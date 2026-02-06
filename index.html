@@ -6,13 +6,13 @@
     <title>โหวตร้านค้า Numberone Market</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        body { font-family: 'Kanit', sans-serif; padding: 20px; text-align: center; background-color: #f4f7f6; }
-        #voteForm { background: white; max-width: 400px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #00b900; }
-        .rating { margin: 15px 0; border: 1px solid #eee; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
-        input[type="number"] { width: 60px; height: 30px; text-align: center; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; }
-        button { background: #00b900; color: white; border: none; padding: 15px 30px; border-radius: 30px; cursor: pointer; font-size: 18px; font-weight: bold; width: 100%; margin-top: 10px; }
-        button:active { background: #009e00; transform: scale(0.98); }
+        body { font-family: sans-serif; padding: 20px; text-align: center; background-color: #f8f9fa; }
+        #voteForm { background: white; max-width: 400px; margin: auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        h2 { color: #28a745; margin-bottom: 25px; }
+        .rating { margin: 15px 0; display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
+        input[type="number"] { width: 60px; height: 35px; text-align: center; border-radius: 8px; border: 1px solid #ddd; font-size: 18px; font-weight: bold; color: #28a745; }
+        button { background: #28a745; color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; margin-top: 20px; }
+        button:active { transform: scale(0.98); background: #218838; }
     </style>
 </head>
 <body>
@@ -26,24 +26,18 @@
     </div>
 
     <script>
-        // --- แก้ไขจุดที่ 1: ใส่ LIFF ID จริงของคุณ ---
+        // ใช้ค่าจริงจากภาพที่คุณส่งมา
         const LIFF_ID = '2009063345-QrUBULyk'; 
-
-        // --- แก้ไขจุดที่ 2: ใส่ Web App URL เต็มๆ จาก Google Apps Script (รูปที่ 5) ---
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfcybyr08i6xVOBQDAnuAfAGLsg9DpgS7WjQ08YshoCX2b6qCoyMT5QXVryUgB-5CR4j4WUcQ/exec';
 
         async function main() {
-            try {
-                await liff.init({ liffId: LIFF_ID });
-                if (!liff.isLoggedIn()) {
-                    liff.login();
-                } else {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const shopId = urlParams.get('shop_id');
-                    document.getElementById('shopIdText').innerText = shopId || 'ไม่ได้ระบุร้าน';
-                }
-            } catch (err) {
-                console.error('LIFF Initialization failed', err);
+            await liff.init({ liffId: LIFF_ID });
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                const shopId = urlParams.get('shop_id');
+                document.getElementById('shopIdText').innerText = shopId || 'ไม่ได้ระบุร้าน';
             }
         }
 
@@ -54,7 +48,7 @@
                 const shopId = urlParams.get('shop_id');
 
                 if (!shopId) {
-                    alert('ไม่พบรหัสร้านค้า โปรดสแกน QR Code ใหม่');
+                    alert('กรุณาสแกน QR Code ของร้านค้าเพื่อโหวต');
                     return;
                 }
 
@@ -68,19 +62,17 @@
                     quality: document.getElementById('quality').value
                 });
 
-                // ส่งข้อมูลไปยัง Google Sheets
                 const res = await fetch(`${WEB_APP_URL}?${params.toString()}`, { method: 'POST' });
                 const text = await res.text();
 
                 if (text === "DUPLICATE") {
                     alert("คุณเคยโหวตร้านนี้ไปแล้ว!");
                 } else {
-                    alert("ขอบคุณสำหรับผลโหวตครับ!");
-                    liff.closeWindow(); // ปิดหน้าจอทันทีเมื่อโหวตเสร็จ
+                    alert("โหวตสำเร็จ! ขอบคุณที่ร่วมสนุกครับ");
+                    liff.closeWindow();
                 }
-            } catch (err) {
-                console.error('Submission failed', err);
-                alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
+            } catch (e) {
+                alert('เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง');
             }
         }
         main();
