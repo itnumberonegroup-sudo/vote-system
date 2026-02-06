@@ -26,11 +26,11 @@
     </div>
 
     <script>
-        // อัปเดตเป็น LIFF ID ใหม่จากรูปภาพของคุณ
+        // LIFF ID ปัจจุบันของคุณ
         const LIFF_ID = '2009067055-3oHER0LB'; 
         
-        // URL จริงจาก Apps Script ของคุณ
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfcybyr08i6xVOBQDAnuAfAGLsg9DpgS7WjQ08YshoCX2b6qCoyMT5QXVryUgB-5CR4j4WUcQ/exec';
+        // อัปเดต Web App URL ใหม่ที่คุณแจ้งมาล่าสุด
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxtMx8gOrCe6-ux8R07HCjmHx-01JadM4YOXz7ZOC9opVRYZv8OAIU9hpkTJVYz7tknw/exec';
 
         async function main() {
             try {
@@ -68,16 +68,15 @@
                     quality: document.getElementById('quality').value
                 });
 
-                // ส่งข้อมูลด้วยวิธี GET ตามที่โค้ด Apps Script ของคุณรองรับ
-                const res = await fetch(`${WEB_APP_URL}?${params.toString()}`);
-                const text = await res.text();
+                // ส่วนที่แก้ไขเพิ่ม code ตามที่คุณต้องการ เพื่อให้ส่งข้อมูลข้าม Domain ได้
+                await fetch(`${WEB_APP_URL}?${params.toString()}`, {
+                    method: 'GET',
+                    mode: 'no-cors' 
+                });
 
-                if (text === "DUPLICATE") {
-                    alert("คุณเคยโหวตร้านนี้ไปแล้ว!");
-                } else {
-                    alert("โหวตสำเร็จ! ขอบคุณที่ร่วมสนุกครับ");
-                    liff.closeWindow();
-                }
+                alert("โหวตสำเร็จ! ขอบคุณที่ร่วมสนุกครับ");
+                liff.closeWindow();
+
             } catch (e) {
                 console.error('Submit Error:', e);
                 alert('เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง');
