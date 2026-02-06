@@ -6,50 +6,82 @@
     <title>โหวตร้านค้า Numberone Market</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; text-align: center; }
-        .rating { margin: 20px 0; border: 1px solid #ddd; padding: 10px; border-radius: 8px; }
-        button { background: #00b900; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        body { font-family: 'Kanit', sans-serif; padding: 20px; text-align: center; background-color: #f4f7f6; }
+        #voteForm { background: white; max-width: 400px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #00b900; }
+        .rating { margin: 15px 0; border: 1px solid #eee; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        input[type="number"] { width: 60px; height: 30px; text-align: center; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; }
+        button { background: #00b900; color: white; border: none; padding: 15px 30px; border-radius: 30px; cursor: pointer; font-size: 18px; font-weight: bold; width: 100%; margin-top: 10px; }
+        button:active { background: #009e00; transform: scale(0.98); }
     </style>
 </head>
 <body>
-    <h2>โหวตร้านค้า: <span id="shopIdText">...</span></h2>
     <div id="voteForm">
-        <div class="rating">ความสะอาด: <input type="number" id="clean" min="1" max="5" value="5"></div>
-        <div class="rating">รสชาติอร่อย: <input type="number" id="taste" min="1" max="5" value="5"></div>
-        <div class="rating">รอไม่นาน: <input type="number" id="wait" min="1" max="5" value="5"></div>
-        <div class="rating">คุณภาพ: <input type="number" id="quality" min="1" max="5" value="5"></div>
+        <h2>โหวตร้านค้า: <span id="shopIdText">...</span></h2>
+        <div class="rating"><span>ความสะอาด:</span> <input type="number" id="clean" min="1" max="5" value="5"></div>
+        <div class="rating"><span>รสชาติอร่อย:</span> <input type="number" id="taste" min="1" max="5" value="5"></div>
+        <div class="rating"><span>รอไม่นาน:</span> <input type="number" id="wait" min="1" max="5" value="5"></div>
+        <div class="rating"><span>คุณภาพ:</span> <input type="number" id="quality" min="1" max="5" value="5"></div>
         <button onclick="submitVote()">ส่งคะแนนโหวต</button>
     </div>
 
     <script>
-        const LIFF_ID = 'ใส่_LIFF_ID_ของคุณที่ได้จากLINE_DEV'; 
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfcybyr.../exec'; // URL จากรูปที่ 5
+        // --- แก้ไขจุดที่ 1: ใส่ LIFF ID จริงของคุณ ---
+        const LIFF_ID = '2009063345-QrUBULyk'; 
+
+        // --- แก้ไขจุดที่ 2: ใส่ Web App URL เต็มๆ จาก Google Apps Script (รูปที่ 5) ---
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfcybyr08i6xVOBQDAnuAfAGLsg9DpgS7WjQ08YshoCX2b6qCoyMT5QXVryUgB-5CR4j4WUcQ/exec';
 
         async function main() {
-            await liff.init({ liffId: LIFF_ID });
-            if (!liff.isLoggedIn()) { liff.login(); }
-            const urlParams = new URLSearchParams(window.location.search);
-            document.getElementById('shopIdText').innerText = urlParams.get('shop_id') || 'ไม่ได้ระบุร้าน';
+            try {
+                await liff.init({ liffId: LIFF_ID });
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                } else {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const shopId = urlParams.get('shop_id');
+                    document.getElementById('shopIdText').innerText = shopId || 'ไม่ได้ระบุร้าน';
+                }
+            } catch (err) {
+                console.error('LIFF Initialization failed', err);
+            }
         }
 
         async function submitVote() {
-            const profile = await liff.getProfile();
-            const urlParams = new URLSearchParams(window.location.search);
-            const shopId = urlParams.get('shop_id');
-            const params = new URLSearchParams({
-                shopId: shopId,
-                userId: profile.userId,
-                displayName: profile.displayName,
-                clean: document.getElementById('clean').value,
-                taste: document.getElementById('taste').value,
-                wait: document.getElementById('wait').value,
-                quality: document.getElementById('quality').value
-            });
+            try {
+                const profile = await liff.getProfile();
+                const urlParams = new URLSearchParams(window.location.search);
+                const shopId = urlParams.get('shop_id');
 
-            const res = await fetch(`${WEB_APP_URL}?${params.toString()}`);
-            const text = await res.text();
-            if (text === "DUPLICATE") alert("คุณเคยโหวตร้านนี้ไปแล้ว!");
-            else { alert("โหวตสำเร็จ!"); liff.closeWindow(); }
+                if (!shopId) {
+                    alert('ไม่พบรหัสร้านค้า โปรดสแกน QR Code ใหม่');
+                    return;
+                }
+
+                const params = new URLSearchParams({
+                    shopId: shopId,
+                    userId: profile.userId,
+                    displayName: profile.displayName,
+                    clean: document.getElementById('clean').value,
+                    taste: document.getElementById('taste').value,
+                    wait: document.getElementById('wait').value,
+                    quality: document.getElementById('quality').value
+                });
+
+                // ส่งข้อมูลไปยัง Google Sheets
+                const res = await fetch(`${WEB_APP_URL}?${params.toString()}`, { method: 'POST' });
+                const text = await res.text();
+
+                if (text === "DUPLICATE") {
+                    alert("คุณเคยโหวตร้านนี้ไปแล้ว!");
+                } else {
+                    alert("ขอบคุณสำหรับผลโหวตครับ!");
+                    liff.closeWindow(); // ปิดหน้าจอทันทีเมื่อโหวตเสร็จ
+                }
+            } catch (err) {
+                console.error('Submission failed', err);
+                alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
+            }
         }
         main();
     </script>
