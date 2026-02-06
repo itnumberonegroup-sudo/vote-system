@@ -26,18 +26,24 @@
     </div>
 
     <script>
-        // ใช้ค่าจริงจากภาพที่คุณส่งมา
-        const LIFF_ID = '2009063345-QrUBULyk'; 
+        // อัปเดตเป็น LIFF ID ใหม่จากรูปภาพของคุณ
+        const LIFF_ID = '2009067055-3oHER0LB'; 
+        
+        // URL จริงจาก Apps Script ของคุณ
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfcybyr08i6xVOBQDAnuAfAGLsg9DpgS7WjQ08YshoCX2b6qCoyMT5QXVryUgB-5CR4j4WUcQ/exec';
 
         async function main() {
-            await liff.init({ liffId: LIFF_ID });
-            if (!liff.isLoggedIn()) {
-                liff.login();
-            } else {
-                const urlParams = new URLSearchParams(window.location.search);
-                const shopId = urlParams.get('shop_id');
-                document.getElementById('shopIdText').innerText = shopId || 'ไม่ได้ระบุร้าน';
+            try {
+                await liff.init({ liffId: LIFF_ID });
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                } else {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const shopId = urlParams.get('shop_id');
+                    document.getElementById('shopIdText').innerText = shopId || 'ไม่ได้ระบุร้าน';
+                }
+            } catch (error) {
+                console.error('LIFF Error:', error);
             }
         }
 
@@ -62,7 +68,8 @@
                     quality: document.getElementById('quality').value
                 });
 
-                const res = await fetch(`${WEB_APP_URL}?${params.toString()}`, { method: 'POST' });
+                // ส่งข้อมูลด้วยวิธี GET ตามที่โค้ด Apps Script ของคุณรองรับ
+                const res = await fetch(`${WEB_APP_URL}?${params.toString()}`);
                 const text = await res.text();
 
                 if (text === "DUPLICATE") {
@@ -72,6 +79,7 @@
                     liff.closeWindow();
                 }
             } catch (e) {
+                console.error('Submit Error:', e);
                 alert('เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง');
             }
         }
