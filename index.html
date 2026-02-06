@@ -29,8 +29,8 @@
         // LIFF ID ปัจจุบันของคุณ
         const LIFF_ID = '2009067055-3oHER0LB'; 
         
-        // อัปเดต Web App URL ใหม่ที่คุณแจ้งมาล่าสุด
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxtMx8gOrCe6-ux8R07HCjmHx-01JadM4YOXz7ZOC9opVRYZv8OAIU9hpkTJVYz7tknw/exec';
+        // อัปเดต Web App URL ล่าสุดที่คุณแจ้งมา
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyLM8fJy7bP8K_WZdqd487_KWkYAAQMvMnraQ6ywz0GuvUDYS92loFZmgkBOo-H5OecyA/exec';
 
         async function main() {
             try {
@@ -68,7 +68,7 @@
                     quality: document.getElementById('quality').value
                 });
 
-                // ส่วนที่แก้ไขเพิ่ม code ตามที่คุณต้องการ เพื่อให้ส่งข้อมูลข้าม Domain ได้
+                // ส่งข้อมูลด้วยวิธี GET และใช้ mode: 'no-cors' เพื่อความปลอดภัย
                 await fetch(`${WEB_APP_URL}?${params.toString()}`, {
                     method: 'GET',
                     mode: 'no-cors' 
