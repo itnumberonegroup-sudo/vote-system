@@ -176,7 +176,6 @@
         const LIFF_ID = '2009067055-3oHER0LB'; 
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzsmuxybGME9J2qTl_Jwvlc81ezdMASQcsiu2prU_LoPG3t28-FMK4Ie7xaaKVev0Q8Dw/exec';
 
-        // ฐานข้อมูลร้านค้า (เพิ่ม/แก้ไขตรงนี้ได้เลย)
         const shopData = {
             'SHOP001': 'ร้านข้าวมันไก่โกเฮง',
             'SHOP002': 'ร้านกาแฟโบราณลุงใจ',
@@ -192,8 +191,6 @@
                 } else {
                     const urlParams = new URLSearchParams(window.location.search);
                     const shopId = urlParams.get('shop_id');
-                    
-                    // เปลี่ยนจากรหัสเป็นชื่อร้านที่นี่
                     const name = shopData[shopId] || shopId || 'ไม่พบข้อมูลร้าน';
                     document.getElementById('shopNameDisplay').innerText = name;
                 }
@@ -207,8 +204,12 @@
         }
 
         async function submitVote() {
-            const shopId = new URLSearchParams(window.location.search).get('shop_id');
+            const urlParams = new URLSearchParams(window.location.search);
+            const shopId = urlParams.get('shop_id');
             if(!shopId) return alert('กรุณาสแกน QR ร้านค้า');
+
+            // ดึงชื่อร้านค้าภาษาไทยจากฐานข้อมูล
+            const shopName = shopData[shopId] || shopId;
 
             document.getElementById('loading').style.display = 'flex';
             
@@ -216,6 +217,7 @@
                 const profile = await liff.getProfile();
                 const params = new URLSearchParams({
                     shopId: shopId,
+                    shopName: shopName, // ส่งชื่อร้านค้าไปด้วย
                     userId: profile.userId,
                     displayName: profile.displayName,
                     clean: getVal('clean'),
