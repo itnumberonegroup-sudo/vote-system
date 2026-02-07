@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Voting Executive Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kanit', sans-serif; background: #f8fafc; }
+        .glass { background: #ffffff; }
+        .vibrant-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%); }
+        .card-shadow { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04); }
+        .stat-card { position: relative; overflow: hidden; border-radius: 1rem; border: 1px solid #f1f5f9; transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08); }
+        .stat-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; }
+        .stat-blue::after { background: #3b82f6; }
+        .stat-orange::after { background: #f97316; }
+        .stat-green::after { background: #22c55e; }
+        .stat-purple::after { background: #a855f7; }
+        .table-container { max-height: 480px; overflow-y: auto; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        /* Logo Styling */
+        .logo-container { max-width: 200px; max-height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-preview { width: 100%; height: auto; object-fit: contain; }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="vibrant-gradient text-white p-6 shadow-xl mb-8">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <!-- Horizontal Logo Area -->
+                <div id="logoWrapper" class="logo-container bg-white/10 rounded-lg p-2 backdrop-blur-sm border border-white/20">
+                    <img id="headerLogo" src="https://via.placeholder.com/200x60?text=YOUR+LOGO" alt="Company Logo" class="logo-preview">
+                </div>
+                
+                <div class="flex items-center gap-4 border-l-0 md:border-l border-white/20 md:pl-6">
+                    <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-md hidden sm:block">
+                        <i data-lucide="layout-dashboard" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold tracking-tight">Executive Summary Dashboard</h1>
+                        <p class="text-white/80 text-sm">อ้างอิงข้อมูลจาก Numberone Market</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col items-center md:items-end gap-2">
+                <div id="lastUpdate" class="text-xs font-light opacity-90 px-3 py-1 bg-black/10 rounded-full">
+                    รอการเชื่อมต่อข้อมูล...
+                </div>
+                <button onclick="toggleSettings()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-all text-sm backdrop-blur-md border border-white/20 shadow-lg">
+                    <i data-lucide="settings" class="w-4 h-4"></i>
+                    จัดการข้อมูลและโลโก้
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4">
+        
+        <!-- Settings Panel -->
+        <div id="settingsPanel" class="hidden mb-8 p-6 bg-white rounded-2xl shadow-xl border border-slate-200 animate-in fade-in slide-in-from-top-2">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Data Source Section -->
+                <div class="flex-1 space-y-4">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i data-lucide="file-spreadsheet" class="text-indigo-600"></i>
+                        1. แหล่งข้อมูล (Google Sheets / CSV)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Link CSV</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="sheetUrlInput" placeholder="วางลิงก์ CSV..." class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                <button onclick="updateFromUrl()" class="bg-indigo-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-indigo-700">เชื่อมต่อ</button>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-widest">อัปโหลดไฟล์</label>
+                            <input type="file" id="fileInput" accept=".csv" class="hidden" onchange="handleFileUpload(event)">
+                            <label for="fileInput" class="flex items-center justify-center gap-2 w-full p-2.5 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
+                                <i data-lucide="upload" class="w-4 h-4 text-slate-400"></i>
+                                <span class="text-xs font-medium text-slate-600">เลือกไฟล์ CSV</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Branding Section -->
+                <div class="flex-none lg:w-1/3 space-y-4 border-l-0 lg:border-l border-slate-100 lg:pl-8">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i data-lucide="palette" class="text-pink-600"></i>
+                        2. ปรับแต่งโลโก้ (Horizontal Logo)
+                    </h2>
+                    <div class="space-y-3">
+                        <div id="settingsLogoPreview" class="h-20 w-full border rounded-xl bg-slate-50 flex items-center justify-center p-2 overflow-hidden">
+                            <img id="previewImg" src="https://via.placeholder.com/200x60?text=PREVIEW" alt="Logo Preview" class="max-h-full max-w-full object-contain">
+                        </div>
+                        <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                        <label for="logoInput" class="flex items-center justify-center gap-2 w-full p-3 bg-slate-800 text-white rounded-xl cursor-pointer hover:bg-slate-900 transition-colors shadow-md">
+                            <i data-lucide="image-plus" class="w-4 h-4"></i>
+                            <span class="text-sm font-semibold">เปลี่ยนรูป Logo</span>
+                        </label>
+                        <p class="text-[10px] text-center text-slate-400">แนะนำขนาด 400x120px หรือสัดส่วนแนวนอน</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Overview Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card stat-blue glass p-5 card-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-slate-400 text-sm font-medium">ความสะอาด</span>
+                    <i data-lucide="sparkles" class="w-5 h-5 text-slate-300"></i>
+                </div>
+                <h3 id="avgClean" class="text-4xl font-bold text-slate-800">0.0</h3>
+            </div>
+            <div class="stat-card stat-orange glass p-5 card-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-slate-400 text-sm font-medium">รสชาติ</span>
+                    <i data-lucide="utensils" class="w-5 h-5 text-slate-300"></i>
+                </div>
+                <h3 id="avgTaste" class="text-4xl font-bold text-slate-800">0.0</h3>
+            </div>
+            <div class="stat-card stat-green glass p-5 card-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-slate-400 text-sm font-medium">ความรวดเร็ว</span>
+                    <i data-lucide="clock" class="w-5 h-5 text-slate-300"></i>
+                </div>
+                <h3 id="avgWait" class="text-4xl font-bold text-slate-800">0.0</h3>
+            </div>
+            <div class="stat-card stat-purple glass p-5 card-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-slate-400 text-sm font-medium">บริการ/คุณภาพ</span>
+                    <i data-lucide="heart" class="w-5 h-5 text-slate-300"></i>
+                </div>
+                <h3 id="avgQuality" class="text-4xl font-bold text-slate-800">0.0</h3>
+            </div>
+        </div>
+
+        <!-- Charts (Top 10 separated) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="glass p-6 rounded-2xl card-shadow border border-slate-100">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="bg-green-500 p-2 rounded-lg text-white"><i data-lucide="trending-up" class="w-5 h-5"></i></div>
+                    <h2 class="text-xl font-bold text-slate-700">Top 10 ร้านค้ายอดเยี่ยม</h2>
+                </div>
+                <div class="h-[300px]">
+                    <canvas id="topChart"></canvas>
+                </div>
+            </div>
+            <div class="glass p-6 rounded-2xl card-shadow border border-slate-100">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="bg-red-500 p-2 rounded-lg text-white"><i data-lucide="trending-down" class="w-5 h-5"></i></div>
+                    <h2 class="text-xl font-bold text-slate-700">Top 10 ร้านค้าที่ต้องปรับปรุง</h2>
+                </div>
+                <div class="h-[300px]">
+                    <canvas id="bottomChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Details Tables -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            <div class="glass rounded-2xl card-shadow overflow-hidden border border-slate-100">
+                <div class="p-5 bg-green-50/30 border-b border-slate-100 flex items-center gap-3">
+                    <i data-lucide="award" class="text-green-600"></i>
+                    <h2 class="text-lg font-bold text-slate-700">รายละเอียด Top 10 ยอดเยี่ยม</h2>
+                </div>
+                <div class="table-container">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 sticky top-0">
+                            <tr class="text-slate-400 text-[10px] uppercase tracking-widest border-b border-slate-100">
+                                <th class="p-4 font-bold">ชื่อร้าน</th>
+                                <th class="p-4 font-bold text-center">สะอาด</th>
+                                <th class="p-4 font-bold text-center">รสชาติ</th>
+                                <th class="p-4 font-bold text-center">เร็ว</th>
+                                <th class="p-4 font-bold text-center">บริการ</th>
+                                <th class="p-4 font-bold text-center">รวม</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bestTableBody" class="text-sm divide-y divide-slate-50"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="glass rounded-2xl card-shadow overflow-hidden border border-slate-100">
+                <div class="p-5 bg-red-50/30 border-b border-slate-100 flex items-center gap-3">
+                    <i data-lucide="alert-circle" class="text-red-600"></i>
+                    <h2 class="text-lg font-bold text-slate-700">รายละเอียด Top 10 ปรับปรุง</h2>
+                </div>
+                <div class="table-container">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 sticky top-0">
+                            <tr class="text-slate-400 text-[10px] uppercase tracking-widest border-b border-slate-100">
+                                <th class="p-4 font-bold">ชื่อร้าน</th>
+                                <th class="p-4 font-bold text-center">สะอาด</th>
+                                <th class="p-4 font-bold text-center">รสชาติ</th>
+                                <th class="p-4 font-bold text-center">เร็ว</th>
+                                <th class="p-4 font-bold text-center">บริการ</th>
+                                <th class="p-4 font-bold text-center">รวม</th>
+                            </tr>
+                        </thead>
+                        <tbody id="worstTableBody" class="text-sm divide-y divide-slate-50"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let charts = {};
+        
+        // Mock Data based on your Google Sheet columns
+        const mockData = [
+            { ShopName: "ชาบูพรีเมียม", Score_Clean: 4.9, Score_Taste: 4.8, Score_Wait: 4.5, Score_Quality: 4.8 },
+            { ShopName: "กาแฟดีต่อใจ", Score_Clean: 5.0, Score_Taste: 4.2, Score_Wait: 4.8, Score_Quality: 4.9 },
+            { ShopName: "ก๋วยเตี๋ยวเรือทอง", Score_Clean: 4.8, Score_Taste: 4.9, Score_Wait: 4.2, Score_Quality: 4.7 },
+            { ShopName: "ราเมงต้นตำรับ", Score_Clean: 4.7, Score_Taste: 4.7, Score_Wait: 4.1, Score_Quality: 4.6 },
+            { ShopName: "ร้านส้มตำป้าแดง", Score_Clean: 4.5, Score_Taste: 5.0, Score_Wait: 4.0, Score_Quality: 4.5 },
+            { ShopName: "พิซซ่าเตาถ่าน", Score_Clean: 4.2, Score_Taste: 4.9, Score_Wait: 3.8, Score_Quality: 4.0 },
+            { ShopName: "ข้าวมันไก่เฮียชัย", Score_Clean: 3.5, Score_Taste: 4.5, Score_Wait: 3.0, Score_Quality: 3.2 },
+            { ShopName: "โจ๊กเย็นเย็น", Score_Clean: 2.2, Score_Taste: 2.8, Score_Wait: 3.0, Score_Quality: 2.5 },
+            { ShopName: "ราดหน้าป้าหวัง", Score_Clean: 2.5, Score_Taste: 3.2, Score_Wait: 2.0, Score_Quality: 2.1 },
+            { ShopName: "ข้าวแกงราคาส่ง", Score_Clean: 2.1, Score_Taste: 3.0, Score_Wait: 2.5, Score_Quality: 2.0 }
+        ];
+
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            panel.classList.toggle('hidden');
+        }
+
+        // --- Logo Upload Logic ---
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                // Update Header
+                document.getElementById('headerLogo').src = base64Data;
+                // Update Preview in Settings
+                document.getElementById('previewImg').src = base64Data;
+                // Optional: Save to localStorage to persist
+                localStorage.setItem('dashboard_logo', base64Data);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Load saved logo on start
+        function loadSavedLogo() {
+            const savedLogo = localStorage.getItem('dashboard_logo');
+            if (savedLogo) {
+                document.getElementById('headerLogo').src = savedLogo;
+                document.getElementById('previewImg').src = savedLogo;
+            }
+        }
+
+        async function updateFromUrl() {
+            const url = document.getElementById('sheetUrlInput').value;
+            if (!url) return;
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                processAndRender(parseCSV(text));
+                toggleSettings();
+            } catch (e) { alert('ไม่สามารถดึงข้อมูลได้ โปรดตรวจสอบการ Publish Google Sheet'); }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                processAndRender(parseCSV(e.target.result));
+                toggleSettings();
+            };
+            reader.readAsText(file);
+        }
+
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 1) return [];
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            
+            return lines.slice(1).map(line => {
+                const values = line.split(',').map(v => v.trim().replace(/"/g, ''));
+                let obj = {};
+                headers.forEach((header, i) => {
+                    obj[header] = isNaN(values[i]) ? values[i] : parseFloat(values[i]);
+                });
+                return obj;
+            }).filter(item => item.ShopName);
+        }
+
+        function processAndRender(data) {
+            const aggregated = {};
+            data.forEach(item => {
+                if(!aggregated[item.ShopName]) {
+                    aggregated[item.ShopName] = { 
+                        ShopName: item.ShopName, 
+                        Score_Clean: 0, Score_Taste: 0, Score_Wait: 0, Score_Quality: 0, 
+                        count: 0 
+                    };
+                }
+                aggregated[item.ShopName].Score_Clean += (item.Score_Clean || 0);
+                aggregated[item.ShopName].Score_Taste += (item.Score_Taste || 0);
+                aggregated[item.ShopName].Score_Wait += (item.Score_Wait || 0);
+                aggregated[item.ShopName].Score_Quality += (item.Score_Quality || 0);
+                aggregated[item.ShopName].count++;
+            });
+
+            const processedData = Object.values(aggregated).map(item => {
+                const clean = item.Score_Clean / item.count;
+                const taste = item.Score_Taste / item.count;
+                const wait = item.Score_Wait / item.count;
+                const quality = item.Score_Quality / item.count;
+                return {
+                    ShopName: item.ShopName,
+                    Score_Clean: parseFloat(clean.toFixed(1)),
+                    Score_Taste: parseFloat(taste.toFixed(1)),
+                    Score_Wait: parseFloat(wait.toFixed(1)),
+                    Score_Quality: parseFloat(quality.toFixed(1)),
+                    TotalScore: parseFloat((clean + taste + wait + quality).toFixed(1))
+                };
+            });
+
+            const sortedBest = [...processedData].sort((a, b) => b.TotalScore - a.TotalScore).slice(0, 10);
+            const sortedWorst = [...processedData].sort((a, b) => a.TotalScore - b.TotalScore).slice(0, 10);
+
+            const calcGlobalAvg = key => (processedData.length > 0 ? (processedData.reduce((sum, item) => sum + item[key], 0) / processedData.length).toFixed(1) : "0.0");
+            document.getElementById('avgClean').innerText = calcGlobalAvg('Score_Clean');
+            document.getElementById('avgTaste').innerText = calcGlobalAvg('Score_Taste');
+            document.getElementById('avgWait').innerText = calcGlobalAvg('Score_Wait');
+            document.getElementById('avgQuality').innerText = calcGlobalAvg('Score_Quality');
+
+            renderCharts(sortedBest, sortedWorst);
+            renderTable('bestTableBody', sortedBest, 'green');
+            renderTable('worstTableBody', sortedWorst, 'red');
+
+            document.getElementById('lastUpdate').innerText = `อัปเดตเมื่อ: ${new Date().toLocaleTimeString('th-TH')}`;
+        }
+
+        function renderCharts(best, worst) {
+            if (charts.top) charts.top.destroy();
+            if (charts.bottom) charts.bottom.destroy();
+
+            const commonOptions = {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    x: { beginAtZero: true, max: 20, grid: { color: '#f1f5f9' } },
+                    y: { grid: { display: false } }
+                }
+            };
+
+            charts.top = new Chart(document.getElementById('topChart'), {
+                type: 'bar',
+                data: {
+                    labels: best.map(d => d.ShopName),
+                    datasets: [{ data: best.map(d => d.TotalScore), backgroundColor: '#22c55e', borderRadius: 4 }]
+                },
+                options: commonOptions
+            });
+
+            charts.bottom = new Chart(document.getElementById('bottomChart'), {
+                type: 'bar',
+                data: {
+                    labels: worst.map(d => d.ShopName),
+                    datasets: [{ data: worst.map(d => d.TotalScore), backgroundColor: '#ef4444', borderRadius: 4 }]
+                },
+                options: commonOptions
+            });
+        }
+
+        function renderTable(id, data, type) {
+            const badgeColor = type === 'green' ? 'bg-green-500' : 'bg-red-500';
+            document.getElementById(id).innerHTML = data.map(item => `
+                <tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="p-4 font-semibold text-slate-700">${item.ShopName}</td>
+                    <td class="p-4 text-center text-slate-500">${item.Score_Clean}</td>
+                    <td class="p-4 text-center text-slate-500">${item.Score_Taste}</td>
+                    <td class="p-4 text-center text-slate-500">${item.Score_Wait}</td>
+                    <td class="p-4 text-center text-slate-500">${item.Score_Quality}</td>
+                    <td class="p-4 text-center">
+                        <span class="${badgeColor} text-white px-2.5 py-1.5 rounded-lg text-[10px] font-bold shadow-sm inline-block min-w-[2.5rem]">${item.TotalScore}</span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.onload = () => { 
+            lucide.createIcons(); 
+            loadSavedLogo();
+            processAndRender(mockData); 
+        };
+    </script>
+</body>
+</html>
