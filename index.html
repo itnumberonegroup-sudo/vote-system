@@ -58,6 +58,24 @@
         .shop-info h2 { margin: 5px 0; color: var(--primary-color); font-size: 24px; }
 
         .rating-group { margin-bottom: 20px; }
+        .rating-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+
+        /* Style สำหรับช่องกรอกเบอร์โทร */
+        .input-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: 'Prompt', sans-serif;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        .input-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
         .stars {
             display: flex;
             flex-direction: row-reverse;
@@ -82,6 +100,7 @@
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+            margin-top: 10px;
         }
 
         #loading {
@@ -122,6 +141,12 @@
             <div class="shop-info">
                 <div style="font-size: 12px; color: #777;">คุณกำลังให้คะแนนร้าน</div>
                 <h2 id="shopNameDisplay">กำลังโหลด...</h2>
+            </div>
+
+            <!-- เพิ่มช่องกรอกเบอร์โทรศัพท์ -->
+            <div class="rating-group">
+                <label><i class="fas fa-phone"></i> เบอร์โทรศัพท์ (เพื่อรับรางวัล)</label>
+                <input type="tel" id="phoneInput" class="input-control" placeholder="กรุณากรอกเบอร์โทรศัพท์" maxlength="10">
             </div>
 
             <div class="rating-group">
@@ -204,28 +229,35 @@
         }
 
         async function submitVote() {
+            // 1. ตรวจสอบข้อมูลเบอร์โทรศัพท์
+            const phone = document.getElementById('phoneInput').value.trim();
+            if(!phone) {
+                alert("กรอกข้อมูลไม่ครบถ้วน"); // แจ้งเตือนถ้าไม่กรอกเบอร์โทร
+                return;
+            }
+
             const urlParams = new URLSearchParams(window.location.search);
             const shopId = urlParams.get('shop_id');
             if(!shopId) return alert('กรุณาสแกน QR ร้านค้า');
 
-            // ดึงชื่อร้านค้าภาษาไทยจากฐานข้อมูล
             const shopName = shopData[shopId] || shopId;
-
             document.getElementById('loading').style.display = 'flex';
             
             try {
                 const profile = await liff.getProfile();
                 const params = new URLSearchParams({
                     shopId: shopId,
-                    shopName: shopName, // ส่งชื่อร้านค้าไปด้วย
+                    shopName: shopName,
                     userId: profile.userId,
                     displayName: profile.displayName,
+                    phone: phone, // ส่งเบอร์โทรศัพท์ไปบันทึก (Column J ใน Sheet)
                     clean: getVal('clean'),
                     taste: getVal('taste'),
                     wait: getVal('wait'),
                     quality: getVal('quality')
                 });
 
+                // ส่งข้อมูลไปยัง Google Apps Script
                 await fetch(`${WEB_APP_URL}?${params.toString()}`, { method: 'GET', mode: 'no-cors' });
                 alert("บันทึกสำเร็จ ขอบคุณครับ!");
                 liff.closeWindow();
@@ -239,6 +271,3 @@
     </script>
 </body>
 </html>
-
-
-
