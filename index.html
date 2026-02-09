@@ -1,3 +1,4 @@
+new coed
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -11,9 +12,10 @@
         :root {
             --primary-color: #28a745;
             --secondary-color: #ffc107;
-            --bg-color: #f0f2f5;
-            --text-dark: #333;
-            --card-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            --bg-color: #f8fafc;
+            --text-dark: #1e293b;
+            --error-color: #ef4444;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
 
         body {
@@ -24,83 +26,194 @@
             color: var(--text-dark);
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
-        .container { width: 100%; max-width: 450px; }
+        .container { width: 100%; max-width: 480px; }
 
         .header-banner {
-            background: linear-gradient(135deg, #28a745, #1e7e34);
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1555529771-835f59fc5efe?auto=format&fit=crop&q=80&w=1000');
+            background-size: cover;
+            background-position: center;
             color: white;
-            padding: 30px 20px;
-            border-radius: 25px 25px 0 0;
+            padding: 50px 20px;
+            border-radius: 30px 30px 0 0;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-banner h1 { 
+            margin: 0; 
+            font-size: 24px; 
+            font-weight: 600;
+            letter-spacing: 0.5px; 
+            line-height: 1.3;
+        }
+
+        .header-banner p {
+            margin: 10px 0 0;
+            font-weight: 300;
+            font-size: 16px;
+            opacity: 0.9;
         }
 
         .prize-badge {
             background: var(--secondary-color);
             color: #856404;
             display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 13px;
-            margin-top: 10px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         #voteForm {
             background: white;
-            padding: 25px;
-            border-radius: 0 0 25px 25px;
+            padding: 30px 25px;
+            border-radius: 0 0 30px 30px;
             box-shadow: var(--card-shadow);
         }
 
-        .shop-info { text-align: center; margin-bottom: 25px; border-bottom: 1px dashed #ddd; padding-bottom: 15px; }
-        .shop-info h2 { margin: 5px 0; color: var(--primary-color); font-size: 24px; }
+        .shop-info { 
+            text-align: center; 
+            margin-bottom: 25px; 
+            border-bottom: 2px solid #f1f5f9; 
+            padding-bottom: 20px; 
+        }
+        .shop-info h2 { margin: 8px 0; color: var(--primary-color); font-size: 26px; }
 
-        .rating-group { margin-bottom: 20px; }
-        .rating-group label { display: block; margin-bottom: 8px; font-weight: 600; }
-
-        /* Style สำหรับช่องกรอกเบอร์โทร */
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 15px; color: #475569; }
+        
         .input-control {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #eee;
-            border-radius: 12px;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
             font-family: 'Prompt', sans-serif;
             font-size: 16px;
             box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
+            background: #fdfdfd;
         }
         .input-control:focus {
             outline: none;
             border-color: var(--primary-color);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.1);
         }
 
+        .rating-container {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+        .rating-label { font-weight: 600; margin-bottom: 12px; display: block; color: #475569; }
+        
         .stars {
             display: flex;
             flex-direction: row-reverse;
-            justify-content: space-around;
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 12px;
+            justify-content: center;
+            gap: 10px;
         }
-
         .stars input { display: none; }
-        .stars label { font-size: 32px; color: #ddd; cursor: pointer; }
-        .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: var(--secondary-color); }
+        .stars label { 
+            font-size: 40px; 
+            color: #cbd5e1; 
+            cursor: pointer; 
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .stars label:active { transform: scale(0.8); }
+        .stars input:checked ~ label { color: var(--secondary-color); }
+        .stars label:hover, .stars label:hover ~ label { color: #fbbf24; }
+
+        .pdpa-container {
+            margin: 25px 0;
+            padding: 15px;
+            background: #fffcf0;
+            border-radius: 15px;
+            border: 1px solid #ffeeba;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #666;
+        }
+        .pdpa-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .pdpa-checkbox input { margin-top: 4px; width: 18px; height: 18px; cursor: pointer; }
+        .pdpa-container a { color: var(--primary-color); text-decoration: underline; }
 
         .btn-submit {
             background: var(--primary-color);
             color: white;
             border: none;
             padding: 18px;
-            border-radius: 15px;
+            border-radius: 18px;
             width: 100%;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-            margin-top: 10px;
+            box-shadow: 0 10px 15px -3px rgba(40, 167, 69, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-submit:active { transform: translateY(2px); box-shadow: none; }
+        .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; box-shadow: none; }
+
+        /* Alert Badge สำหรับการโหวตซ้ำ */
+        #alreadyVotedMsg {
+            display: none;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #fecaca;
+        }
+
+        #customAlert {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 320px;
+            width: 100%;
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes modalPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-icon { font-size: 50px; margin-bottom: 15px; }
+        .modal-success { color: var(--primary-color); }
+        .modal-error { color: var(--error-color); }
+        .modal-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            border-radius: 12px;
+            border: none;
+            background: #334155;
+            color: white;
+            font-family: 'Prompt';
+            cursor: pointer;
         }
 
         #loading {
@@ -108,16 +221,15 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255,255,255,0.9);
-            z-index: 1000;
+            z-index: 3000;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-
         .spinner {
-            width: 40px; height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-color);
+            width: 50px; height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -128,78 +240,72 @@
 
     <div id="loading">
         <div class="spinner"></div>
-        <p>กำลังบันทึกคะแนน...</p>
+        <p style="margin-top: 15px; font-weight: 600;">กำลังบันทึกคะแนน...</p>
+    </div>
+
+    <div id="customAlert" onclick="closeAlert()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div id="modalIcon" class="modal-icon"></div>
+            <h3 id="modalTitle" style="margin: 0;">หัวข้อ</h3>
+            <p id="modalMsg" style="color: #64748b; margin-top: 10px;">ข้อความ</p>
+            <button class="modal-btn" onclick="closeAlert()">ตกลง</button>
+        </div>
     </div>
 
     <div class="container">
         <div class="header-banner">
-            <h1>NUMBER ONE MARKET</h1>
-            <div class="prize-badge">โหวตลุ้นรับของรางวัล!</div>
+            <h1>THE BEST OF NUMBER ONE MARKET</h1>
+            <p>โหวตร้านค้าเพื่อลุ้นรับของรางวัล!!</p>
+            <div class="prize-badge"><i class="fas fa-motorcycle"></i> ลุ้นรับทองคำ และ รถมอเตอร์ไซค์!</div>
         </div>
 
         <div id="voteForm">
+            <div id="alreadyVotedMsg">วันนี้คุณโหวตร้านค้านี้ไปแล้ว</div>
+            
             <div class="shop-info">
-                <div style="font-size: 12px; color: #777;">คุณกำลังให้คะแนนร้าน</div>
-                <h2 id="shopNameDisplay">กำลังโหลด...</h2>
+                <div style="font-size: 13px; color: #94a3b8; font-weight: 400;">ร้านค้าที่ท่านเลือก</div>
+                <h2 id="shopNameDisplay">กำลังโหลดร้านค้า...</h2>
             </div>
 
-            <!-- เพิ่มช่องกรอกเบอร์โทรศัพท์ -->
-            <div class="rating-group">
-                <label><i class="fas fa-phone"></i> เบอร์โทรศัพท์ (เพื่อรับรางวัล)</label>
-                <input type="tel" id="phoneInput" class="input-control" placeholder="กรุณากรอกเบอร์โทรศัพท์" maxlength="10">
+            <div class="input-group">
+                <label><i class="fas fa-user"></i> ชื่อ – นามสกุล (เพื่อรับรางวัล)</label>
+                <input type="text" id="nameInput" class="input-control" placeholder="ระบุชื่อ-นามสกุล">
             </div>
 
-            <div class="rating-group">
-                <label>ความสะอาด</label>
+            <div class="input-group">
+                <label><i class="fas fa-phone"></i> เบอร์โทรศัพท์</label>
+                <input type="tel" id="phoneInput" class="input-control" placeholder="0XXXXXXXXX" maxlength="10">
+            </div>
+
+            <div class="rating-container">
+                <span class="rating-label">ให้คะแนนร้านค้า</span>
                 <div class="stars">
-                    <input type="radio" name="clean" id="c5" value="5"><label for="c5" class="fas fa-star"></label>
-                    <input type="radio" name="clean" id="c4" value="4"><label for="c4" class="fas fa-star"></label>
-                    <input type="radio" name="clean" id="c3" value="3" checked><label for="c3" class="fas fa-star"></label>
-                    <input type="radio" name="clean" id="c2" value="2"><label for="c2" class="fas fa-star"></label>
-                    <input type="radio" name="clean" id="c1" value="1"><label for="c1" class="fas fa-star"></label>
+                    <input type="radio" name="score_quality" id="q5" value="5"><label for="q5" class="fas fa-star"></label>
+                    <input type="radio" name="score_quality" id="q4" value="4"><label for="q4" class="fas fa-star"></label>
+                    <input type="radio" name="score_quality" id="q3" value="3"><label for="q3" class="fas fa-star"></label>
+                    <input type="radio" name="score_quality" id="q2" value="2"><label for="q2" class="fas fa-star"></label>
+                    <input type="radio" name="score_quality" id="q1" value="1"><label for="q1" class="fas fa-star"></label>
                 </div>
+                <div id="ratingError" style="color: var(--error-color); font-size: 12px; margin-top: 8px; display: none;">กรุณาเลือกดาวเพื่อรหัสคะแนน</div>
             </div>
 
-            <div class="rating-group">
-                <label>รสชาติ</label>
-                <div class="stars">
-                    <input type="radio" name="taste" id="t5" value="5"><label for="t5" class="fas fa-star"></label>
-                    <input type="radio" name="taste" id="t4" value="4"><label for="t4" class="fas fa-star"></label>
-                    <input type="radio" name="taste" id="t3" value="3" checked><label for="t3" class="fas fa-star"></label>
-                    <input type="radio" name="taste" id="t2" value="2"><label for="t2" class="fas fa-star"></label>
-                    <input type="radio" name="taste" id="t1" value="1"><label for="t1" class="fas fa-star"></label>
-                </div>
+            <div class="pdpa-container">
+                <label class="pdpa-checkbox">
+                    <input type="checkbox" id="pdpaConsent">
+                    <span>
+                        บริการจะจัดเก็บข้อมูลของท่าน เพื่อการติดต่อสื่อสาร หรือแจ้งข้อมูลข่าวสารและสืบประโยชน์เกี่ยวข้องกับผลิตภัณฑ์ บริการ รวมถึงการปฏิบัติตามกฎหมายอื่นที่เกี่ยวข้อง บริษัท นัมเบอร์ วัน ห้าม ท่านสามารถศึกษารายละเอียดเพิ่มเติมเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคลได้จาก 
+                        <a href="https://www.numberonemarket.com/privacy.php" target="_blank">ประกาศความเป็นส่วนตัว ฉบับการขอแสดงความคิดเห็น</a>*
+                    </span>
+                </label>
             </div>
 
-            <div class="rating-group">
-                <label>ความรวดเร็ว</label>
-                <div class="stars">
-                    <input type="radio" name="wait" id="w5" value="5"><label for="w5" class="fas fa-star"></label>
-                    <input type="radio" name="wait" id="w4" value="4"><label for="w4" class="fas fa-star"></label>
-                    <input type="radio" name="wait" id="w3" value="3" checked><label for="w3" class="fas fa-star"></label>
-                    <input type="radio" name="wait" id="w2" value="2"><label for="w2" class="fas fa-star"></label>
-                    <input type="radio" name="wait" id="w1" value="1"><label for="w1" class="fas fa-star"></label>
-                </div>
-            </div>
-
-            <div class="rating-group">
-                <label>บริการ/คุณภาพ</label>
-                <div class="stars">
-                    <input type="radio" name="quality" id="q5" value="5"><label for="q5" class="fas fa-star"></label>
-                    <input type="radio" name="quality" id="q4" value="4"><label for="q4" class="fas fa-star"></label>
-                    <input type="radio" name="quality" id="q3" value="3" checked><label for="q3" class="fas fa-star"></label>
-                    <input type="radio" name="quality" id="q2" value="2"><label for="q2" class="fas fa-star"></label>
-                    <input type="radio" name="quality" id="q1" value="1"><label for="q1" class="fas fa-star"></label>
-                </div>
-            </div>
-
-            <button class="btn-submit" id="btnSubmit" onclick="submitVote()">ยืนยันการให้คะแนน</button>
+            <button class="btn-submit" id="btnSubmit" onclick="validateAndSubmit()">ยืนยันการให้คะแนน</button>
         </div>
     </div>
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyE-NJOi_0Y4yCRJSjx8gbc9_mCQ923aE5Mgqazc5kE1makNsYkw9LzoPwplJftH1HM4Q/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwxv7FGjDqyapXUtrYqZvQ9JkbhvPEb9BV5BmRMWhlMFZEFCYn4Ouoxug2Gxgd5IZvYrQ/exec';
 
         const shopData = {
             'SHOP001': 'ร้านข้าวมันไก่โกเฮง',
@@ -207,6 +313,28 @@
             'SHOP003': 'ร้านส้มตำแซ่บเวอร์',
             'SHOP004': 'ร้านเจ๊ไก่หมกไก่'
         };
+
+        // ตรวจสอบว่าเคยโหวตร้านนี้ไปหรือยังในช่วง 24 ชม.
+        function checkVoteHistory(shopId) {
+            const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
+            if (history[shopId]) {
+                const lastVoteTime = new Date(history[shopId]).getTime();
+                const currentTime = new Date().getTime();
+                const diffHours = (currentTime - lastVoteTime) / (1000 * 60 * 60);
+                
+                if (diffHours < 24) {
+                    return true; // โหวตซ้ำภายใน 24 ชม.
+                }
+            }
+            return false;
+        }
+
+        // บันทึกประวัติการโหวตลง localStorage
+        function saveVoteHistory(shopId) {
+            const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
+            history[shopId] = new Date().toISOString();
+            localStorage.setItem('vote_history', JSON.stringify(history));
+        }
 
         async function main() {
             try {
@@ -218,27 +346,83 @@
                     const shopId = urlParams.get('shop_id');
                     const name = shopData[shopId] || shopId || 'ไม่พบข้อมูลร้าน';
                     document.getElementById('shopNameDisplay').innerText = name;
+
+                    // ตรวจสอบประวัติการโหวตทันทีที่โหลดหน้า
+                    if (shopId && checkVoteHistory(shopId)) {
+                        document.getElementById('alreadyVotedMsg').style.display = 'block';
+                        document.getElementById('btnSubmit').disabled = true;
+                        document.getElementById('btnSubmit').innerText = 'วันนี้คุณโหวตร้านนี้แล้ว';
+                    }
                 }
-            } catch (error) { console.error(error); }
-        }
-
-        function getVal(name) {
-            const el = document.getElementsByName(name);
-            for(let i=0; i<el.length; i++) if(el[i].checked) return el[i].value;
-            return 3;
-        }
-
-        async function submitVote() {
-            // 1. ตรวจสอบข้อมูลเบอร์โทรศัพท์
-            const phone = document.getElementById('phoneInput').value.trim();
-            if(!phone) {
-                alert("กรอกข้อมูลไม่ครบถ้วน"); // แจ้งเตือนถ้าไม่กรอกเบอร์โทร
-                return;
+            } catch (error) { 
+                console.error(error); 
+                showAlert('Error', 'ไม่สามารถเชื่อมต่อ LINE ได้', 'error');
             }
+        }
 
+        function showAlert(title, msg, type) {
+            const modal = document.getElementById('customAlert');
+            const icon = document.getElementById('modalIcon');
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMsg').innerText = msg;
+            
+            if (type === 'success') {
+                icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                icon.className = 'modal-icon modal-success';
+            } else {
+                icon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+                icon.className = 'modal-icon modal-error';
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeAlert() {
+            document.getElementById('customAlert').style.display = 'none';
+        }
+
+        function getSelectedRating() {
+            const el = document.getElementsByName('score_quality');
+            for(let i=0; i<el.length; i++) if(el[i].checked) return el[i].value;
+            return 0;
+        }
+
+        async function validateAndSubmit() {
             const urlParams = new URLSearchParams(window.location.search);
             const shopId = urlParams.get('shop_id');
-            if(!shopId) return alert('กรุณาสแกน QR ร้านค้า');
+            
+            // ตรวจสอบซ้ำอีกครั้งก่อนส่งเผื่อมีการเปิดทิ้งไว้นาน
+            if (shopId && checkVoteHistory(shopId)) {
+                return showAlert('โหวตซ้ำ', 'วันนี้คุณโหวตร้านค้านี้ไปแล้ว กรุณากลับมาใหม่หลัง 24 ชม.', 'error');
+            }
+
+            const fullName = document.getElementById('nameInput').value.trim();
+            const phone = document.getElementById('phoneInput').value.trim();
+            const rating = getSelectedRating();
+            const pdpa = document.getElementById('pdpaConsent').checked;
+
+            if (!fullName || !phone) {
+                return showAlert('ข้อมูลไม่ครบ', 'กรุณากรอกชื่อ-นามสกุล และเบอร์โทรศัพท์ให้ครบถ้วน', 'error');
+            }
+            if (phone.length < 9) {
+                return showAlert('ข้อมูลผิดพลาด', 'กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง', 'error');
+            }
+            if (rating == 0) {
+                document.getElementById('ratingError').style.display = 'block';
+                return showAlert('ยังไม่ได้ให้คะแนน', 'กรุณาเลือกคะแนน 1-5 ดาว', 'error');
+            } else {
+                document.getElementById('ratingError').style.display = 'none';
+            }
+            if (!pdpa) {
+                return showAlert('ยอมรับเงื่อนไข', 'กรุณาติ๊กยอมรับประกาศความเป็นส่วนตัว', 'error');
+            }
+
+            submitVote(fullName, phone, rating);
+        }
+
+        async function submitVote(fullName, phone, rating) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const shopId = urlParams.get('shop_id');
+            if(!shopId) return showAlert('ผิดพลาด', 'กรุณาสแกน QR ร้านค้าใหม่อีกครั้ง', 'error');
 
             const shopName = shopData[shopId] || shopId;
             document.getElementById('loading').style.display = 'flex';
@@ -250,25 +434,33 @@
                     shopName: shopName,
                     userId: profile.userId,
                     displayName: profile.displayName,
-                    phone: phone, // ส่งเบอร์โทรศัพท์ไปบันทึก (Column J ใน Sheet)
-                    clean: getVal('clean'),
-                    taste: getVal('taste'),
-                    wait: getVal('wait'),
-                    quality: getVal('quality')
+                    fullName: fullName, 
+                    phone: phone,
+                    clean: 0,   
+                    taste: 0,
+                    wait: 0,
+                    quality: rating 
                 });
 
-                // ส่งข้อมูลไปยัง Google Apps Script
                 await fetch(`${WEB_APP_URL}?${params.toString()}`, { method: 'GET', mode: 'no-cors' });
-                alert("บันทึกสำเร็จ ขอบคุณครับ!");
-                liff.closeWindow();
-            } catch (e) {
-                alert("เกิดข้อผิดพลาด กรุณาลองใหม่");
-            } finally {
+                
+                // บันทึกประวัติลงเครื่องผู้ใช้หลังส่งสำเร็จ
+                saveVoteHistory(shopId);
+                
                 document.getElementById('loading').style.display = 'none';
+                showAlert('สำเร็จ!', 'ขอบคุณที่ร่วมสนุกและให้ความเห็นครับ', 'success');
+                
+                setTimeout(() => {
+                    liff.closeWindow();
+                }, 2500);
+
+            } catch (e) {
+                document.getElementById('loading').style.display = 'none';
+                showAlert('ขออภัย', 'เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่', 'error');
             }
         }
+        
         main();
     </script>
 </body>
 </html>
-
