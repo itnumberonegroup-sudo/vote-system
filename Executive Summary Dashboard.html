@@ -379,10 +379,10 @@
             const avgSatisfy = stats.totalVotes > 0 ? ((stats.totalScore / (stats.totalVotes * 5)) * 100).toFixed(1) : 0;
             
             statsGrid.innerHTML = `
-                ${renderStatCard("โหวตรวม", stats.totalVotes, "VOTES", "blue")}
-                ${renderStatCard("ร้านค้า", uniqueShopsCount, "SHOPS", "purple")}
-                ${renderStatCard("แต้มรวม", stats.totalScore, "POINTS", "orange")}
-                ${renderStatCard("ความสุข", avgSatisfy, "%", "emerald", avgSatisfy)}
+                ${renderStatCard("จำนวนโหวตทั้งหมด", stats.totalVotes, "VOTES", "blue")}
+                ${renderStatCard("จำนวนร้านค้าที่ถูกโหวต", uniqueShopsCount, "SHOPS", "purple")}
+                ${renderStatCard("คะแนนโหวตรวม", stats.totalScore, "POINTS", "orange")}
+                ${renderStatCard("คะแนนโหวตเฉลี่ย", avgSatisfy, "%", "emerald", avgSatisfy)}
             `;
 
             const zoneGrid = document.getElementById('zone-summary-grid');
@@ -454,3 +454,4 @@
     </script>
 </body>
 </html>
+
