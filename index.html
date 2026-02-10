@@ -6,7 +6,6 @@
     <title>Number One Market - Vote & Win</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- เพิ่ม Font ที่รองรับหลายภาษา -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Noto+Sans+Myanmar:wght@400;700&family=Noto+Sans+Lao:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -134,7 +133,6 @@
         }
         .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
 
-        /* Modal / Alert */
         #customAlert {
             display: none;
             position: fixed;
@@ -388,7 +386,7 @@
             },
             lo: {
                 header: "THE BEST OF NUMBER ONE MARKET",
-                subtitle: "ໂຫວດຮ້ານຄ້າເພື່ອລຸ້ນຮັບຂອງລາງວັນ!!",
+                subtitle: "ໂຫວດຮ້านຄ້າເພື່ອລຸ້ນຮັບຂອງລາງວັນ!!",
                 prize: "ລຸ້ນຮັບຄຳ ແລະ ລົດຈັກ!",
                 alreadyVoted: "ມື້ນີ້ທ່ານໂຫວດຮ້ານນີ້ແລ້ວ",
                 selectedShop: "ຮ້ານທີ່ທ່ານເລືອກ",
@@ -469,8 +467,6 @@
         function changeLang(lang) {
             currentLang = lang;
             const t = translations[lang] || translations.th;
-            
-            // อัปเดตข้อความในหน้าเว็บ
             document.getElementById('txt-header').innerText = t.header;
             document.getElementById('txt-subtitle').innerText = t.subtitle;
             document.getElementById('txt-prize').innerHTML = `<i class="fas fa-motorcycle"></i> ${t.prize}`;
@@ -481,14 +477,10 @@
             document.getElementById('lbl-phone').innerHTML = `<i class="fas fa-phone"></i> ${t.lblPhone}`;
             document.getElementById('phoneInput').placeholder = t.phonePlaceholder;
             document.getElementById('txt-rate-label').innerText = t.rateLabel;
-            
-            // เช็คว่าปุ่มควรแสดงอะไร
             const isAlreadyVoted = currentShopId && checkVoteHistory(currentShopId);
             document.getElementById('btnSubmit').innerText = isAlreadyVoted ? t.alreadyVoted : t.submit;
-            
             document.getElementById('txt-loading').innerText = t.loading;
             document.getElementById('btn-modal-close').innerText = t.btnOk;
-            
             const pdpaSpan = document.getElementById('txt-pdpa');
             pdpaSpan.innerHTML = `${t.pdpa} <a href="https://www.numberonemarket.com/privacy.php" target="_blank" id="txt-pdpa-link">${t.pdpaLink}</a>*`;
         }
@@ -512,13 +504,11 @@
                 } else {
                     const urlParams = new URLSearchParams(window.location.search);
                     currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
-
                     if (currentShopId) {
                         try {
                             const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}`);
                             currentShopName = await response.text();
                             document.getElementById('shopNameDisplay').innerText = currentShopName;
-
                             if (checkVoteHistory(currentShopId)) {
                                 document.getElementById('alreadyVotedMsg').style.display = 'block';
                                 document.getElementById('btnSubmit').disabled = true;
@@ -531,7 +521,6 @@
                         document.getElementById('shopNameDisplay').innerText = "Shop ID not found";
                     }
                 }
-                // เรียกใช้ครั้งแรกเพื่อ set ภาษาเริ่มต้น
                 changeLang(currentLang);
             } catch (error) { console.error(error); }
         }
@@ -550,18 +539,114 @@
         async function validateAndSubmit() {
             const t = translations[currentLang];
             if (currentShopId && checkVoteHistory(currentShopId)) return showAlert(t.alertFail, t.alreadyVoted, 'error');
-
             const name = document.getElementById('nameInput').value.trim();
             const phone = document.getElementById('phoneInput').value.trim();
             const ratingEl = document.querySelector('input[name="score_quality"]:checked');
             const pdpa = document.getElementById('pdpaConsent').checked;
-
             if (!name || !phone) return showAlert(t.alertIncomplete, t.alertIncompleteMsg, 'error');
             if (phone.length < 9) return showAlert(t.alertPhoneError, t.alertPhoneError, 'error');
             if (!ratingEl) return showAlert(t.alertRateError, t.alertRateError, 'error');
             if (!pdpa) return showAlert(t.alertPdpaError, t.alertPdpaError, 'error');
-
             submitVote(name, phone, ratingEl.value);
+        }
+
+        // --- NEW: Function to send Flex Message ---
+        async function sendSuccessFlex(shopName) {
+            if (!liff.isInClient()) return; // Only send if opened in LINE app
+            
+            try {
+                await liff.sendMessages([
+                    {
+                        "type": "flex",
+                        "altText": "โหวตสำเร็จแล้ว! Numberone Market",
+                        "contents": {
+                            "type": "bubble",
+                            "header": {
+                                "type": "box",
+                                "layout": "vertical",
+                                "backgroundColor": "#06C755",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "โหวตสำเร็จแล้ว!",
+                                        "weight": "bold",
+                                        "color": "#FFFFFF",
+                                        "align": "center"
+                                    }
+                                ]
+                            },
+                            "body": {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "ขอบคุณที่ร่วมสนุกกับเรา",
+                                        "weight": "bold",
+                                        "size": "sm",
+                                        "color": "#1DB446",
+                                        "align": "center"
+                                    },
+                                    {
+                                        "type": "separator",
+                                        "margin": "md"
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "margin": "lg",
+                                        "spacing": "sm",
+                                        "contents": [
+                                            {
+                                                "type": "box",
+                                                "layout": "baseline",
+                                                "spacing": "sm",
+                                                "contents": [
+                                                    { "type": "text", "text": "ร้านที่เลือก:", "color": "#aaaaaa", "size": "sm", "flex": 2 },
+                                                    { "type": "text", "text": shopName, "wrap": true, "color": "#666666", "size": "sm", "flex": 4, "weight": "bold" }
+                                                ]
+                                            },
+                                            {
+                                                "type": "box",
+                                                "layout": "baseline",
+                                                "spacing": "sm",
+                                                "contents": [
+                                                    { "type": "text", "text": "โครงการ:", "color": "#aaaaaa", "size": "sm", "flex": 2 },
+                                                    { "type": "text", "text": "Numberone Market", "wrap": true, "color": "#666666", "size": "sm", "flex": 4 }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "margin": "xxl",
+                                        "contents": [
+                                            {
+                                                "type": "image",
+                                                "url": "https://cdn-icons-png.flaticon.com/512/5290/5290058.png",
+                                                "aspectMode": "fit",
+                                                "size": "xs"
+                                            },
+                                            {
+                                                "type": "text",
+                                                "text": "คะแนนของคุณมีค่าต่อผู้ประกอบการ",
+                                                "margin": "md",
+                                                "size": "xxs",
+                                                "color": "#aaaaaa",
+                                                "align": "center"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]);
+                console.log("Flex message sent successfully");
+            } catch (err) {
+                console.error("Error sending Flex Message:", err);
+            }
         }
 
         async function submitVote(name, phone, rating) {
@@ -588,6 +673,9 @@
                 const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
                 history[currentShopId] = new Date().toISOString();
                 localStorage.setItem('vote_history', JSON.stringify(history));
+
+                // --- NEW: Send Flex Message and then show alert ---
+                await sendSuccessFlex(currentShopName);
 
                 document.getElementById('loading').style.display = 'none';
                 showAlert(t.alertSuccess, t.alertSuccessMsg, 'success');
