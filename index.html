@@ -249,7 +249,8 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzYqf3clGc9goZOhScx44uWU1XCX96y0GhvyRrw7gGmvYk3kujHyfLRg8GrRtWSsZ2V5w/exec';
+        // URL เดิมของคุณ
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzKN77R8YvNUwVkO2Sza9Du2o5xeit-Mj2CmWeNBpncFYMD7QJ5dqSqr-QKzT9lgjduzw/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -516,7 +517,40 @@
                     if (currentShopId) {
                         try {
                             const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}`);
-                            currentShopName = await response.text();
+                            const rawData = await response.text();
+                            
+                            // --- [ส่วนที่แก้ไข] ตรวจสอบว่าเป็น JSON (ข้อมูลทั้งหมด) หรือ Text (ชื่อร้าน) ---
+                            // ถ้าข้อมูลที่ได้มาขึ้นต้นด้วย [ แสดงว่าเป็น JSON (Web App ส่งมาผิด) เราจะดึงเฉพาะร้านที่ต้องการ
+                            if (rawData.trim().startsWith('[') || rawData.trim().startsWith('{')) {
+                                try {
+                                    const shops = JSON.parse(rawData);
+                                    let found = null;
+                                    
+                                    if (Array.isArray(shops)) {
+                                        // ค้นหาใน Array ของร้านค้า
+                                        found = shops.find(s => {
+                                            // รองรับ Key หลายแบบเผื่อ Web App ส่งมาไม่ตรง
+                                            const sId = s.ShopID || s.shopId || s['Column A (ShopID)']; 
+                                            return sId && sId.toString().trim() === currentShopId.trim();
+                                        });
+                                    }
+                                    
+                                    if (found) {
+                                        // เจอร้านแล้ว ดึงชื่อร้านออกมา
+                                        currentShopName = found.ShopName || found.shopName || found['Column B (ShopName)'];
+                                    } else {
+                                        currentShopName = "ไม่พบร้านค้า (Shop Not Found)";
+                                    }
+                                } catch (e) {
+                                    console.error("JSON Parse Error:", e);
+                                    currentShopName = "Error Loading Data";
+                                }
+                            } else {
+                                // ถ้าข้อมูลเป็น Text ธรรมดา (กรณี Web App ทำงานถูกต้อง) ให้ใช้ได้เลย
+                                currentShopName = rawData;
+                            }
+                            // -------------------------------------------------------------
+
                             document.getElementById('shopNameDisplay').innerText = currentShopName;
 
                             if (checkVoteHistory(currentShopId)) {
@@ -525,10 +559,11 @@
                                 changeLang(currentLang);
                             }
                         } catch (err) {
-                            document.getElementById('shopNameDisplay').innerText = "Error loading shop";
+                            console.error(err);
+                            document.getElementById('shopNameDisplay').innerText = "Connection Error";
                         }
                     } else {
-                        document.getElementById('shopNameDisplay').innerText = "Shop ID not found";
+                        document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้า (No Shop ID)";
                     }
                 }
                 // เรียกใช้ครั้งแรกเพื่อ set ภาษาเริ่มต้น
@@ -602,7 +637,3 @@
     </script>
 </body>
 </html>
-
-
-
-
