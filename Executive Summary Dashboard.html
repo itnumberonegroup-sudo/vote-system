@@ -5,25 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Best of Number One Market - Modern Dashboard</title>
 
-    <!-- สำหรับแสดง Icon เมื่อ Add to Home Screen (my-logo.png) -->
-    <!-- iOS: iPhone, iPad -->
     <link rel="apple-touch-icon" href="my-logo.png">
-    
-    <!-- Android & Chrome -->
     <link rel="icon" type="image/png" sizes="192x192" href="my-logo.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="my-logo.png">
-    <link rel="shortcut icon" href="my-logo.png" type="image/x-icon">
-    
-    <!-- ปรับแต่งส่วนติดต่อผู้ใช้บนมือถือ (PWA Meta Tags) -->
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="โหวตนัมเบอร์วัน">
-    <meta name="mobile-web-app-capable" content="yes">
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Modern & Highly Readable Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -40,7 +28,7 @@
         .glass { 
             backdrop-filter: blur(20px) saturate(180%);
             background-color: rgba(255, 255, 255, 0.8);
-            border-b: 1px solid rgba(226, 232, 240, 0.8);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
         .text-gradient {
             background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
@@ -49,12 +37,6 @@
         }
         .card-hover { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
-        .status-badge { font-feature-settings: "tnum"; font-variant-numeric: tabular-nums; }
-        
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            opacity: 1;
-        }
     </style>
 </head>
 <body class="min-h-screen pb-12">
@@ -66,7 +48,7 @@
                 <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
                 <div class="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
-            <p class="font-medium text-slate-500 animate-pulse text-sm">กำลังอัปเดตข้อมูล Real-time...</p>
+            <p class="font-medium text-slate-500 animate-pulse text-sm">กำลังอัปเดตข้อมูลผ่าน Proxy API...</p>
         </div>
     </div>
 
@@ -86,26 +68,22 @@
             </div>
             
             <div class="space-y-8">
-                <!-- Logo Setup -->
                 <div class="space-y-3">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                         ตั้งค่า LOGO ตลาด (ทรงยาว)
                     </label>
                     <div class="flex gap-3">
-                        <input id="input-logo" type="text" placeholder="วางลิงก์ Google Drive หรือลิงก์รูปภาพที่นี่" class="flex-1 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 outline-none transition-all">
+                        <input id="input-logo" type="text" placeholder="วางลิงก์รูปภาพที่นี่" class="flex-1 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 outline-none transition-all">
                     </div>
                 </div>
 
-                <!-- Zone Configuration -->
                 <div class="space-y-4">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        กำหนดชื่อและช่วงหมายเลข SHOP ID รายโซน
+                        กำหนดโซนร้านค้า
                     </label>
-                    <div id="zone-configs-container" class="grid gap-4">
-                        <!-- Zones populated by JS -->
-                    </div>
+                    <div id="zone-configs-container" class="grid gap-4"></div>
                 </div>
             </div>
 
@@ -119,27 +97,21 @@
     <header class="sticky top-0 z-40 glass px-4 py-6 md:px-10">
         <div class="max-w-7xl mx-auto flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div class="flex flex-col items-center text-center lg:items-start lg:text-left">
-                <!-- Modern Logo Frame -->
-                <div id="logo-display-container" class="mb-4 transition-all duration-500 min-h-[80px] flex items-center">
-                    <!-- Logo injected by JS -->
-                </div>
-                
+                <div id="logo-display-container" class="mb-4 transition-all duration-500 min-h-[80px] flex items-center"></div>
                 <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight sm:text-4xl uppercase">
                     THE BEST OF <span class="text-gradient">NUMBER ONE MARKET</span>
                 </h1>
                 <div class="mt-3 flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.25em]">
                     <span class="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-                    ฐานข้อมูลออนไลน์: <span id="last-update" class="text-slate-600 status-badge">--:--:--</span>
+                    ฐานข้อมูล (🔒 ข้อมูลลูกค้าถูกกรองผ่าน Proxy): <span id="last-update" class="text-slate-600">--:--:--</span>
                 </div>
             </div>
 
             <div class="flex items-center justify-center gap-3">
-                <button onclick="toggleSettings(true)" class="group flex items-center gap-2 rounded-2xl bg-white px-6 py-4 text-xs font-bold text-slate-700 shadow-sm border border-slate-200 hover:border-blue-400 hover:text-blue-600 active:scale-95 transition-all">
-                    <svg class="group-hover:rotate-90 transition-transform duration-500" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                <button onclick="toggleSettings(true)" class="group flex items-center gap-2 rounded-2xl bg-white px-6 py-4 text-xs font-bold text-slate-700 shadow-sm border border-slate-200 hover:border-blue-400 hover:text-blue-600 transition-all">
                     ตั้งค่า
                 </button>
-                <button onclick="fetchData()" class="flex items-center gap-2 rounded-2xl bg-blue-600 px-8 py-4 text-xs font-bold text-white shadow-xl shadow-blue-500/30 hover:bg-blue-700 active:scale-95 transition-all uppercase">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+                <button onclick="fetchData()" class="flex items-center gap-2 rounded-2xl bg-blue-600 px-8 py-4 text-xs font-bold text-white shadow-xl shadow-blue-500/30 hover:bg-blue-700 transition-all uppercase">
                     อัปเดตข้อมูล
                 </button>
             </div>
@@ -147,41 +119,23 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 md:px-10 mt-10 space-y-12">
-        <!-- Main Stats -->
         <div id="stats-grid" class="grid grid-cols-2 gap-5 lg:grid-cols-4"></div>
-
-        <!-- Zone Summary -->
         <section class="space-y-6">
-            <div class="flex items-center justify-between px-2">
-                <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-3">
-                    <span class="w-2 h-8 bg-blue-500 rounded-full"></span>
-                    สรุปผลคะแนนรายโซน
-                </h2>
-            </div>
+            <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-3">
+                <span class="w-2 h-8 bg-blue-500 rounded-full"></span>
+                สรุปผลคะแนนรายโซน
+            </h2>
             <div id="zone-summary-grid" class="grid grid-cols-1 gap-6 lg:grid-cols-3"></div>
         </section>
-
-        <!-- Top 5 Lists -->
         <section id="top-5-grid" class="grid grid-cols-1 gap-8 md:grid-cols-3"></section>
-
-        <!-- Overall Top 10 -->
         <section class="relative rounded-[3rem] bg-slate-900 p-8 sm:p-14 shadow-3xl text-white overflow-hidden">
-            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] -mr-64 -mt-64"></div>
-            <div class="relative z-10 mb-10">
-                <h2 class="text-3xl font-bold flex items-center gap-5 uppercase tracking-tight">
-                    <span class="p-3 bg-blue-600 rounded-2xl shadow-2xl shadow-blue-500/40">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-                    </span>
-                    Top 10 ร้านค้ายอดนิยมประจำตลาด
-                </h2>
-            </div>
             <div id="top-10-list" class="grid grid-cols-1 gap-5 md:grid-cols-2 relative z-10"></div>
         </section>
     </main>
 
     <script>
-        const SHEET_ID = "1vaB9QG7oyDQL2cy0LUE6-eT9FcFBvJpWyRVyu855UQo";
-        const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=0`;
+        // *** ใช้งาน Web App URL ที่คุณให้มาเรียบร้อยแล้ว ***
+        const PROXY_API_URL = "https://script.google.com/macros/s/AKfycbzYqf3clGc9goZOhScx44uWU1XCX96y0GhvyRrw7gGmvYk3kujHyfLRg8GrRtWSsZ2V5w/exec";
 
         let appSettings = {
             logoUrl: "https://lh3.googleusercontent.com/d/1tUpAvRAPs2WPkrYzpXs77VQ13fRB172y",
@@ -194,160 +148,33 @@
 
         let rawData = [];
 
-        function loadSettings() {
-            const saved = localStorage.getItem('market_settings_v5');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                appSettings = { ...appSettings, ...parsed };
-            }
-        }
-
+        // ฟังก์ชันแปลงลิงก์ Google Drive ให้เป็น Direct Link
         function convertDriveUrl(url) {
             if (!url) return "";
             if (url.startsWith('https://lh3.googleusercontent.com/d/')) return url;
             let id = "";
             if (url.includes('drive.google.com/file/d/')) {
                 const parts = url.split('/d/');
-                if (parts.length > 1) {
-                    id = parts[1].split('/')[0].split('?')[0].split('&')[0];
-                }
+                if (parts.length > 1) id = parts[1].split('/')[0].split('?')[0];
             } else if (url.includes('id=')) {
                 id = url.split('id=')[1].split('&')[0];
             }
-            if (id) return `https://lh3.googleusercontent.com/d/${id}`;
-            return url;
-        }
-
-        function saveSettings() {
-            const inputLogo = document.getElementById('input-logo').value.trim();
-            if (inputLogo) appSettings.logoUrl = convertDriveUrl(inputLogo);
-            
-            Object.keys(appSettings.zones).forEach(key => {
-                const nameVal = document.getElementById(`${key}-name`).value.trim();
-                const startVal = parseInt(document.getElementById(`${key}-start`).value);
-                const endVal = parseInt(document.getElementById(`${key}-end`).value);
-                
-                if (nameVal) appSettings.zones[key].name = nameVal;
-                if (!isNaN(startVal)) appSettings.zones[key].start = startVal;
-                if (!isNaN(endVal)) appSettings.zones[key].end = endVal;
-            });
-            
-            localStorage.setItem('market_settings_v5', JSON.stringify(appSettings));
-            toggleSettings(false);
-            updateLogoDisplay();
-            processData();
-        }
-
-        function toggleSettings(show) {
-            const modal = document.getElementById('settings-modal');
-            if (show) {
-                document.getElementById('input-logo').value = appSettings.logoUrl;
-                renderZoneInputs();
-                modal.classList.remove('hidden');
-                setTimeout(() => modal.children[0].classList.replace('scale-95', 'scale-100'), 10);
-            } else {
-                modal.children[0].classList.replace('scale-100', 'scale-95');
-                setTimeout(() => modal.classList.add('hidden'), 200);
-            }
-        }
-
-        function renderZoneInputs() {
-            const container = document.getElementById('zone-configs-container');
-            container.innerHTML = '';
-            Object.keys(appSettings.zones).forEach(key => {
-                const z = appSettings.zones[key];
-                container.innerHTML += `
-                    <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 hover:bg-white transition-all">
-                        <div class="mb-3">
-                            <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">ชื่อโซน</label>
-                            <input id="${key}-name" type="text" value="${z.name}" class="w-full rounded-xl border border-slate-200 bg-white p-2 text-sm font-bold">
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="flex-1">
-                                <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">ID เริ่มต้น</label>
-                                <input id="${key}-start" type="number" value="${z.start}" class="w-full rounded-xl border border-slate-200 bg-white p-2 text-center font-bold">
-                            </div>
-                            <div class="flex-1">
-                                <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">ID สุดท้าย</label>
-                                <input id="${key}-end" type="number" value="${z.end}" class="w-full rounded-xl border border-slate-200 bg-white p-2 text-center font-bold">
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function updateLogoDisplay() {
-            const container = document.getElementById('logo-display-container');
-            if (appSettings.logoUrl) {
-                container.innerHTML = `
-                    <div class="relative group">
-                        <img src="${appSettings.logoUrl}" 
-                             alt="Market Logo" 
-                             class="h-24 w-auto object-contain drop-shadow-md rounded-xl transition-all"
-                             onerror="handleLogoError(this)">
-                    </div>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div class="flex h-20 w-64 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 cursor-pointer font-bold text-[10px] uppercase tracking-widest" onclick="toggleSettings(true)">
-                        คลิกเพื่อตั้งค่า LOGO
-                    </div>
-                `;
-            }
-        }
-
-        function handleLogoError(img) {
-            img.style.display = 'none';
-            const container = document.getElementById('logo-display-container');
-            container.innerHTML = `
-                <div class="bg-red-50 text-red-500 p-4 rounded-xl border border-red-100 text-[10px] font-bold max-w-sm">
-                    ⚠️ โหลดรูปไม่สำเร็จ: ลิงก์ Drive อาจมีปัญหาชั่วคราว
-                </div>
-            `;
+            return id ? `https://lh3.googleusercontent.com/d/${id}` : url;
         }
 
         async function fetchData() {
             try {
-                const response = await fetch(`${SHEET_CSV_URL}&_=${new Date().getTime()}`);
-                if (!response.ok) throw new Error("Connection failed");
-                const csvText = await response.text();
-                rawData = parseCSV(csvText);
+                // ดึงข้อมูลผ่าน Proxy API เพื่อความปลอดภัย
+                const response = await fetch(PROXY_API_URL + "?_=" + new Date().getTime());
+                if (!response.ok) throw new Error("API Connection failed");
+                
+                rawData = await response.json();
                 processData();
                 hideLoading();
             } catch (err) {
-                console.error(err);
+                console.error("Fetch Error:", err);
                 hideLoading();
             }
-        }
-
-        function hideLoading() {
-            const loader = document.getElementById('loading-screen');
-            if (loader) {
-                loader.classList.add('opacity-0');
-                setTimeout(() => loader.style.display = 'none', 700);
-            }
-        }
-
-        function parseCSV(csv) {
-            const lines = csv.split(/\r?\n/);
-            if (lines.length < 2) return [];
-            const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
-            return lines.slice(1).filter(line => line.trim() !== "").map(line => {
-                const values = [];
-                let current = '', inQuotes = false;
-                for (let i = 0; i < line.length; i++) {
-                    const char = line[i];
-                    if (char === '"') inQuotes = !inQuotes;
-                    else if (char === ',' && !inQuotes) { values.push(current.trim()); current = ''; }
-                    else { current += char; }
-                }
-                values.push(current.trim());
-                return headers.reduce((obj, header, i) => {
-                    obj[header] = values[i]?.replace(/^"|"$/g, '') || "";
-                    return obj;
-                }, {});
-            });
         }
 
         function processData() {
@@ -397,51 +224,44 @@
 
         function renderUI(stats, uniqueShopsCount, zoneStats, shopList) {
             document.getElementById('last-update').innerText = new Date().toLocaleTimeString('th-TH');
-
-            const statsGrid = document.getElementById('stats-grid');
             const avgSatisfy = stats.totalVotes > 0 ? ((stats.totalScore / (stats.totalVotes * 5)) * 100).toFixed(1) : 0;
             
-            statsGrid.innerHTML = `
+            document.getElementById('stats-grid').innerHTML = `
                 ${renderStatCard("จำนวนโหวตทั้งหมด", stats.totalVotes, "VOTES", "blue")}
-                ${renderStatCard("จำนวนร้านค้าที่ถูกโหวต", uniqueShopsCount, "SHOPS", "purple")}
-                ${renderStatCard("คะแนนโหวตรวม", stats.totalScore, "POINTS", "orange")}
-                ${renderStatCard("คะแนนโหวตเฉลี่ย", avgSatisfy, "%", "emerald")}
+                ${renderStatCard("จำนวนร้านค้า", uniqueShopsCount, "SHOPS", "purple")}
+                ${renderStatCard("คะแนนรวม", stats.totalScore, "POINTS", "orange")}
+                ${renderStatCard("ความพึงพอใจเฉลี่ย", avgSatisfy, "%", "emerald")}
             `;
 
             const zoneGrid = document.getElementById('zone-summary-grid');
             zoneGrid.innerHTML = '';
-            Object.keys(appSettings.zones).forEach((key) => {
+            Object.keys(appSettings.zones).forEach(key => {
                 const z = appSettings.zones[key];
-                const data = zoneStats[z.name] || { votes: 0, shops: new Set(), score: 0 };
+                const data = zoneStats[z.name] || { votes: 0, score: 0 };
                 const percent = data.votes > 0 ? ((data.score / (data.votes * 5)) * 100).toFixed(1) : 0;
                 zoneGrid.innerHTML += `
                     <div class="rounded-[2rem] bg-white p-7 shadow-sm border-l-8 border-blue-500 card-hover">
                         <div class="mb-5 flex justify-between items-start">
-                            <h3 class="text-sm font-extrabold text-slate-800 uppercase leading-none">${z.name}</h3>
+                            <h3 class="text-sm font-extrabold text-slate-800 uppercase">${z.name}</h3>
                             <span class="text-2xl font-black text-slate-900">${percent}%</span>
                         </div>
                         <div class="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-                            <div class="h-full bg-blue-600 transition-all duration-1000" style="width: ${percent}%"></div>
+                            <div class="h-full bg-blue-600" style="width: ${percent}%"></div>
                         </div>
                     </div>
                 `;
             });
 
-            const top10List = document.getElementById('top-10-list');
             const top10 = shopList.sort((a,b) => b.percent - a.percent).slice(0, 10);
-            top10List.innerHTML = top10.map((s, i) => `
-                <div class="flex items-center gap-5 rounded-[1.8rem] bg-white/5 p-5 border border-white/5 hover:bg-white/10 transition-all">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl font-black ${i < 3 ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/50' : 'bg-white/10 text-slate-400'}">${i+1}</div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="truncate font-bold text-base text-white">${s.name}</h3>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">${s.zone}</p>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-2xl font-black text-blue-400">${s.percent}%</div>
-                    </div>
+            document.getElementById('top-10-list').innerHTML = top10.map((s, i) => `
+                <div class="flex items-center gap-5 rounded-[1.8rem] bg-white/5 p-5 border border-white/5 transition-all hover:bg-white/10">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl font-black ${i < 3 ? 'bg-blue-600 text-white' : 'bg-white/10 text-slate-400'}">${i+1}</div>
+                    <div class="flex-1 min-w-0"><h3 class="truncate font-bold text-white">${s.name}</h3></div>
+                    <div class="text-right"><div class="text-2xl font-black text-blue-400">${s.percent}%</div></div>
                 </div>
             `).join('');
 
+            // Render Top 5 per Zone
             const top5Grid = document.getElementById('top-5-grid');
             top5Grid.innerHTML = '';
             Object.values(appSettings.zones).forEach(z => {
@@ -459,23 +279,53 @@
 
         function renderStatCard(title, value, unit, color) {
             const colors = { blue: 'from-blue-600 to-blue-500', purple: 'from-purple-600 to-purple-500', orange: 'from-orange-500 to-orange-400', emerald: 'from-emerald-600 to-emerald-500' };
-            return `
-                <div class="rounded-[2.5rem] bg-gradient-to-br ${colors[color]} p-6 text-white card-hover shadow-lg">
-                    <p class="text-[10px] font-extrabold uppercase tracking-widest opacity-70 mb-4">${title}</p>
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-3xl font-black">${value}</span>
-                        <span class="text-[11px] font-bold uppercase opacity-50 tracking-wider">${unit}</span>
-                    </div>
-                </div>
-            `;
+            return `<div class="rounded-[2.5rem] bg-gradient-to-br ${colors[color]} p-6 text-white shadow-lg"><p class="text-[10px] font-extrabold uppercase opacity-70 mb-4">${title}</p><div class="flex items-baseline gap-2"><span class="text-3xl font-black">${value}</span><span class="text-[11px] font-bold opacity-50 uppercase">${unit}</span></div></div>`;
         }
 
-        window.onload = () => { 
-            loadSettings(); 
+        function updateLogoDisplay() {
+            const container = document.getElementById('logo-display-container');
+            const url = convertDriveUrl(appSettings.logoUrl);
+            if (url) {
+                container.innerHTML = `<img src="${url}" alt="Market Logo" class="h-24 w-auto object-contain drop-shadow-md rounded-xl">`;
+            } else {
+                container.innerHTML = `<div class="flex h-20 w-64 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 cursor-pointer font-bold text-[10px] uppercase" onclick="toggleSettings(true)">คลิกเพื่อตั้งค่า LOGO</div>`;
+            }
+        }
+
+        function renderZoneInputs() {
+            const container = document.getElementById('zone-configs-container');
+            container.innerHTML = '';
+            Object.keys(appSettings.zones).forEach(key => {
+                const z = appSettings.zones[key];
+                container.innerHTML += `
+                    <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5">
+                        <div class="mb-3"><label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">ชื่อโซน</label><input id="${key}-name" type="text" value="${z.name}" class="w-full rounded-xl border border-slate-200 p-2 text-sm font-bold"></div>
+                        <div class="flex gap-4">
+                            <div class="flex-1"><label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">ID เริ่ม</label><input id="${key}-start" type="number" value="${z.start}" class="w-full rounded-xl border border-slate-200 p-2 text-center font-bold"></div>
+                            <div class="flex-1"><label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">ID จบ</label><input id="${key}-end" type="number" value="${z.end}" class="w-full rounded-xl border border-slate-200 p-2 text-center font-bold"></div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function hideLoading() { document.getElementById('loading-screen').classList.add('opacity-0'); setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 700); }
+        function toggleSettings(show) { if(show) renderZoneInputs(); document.getElementById('settings-modal').classList.toggle('hidden', !show); }
+        function loadSettings() { const saved = localStorage.getItem('market_settings_v5'); if (saved) appSettings = {...appSettings, ...JSON.parse(saved)}; }
+        function saveSettings() { 
+            const logoIn = document.getElementById('input-logo').value.trim();
+            if(logoIn) appSettings.logoUrl = logoIn;
+            Object.keys(appSettings.zones).forEach(key => {
+                appSettings.zones[key].name = document.getElementById(`${key}-name`).value;
+                appSettings.zones[key].start = parseInt(document.getElementById(`${key}-start`).value);
+                appSettings.zones[key].end = parseInt(document.getElementById(`${key}-end`).value);
+            });
+            localStorage.setItem('market_settings_v5', JSON.stringify(appSettings)); 
+            toggleSettings(false); 
             updateLogoDisplay();
             fetchData(); 
-            setInterval(fetchData, 30000); 
-        };
+        }
+
+        window.onload = () => { loadSettings(); updateLogoDisplay(); fetchData(); setInterval(fetchData, 30000); };
     </script>
 </body>
 </html>
