@@ -249,13 +249,14 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        // URL เดิมของคุณ
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzKN77R8YvNUwVkO2Sza9Du2o5xeit-Mj2CmWeNBpncFYMD7QJ5dqSqr-QKzT9lgjduzw/exec';
+        // URL Web App เดิมของคุณ (ถูกต้องแล้ว ไม่ต้องเปลี่ยน)
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz_eRPXkwH0ZIA2oq5n0_STmkmrPiEzphN1SO_d8hLO34iA8fLJW5IknAfzZzbRMff_mg/exec';
 
         let currentShopId = "";
         let currentShopName = "";
         let currentLang = 'th';
 
+        // ... existing translations code ...
         const translations = {
             th: {
                 header: "THE BEST OF NUMBER ONE MARKET",
@@ -519,34 +520,35 @@
                             const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}`);
                             const rawData = await response.text();
                             
-                            // --- [ส่วนที่แก้ไข] ตรวจสอบว่าเป็น JSON (ข้อมูลทั้งหมด) หรือ Text (ชื่อร้าน) ---
-                            // ถ้าข้อมูลที่ได้มาขึ้นต้นด้วย [ แสดงว่าเป็น JSON (Web App ส่งมาผิด) เราจะดึงเฉพาะร้านที่ต้องการ
+                            // --- [ส่วนที่แก้ไขใหม่] ตรวจสอบข้อมูลอย่างละเอียด ---
+                            // 1. กรณี Web App ส่งข้อมูลมาเป็น JSON (อาจจะผิดเวอร์ชัน)
                             if (rawData.trim().startsWith('[') || rawData.trim().startsWith('{')) {
                                 try {
                                     const shops = JSON.parse(rawData);
                                     let found = null;
-                                    
-                                    if (Array.isArray(shops)) {
-                                        // ค้นหาใน Array ของร้านค้า
-                                        found = shops.find(s => {
-                                            // รองรับ Key หลายแบบเผื่อ Web App ส่งมาไม่ตรง
-                                            const sId = s.ShopID || s.shopId || s['Column A (ShopID)']; 
-                                            return sId && sId.toString().trim() === currentShopId.trim();
-                                        });
-                                    }
+                                    const shopList = Array.isArray(shops) ? shops : (shops.data || []);
+
+                                    // ค้นหาโดยรองรับชื่อคอลัมน์หลายแบบ (รวมถึงชื่อยาวๆ ใน Sheet ของคุณ)
+                                    found = shopList.find(s => {
+                                        // ลองดึง ID จากหลายๆ key ที่เป็นไปได้
+                                        const sId = s['Column A (ShopID)'] || s['ShopID'] || s['shopId'] || s['id'];
+                                        return sId && sId.toString().trim() === currentShopId.trim();
+                                    });
                                     
                                     if (found) {
-                                        // เจอร้านแล้ว ดึงชื่อร้านออกมา
-                                        currentShopName = found.ShopName || found.shopName || found['Column B (ShopName)'];
+                                        // เจอร้านแล้ว ดึงชื่อร้านออกมา (รองรับชื่อคอลัมน์ยาวๆ ใน Sheet ของคุณ)
+                                        currentShopName = found['Column B (ShopName)'] || found['ShopName'] || found['shopName'] || "ไม่ระบุชื่อร้าน";
                                     } else {
-                                        currentShopName = "ไม่พบร้านค้า (Shop Not Found)";
+                                        // ถ้าหาใน JSON ไม่เจอ แปลว่า Apps Script อาจจะอ่านผิด Sheet (ไปอ่าน Sheet1 แทน Shops)
+                                        currentShopName = "ไม่พบร้านค้า (กรุณาอัปเดต Web App)";
+                                        console.warn("หา ShopID ไม่เจอใน JSON ที่ส่งมา อาจเป็นเพราะ Apps Script ส่งข้อมูลผิด Sheet");
                                     }
                                 } catch (e) {
                                     console.error("JSON Parse Error:", e);
                                     currentShopName = "Error Loading Data";
                                 }
                             } else {
-                                // ถ้าข้อมูลเป็น Text ธรรมดา (กรณี Web App ทำงานถูกต้อง) ให้ใช้ได้เลย
+                                // 2. กรณี Web App ส่งมาเป็น Text (ทำงานถูกต้อง)
                                 currentShopName = rawData;
                             }
                             // -------------------------------------------------------------
