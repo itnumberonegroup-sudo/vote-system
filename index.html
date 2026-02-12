@@ -250,8 +250,8 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        // อัปเดต URL ใหม่เรียบร้อยครับ
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzhog5U0mbgos9p4b2yTsdubRY9AQokBYAuZ0XW9rKJmRYJml6UYuayZtq1FkW-GeykLw/exec';
+        // อัปเดต URL ล่าสุดที่คุณส่งมาให้แล้วครับ
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxzMWHVfh5PB20dZgDdthkknSMgzD8joica1Tb2xq1qWxuM0uXOw8i_wq9jcQaiOUYe/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -328,7 +328,7 @@
                 alertIncomplete: "信息不完整",
                 alertIncompleteMsg: "请填写所有字段",
                 alertPhoneError: "电话号码无效",
-                alertRateError: "请选择1-5星",
+                alertRateError: "请เลือก1-5星",
                 alertPdpaError: "请接受隐私政策",
                 alertSuccess: "成功！",
                 alertSuccessMsg: "感谢您的反馈",
@@ -369,12 +369,12 @@
                 alreadyVoted: "ယနေ့အတွက် မဲပေးပြီးပါပြီ",
                 selectedShop: "ရွေးချယ်ထားသောဆိုင်",
                 lblName: "အမည် (ဆုရရှိရန်အတွက်)",
-                namePlaceholder: "အမည်အပြည့်อစုံထည့်ပါ",
+                namePlaceholder: "အမည်အပြည့်အစုံထည့်ပါ",
                 lblPhone: "ဖုန်းနံပါတ်",
                 phonePlaceholder: "ဖုန်းနံပါတ်ထည့်ပါ",
                 rateLabel: "ဤဆိုင်ကို အဆင့်သတ်မှတ်ပါ",
-                pdpa: "သင်၏အချက်အလက်များကို ဆက်သွယ်ရန်အတွက် သိမ်းဆည်းမည်ဖြစ်သည်။ အသေးစိတ်ကို ",
-                pdpaLink: "ကိုယ်ရေးကိုယ်ตาမူวါဒ",
+                pdpa: "သင်၏အချက်အလက်များကို ဆက်သွယ်ရန်สำหรับ သိမ်းဆည်းမည်ဖြစ်သည်။ အသေးစိတ်ကို ",
+                pdpaLink: "ကိုယ်ရေးကိုယ်တာမူဝါဒ",
                 submit: "အဆင့်သတ်မှတ်ချက်ကို အတည်ပြုပါ",
                 loading: "သိမ်းဆည်းနေသည်...",
                 alertIncomplete: "မပြည့်စုံပါ",
@@ -383,7 +383,7 @@
                 alertRateError: "ကြယ် ၁-၅ ခု ရွေးချယ်ပါ",
                 alertPdpaError: "မူဝါဒကို သဘောတူညီပါ",
                 alertSuccess: "အောင်မြင်ပါသည်!",
-                alertSuccessMsg: "အကြံပြုချက်สำหรับ ကျေးဇူးတင်ပါသည်",
+                alertSuccessMsg: "အကြံပြုချက်အတွက် ကျေးဇူးတင်ပါသည်",
                 alertFail: "အမှားအယွင်း",
                 alertFailMsg: "တစ်ခုခု မှားယွင်းနေပါသည်",
                 btnOk: "အိုကေ"
@@ -446,8 +446,8 @@
                 prize: "Trúng Vàng và Xe máy!",
                 alreadyVoted: "Hôm nay bạn đã bình chọn rồi",
                 selectedShop: "Cửa hàng đã chọn",
-                lblName: "Họ và Tên (để nhận giải)",
-                namePlaceholder: "Nhập họ và tên",
+                lblName: "Họและtên (để nhận giải)",
+                namePlaceholder: "Nhập họและtên",
                 lblPhone: "Số điện thoại",
                 phonePlaceholder: "Nhập số điện thoại",
                 rateLabel: "Đánh giá cửa hàng",
@@ -461,7 +461,7 @@
                 alertRateError: "Vui lòng chọn 1-5 sao",
                 alertPdpaError: "Vui lòng đồng ý chính sách",
                 alertSuccess: "Thành công!",
-                alertSuccessMsg: "Cảm ơn phản hồiของ bạn",
+                alertSuccessMsg: "Cảm ơn phản hồi của bạn",
                 alertFail: "Lỗi",
                 alertFailMsg: "Đã xảy ra lỗi",
                 btnOk: "OK"
@@ -509,6 +509,7 @@
                     liff.login();
                 } else {
                     const urlParams = new URLSearchParams(window.location.search);
+                    // นำคำว่า let ออกเพื่อให้เก็บเข้าตัวแปร Global
                     currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
 
                     if (!currentShopId && urlParams.get('liff.state')) {
@@ -525,7 +526,8 @@
                             const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}&t=${Date.now()}`);
                             const textData = await response.text();
                             
-                            if (textData === "NOT_FOUND" || textData.includes("Error")) {
+                            // ล้าง Logic การเช็ค JSON ออกเพื่อความแม่นยำ เพราะ Apps Script ส่งกลับมาเป็นชื่อร้านโดยตรง
+                            if (textData.includes("Error") || textData === "NOT_FOUND" || textData.includes("No parameter")) {
                                 currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId})`;
                             } else {
                                 currentShopName = textData.trim();
