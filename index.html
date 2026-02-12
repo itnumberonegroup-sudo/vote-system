@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ใส่ meta ป้องกัน Cache เพื่อให้ดึงข้อมูลใหม่เสมอ -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Number One Market - Vote & Win</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -248,6 +252,7 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
+        // แก้ไข URL ให้เป็นเวอร์ชันใหม่ที่คุณเพิ่งสร้างแล้ว
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxKq1vBXPiXOrIEmoWNriH0FA8LbW9Gd7A15ololp-FT_anKmSfTIl6A6kLF1IucWbmIg/exec';
 
         let currentShopId = "";
@@ -510,7 +515,6 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
 
-                    // เพิ่มการดึงค่าจาก liff.state ในกรณีที่เปิดผ่านแอป LINE แล้ว URL ถูกแปลง
                     if (!currentShopId) {
                         const liffState = urlParams.get('liff.state');
                         if (liffState) {
@@ -524,7 +528,7 @@
                             const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}`);
                             const rawData = await response.text();
                             
-                            // ลบเงื่อนไข JSON ออกไปเลย เพราะฝั่ง Google Script เราคืนค่าเป็น Text แน่นอน 100% แล้ว
+                            // ดึงข้อความมาแสดงผล และตัดช่องว่างทิ้ง
                             currentShopName = rawData.trim();
                             document.getElementById('shopNameDisplay').innerText = currentShopName;
 
@@ -611,4 +615,3 @@
     </script>
 </body>
 </html>
-
