@@ -136,7 +136,6 @@
         }
         .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
 
-        /* Modal / Alert */
         #customAlert {
             display: none;
             position: fixed;
@@ -251,7 +250,8 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxlbB-oXfB02K0UalsznNO63tZ0Z2iIiRpsed3t1cFr0XpUTn5mNd1xxCklni7xuVDFFQ/exec';
+        // อัปเดต URL ใหม่เรียบร้อยครับ
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzhog5U0mbgos9p4b2yTsdubRY9AQokBYAuZ0XW9rKJmRYJml6UYuayZtq1FkW-GeykLw/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -369,12 +369,12 @@
                 alreadyVoted: "ယနေ့အတွက် မဲပေးပြီးပါပြီ",
                 selectedShop: "ရွေးချယ်ထားသောဆိုင်",
                 lblName: "အမည် (ဆုရရှိရန်အတွက်)",
-                namePlaceholder: "အမည်အပြည့်အစုံထည့်ပါ",
+                namePlaceholder: "အမည်အပြည့်อစုံထည့်ပါ",
                 lblPhone: "ဖုန်းနံပါတ်",
                 phonePlaceholder: "ဖုန်းနံပါတ်ထည့်ပါ",
                 rateLabel: "ဤဆိုင်ကို အဆင့်သတ်မှတ်ပါ",
                 pdpa: "သင်၏အချက်အလက်များကို ဆက်သွယ်ရန်အတွက် သိမ်းဆည်းမည်ဖြစ်သည်။ အသေးစိတ်ကို ",
-                pdpaLink: "ကိုယ်ရေးကိုယ်တာမူဝါเด",
+                pdpaLink: "ကိုယ်ရေးကိုယ်ตาမူวါဒ",
                 submit: "အဆင့်သတ်မှတ်ချက်ကို အတည်ပြုပါ",
                 loading: "သိမ်းဆည်းနေသည်...",
                 alertIncomplete: "မပြည့်စုံပါ",
@@ -383,8 +383,8 @@
                 alertRateError: "ကြယ် ၁-၅ ခု ရွေးချယ်ပါ",
                 alertPdpaError: "မူဝါဒကို သဘောတူညီပါ",
                 alertSuccess: "အောင်မြင်ပါသည်!",
-                alertSuccessMsg: "အကြံပြုချက်အတွက် ကျေးဇူးတင်ပါသည်",
-                alertFail: "အမှားအยွင်း",
+                alertSuccessMsg: "အကြံပြုချက်สำหรับ ကျေးဇူးတင်ပါသည်",
+                alertFail: "အမှားအယွင်း",
                 alertFailMsg: "တစ်ခုခု မှားယွင်းနေပါသည်",
                 btnOk: "အိုကေ"
             },
@@ -461,7 +461,7 @@
                 alertRateError: "Vui lòng chọn 1-5 sao",
                 alertPdpaError: "Vui lòng đồng ý chính sách",
                 alertSuccess: "Thành công!",
-                alertSuccessMsg: "Cảm ơn phản hồi của bạn",
+                alertSuccessMsg: "Cảm ơn phản hồiของ bạn",
                 alertFail: "Lỗi",
                 alertFailMsg: "Đã xảy ra lỗi",
                 btnOk: "OK"
@@ -472,7 +472,6 @@
             currentLang = lang;
             const t = translations[lang] || translations.th;
             
-            // อัปเดตข้อความใน UI
             document.getElementById('txt-header').innerText = t.header;
             document.getElementById('txt-subtitle').innerText = t.subtitle;
             document.getElementById('txt-prize').innerHTML = `<i class="fas fa-motorcycle"></i> ${t.prize}`;
@@ -486,7 +485,6 @@
             document.getElementById('txt-loading').innerText = t.loading;
             document.getElementById('btn-modal-close').innerText = t.btnOk;
 
-            // ตรวจสอบสถานะการโหวตเพื่อเปลี่ยนคำบนปุ่ม
             const isAlreadyVoted = currentShopId && checkVoteHistory(currentShopId);
             document.getElementById('btnSubmit').innerText = isAlreadyVoted ? t.alreadyVoted : t.submit;
             
