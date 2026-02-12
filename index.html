@@ -173,7 +173,7 @@
 
     <div id="loading">
         <div class="spinner"></div>
-        <p id="txt-loading" style="margin-top: 15px; font-weight: 600;">กำลังประมวลผล...</p>
+        <p id="txt-loading" style="margin-top: 15px; font-weight: 600;">กำลังประมวลผล (V.4)...</p>
     </div>
 
     <div id="customAlert" onclick="closeAlert()">
@@ -512,19 +512,26 @@
                     liff.login();
                 } else {
                     const urlParams = new URLSearchParams(window.location.search);
-                    currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
+                    let currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
 
                     if (!currentShopId) {
-                        const liffState = urlParams.get('liff.state');
+                        let liffState = urlParams.get('liff.state');
                         if (liffState) {
-                            const stateParams = new URLSearchParams(liffState.startsWith('?') ? liffState : '?' + liffState);
+                            // ป้องกันการเข้ารหัส URL ซ้อนกันของ LINE LIFF
+                            if (liffState.startsWith('?')) liffState = liffState.substring(1);
+                            try { liffState = decodeURIComponent(liffState); } catch(e) {}
+                            liffState = '?' + liffState;
+                            
+                            const stateParams = new URLSearchParams(liffState);
                             currentShopId = stateParams.get('shop_id') || stateParams.get('shopId');
                         }
                     }
 
                     if (currentShopId) {
+                        currentShopId = currentShopId.trim().toUpperCase(); // จัดฟอร์แมตให้ตรงกับ Sheet ทันที
                         try {
-                            const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}`);
+                            // เพิ่ม &t=... เพื่อบังคับล้าง Cache การดึงข้อมูลแบบ 100%
+                            const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}&t=${new Date().getTime()}`);
                             const rawData = await response.text();
                             
                             let textData = rawData.trim();
@@ -550,16 +557,16 @@
                                     if (foundShop) {
                                         currentShopName = foundShop.ShopName || foundShop.shopName || foundShop['Column B (ShopName)'] || "ไม่ระบุชื่อร้าน";
                                     } else {
-                                        currentShopName = "ไม่พบร้านค้า (Shop Not Found)";
+                                        currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId || 'ไม่ทราบ'})`;
                                     }
                                 } catch (e) {
                                     console.error("JSON Parse Error:", e);
-                                    currentShopName = "ข้อมูลรูปแบบผิดพลาด (JSON Error)";
+                                    currentShopName = `ข้อมูลรูปแบบผิดพลาด (รหัส: ${currentShopId || 'ไม่ทราบ'})`;
                                 }
                             } else {
                                 // ถ้าระบบส่งเป็น Text กลับมาว่าไม่พบร้านค้า ให้แสดง ID เพื่อเช็คความถูกต้อง
                                 if (textData.includes("ไม่พบร้านค้า") || textData.includes("Shop Not Found")) {
-                                    currentShopName = `ไม่พบชื่อร้านของรหัส: ${currentShopId || 'ไม่ทราบ'}`;
+                                    currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId || 'ไม่ทราบ'})`;
                                 } else {
                                     currentShopName = textData;
                                 }
