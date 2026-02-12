@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ใส่ meta ป้องกัน Cache เพื่อให้ดึงข้อมูลใหม่เสมอ -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -252,8 +251,8 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        // แก้ไข URL ให้เป็นเวอร์ชันใหม่ที่คุณเพิ่งสร้างแล้ว
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxKq1vBXPiXOrIEmoWNriH0FA8LbW9Gd7A15ololp-FT_anKmSfTIl6A6kLF1IucWbmIg/exec';
+        // 👇 วาง URL ใหม่แค่ลิงก์เดียวตรงนี้ครับ 👇
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzqivlHPlhxD6eAAWxLkar_pyGxeFmL-itm8eIjlNvXE8SRwLRDUNyCY3fXwVwoCzCf8w/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -528,27 +527,26 @@
                             const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}`);
                             const rawData = await response.text();
                             
-                            // === ส่วนที่แก้ไขเพื่อป้องกัน Error หน้าจอพัง ===
                             let textData = rawData.trim();
                             
-                            // ตรวจสอบว่าข้อมูลที่ส่งกลับมาเป็นก้อน JSON หรือไม่ (ขึ้นต้นด้วย [ หรือ { )
-                            if (textData.startsWith('[') || textData.startsWith('{')) {
+                            if (textData.toLowerCase().includes('<!doctype html>') || textData.toLowerCase().includes('<html')) {
+                                console.error("Permission Error HTML received:", textData.substring(0, 100));
+                                currentShopName = "ข้อผิดพลาดสิทธิ์เข้าถึง (โปรดตรวจสอบการ Deploy)";
+                            }
+                            else if (textData.startsWith('[') || textData.startsWith('{')) {
                                 try {
                                     const jsonData = JSON.parse(textData);
                                     let foundShop = null;
                                     
-                                    // ถ้าเป็น Array ให้วนลูปหา
                                     if (Array.isArray(jsonData)) {
                                         foundShop = jsonData.find(s => {
                                             const sId = s.ShopID || s.shopId || s.id || s['Column A (ShopID)'];
                                             return sId && sId.toString().trim().toUpperCase() === currentShopId.trim().toUpperCase();
                                         });
                                     } else if (typeof jsonData === 'object') {
-                                        // ถ้าเป็น Object เดียว
                                         foundShop = jsonData;
                                     }
 
-                                    // ถ้าเจอร้านค้า ให้ดึงชื่อร้านมาแสดง
                                     if (foundShop) {
                                         currentShopName = foundShop.ShopName || foundShop.shopName || foundShop['Column B (ShopName)'] || "ไม่ระบุชื่อร้าน";
                                     } else {
@@ -556,19 +554,13 @@
                                     }
                                 } catch (e) {
                                     console.error("JSON Parse Error:", e);
-                                    currentShopName = "ไม่พบร้านค้า (ข้อมูลผิดพลาด)";
+                                    currentShopName = "ข้อมูลรูปแบบผิดพลาด (JSON Error)";
                                 }
                             } else {
-                                // ถ้าส่งมาเป็น Text ธรรมดา (กรณี Apps Script ทำงานถูกเป๊ะ)
                                 currentShopName = textData;
-                                // ดักกรณี Backend ส่ง HTML Error มา
-                                if (currentShopName.startsWith('<')) {
-                                    currentShopName = "ไม่พบร้านค้า (ระบบขัดข้อง)";
-                                }
                             }
                             
                             document.getElementById('shopNameDisplay').innerText = currentShopName;
-                            // ===========================================
 
                             if (checkVoteHistory(currentShopId)) {
                                 document.getElementById('alreadyVotedMsg').style.display = 'block';
@@ -577,7 +569,7 @@
                             }
                         } catch (err) {
                             console.error(err);
-                            document.getElementById('shopNameDisplay').innerText = "Connection Error";
+                            document.getElementById('shopNameDisplay').innerText = "Connection Error (การเชื่อมต่อขัดข้อง)";
                         }
                     } else {
                         document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้าในระบบ (No Shop ID)";
