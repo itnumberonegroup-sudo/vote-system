@@ -6,7 +6,6 @@
     <title>Number One Market - Vote & Win</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- เพิ่ม Font ที่รองรับหลายภาษา -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Noto+Sans+Myanmar:wght@400;700&family=Noto+Sans+Lao:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -249,14 +248,12 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        // URL Web App เดิมของคุณ (ถูกต้องแล้ว ไม่ต้องเปลี่ยน)
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz_eRPXkwH0ZIA2oq5n0_STmkmrPiEzphN1SO_d8hLO34iA8fLJW5IknAfzZzbRMff_mg/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyMetjdJQN6vLDVRKem9YjqpLvQLxB6rsEtEoGnsXP0NrU6RJ4L2LpgCR4PLIZV0HKiiQ/exec';
 
         let currentShopId = "";
         let currentShopName = "";
         let currentLang = 'th';
 
-        // ... existing translations code ...
         const translations = {
             th: {
                 header: "THE BEST OF NUMBER ONE MARKET",
@@ -472,7 +469,6 @@
             currentLang = lang;
             const t = translations[lang] || translations.th;
             
-            // อัปเดตข้อความในหน้าเว็บ
             document.getElementById('txt-header').innerText = t.header;
             document.getElementById('txt-subtitle').innerText = t.subtitle;
             document.getElementById('txt-prize').innerHTML = `<i class="fas fa-motorcycle"></i> ${t.prize}`;
@@ -484,7 +480,6 @@
             document.getElementById('phoneInput').placeholder = t.phonePlaceholder;
             document.getElementById('txt-rate-label').innerText = t.rateLabel;
             
-            // เช็คว่าปุ่มควรแสดงอะไร
             const isAlreadyVoted = currentShopId && checkVoteHistory(currentShopId);
             document.getElementById('btnSubmit').innerText = isAlreadyVoted ? t.alreadyVoted : t.submit;
             
@@ -515,44 +510,22 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
 
+                    // เพิ่มการดึงค่าจาก liff.state ในกรณีที่เปิดผ่านแอป LINE แล้ว URL ถูกแปลง
+                    if (!currentShopId) {
+                        const liffState = urlParams.get('liff.state');
+                        if (liffState) {
+                            const stateParams = new URLSearchParams(liffState.startsWith('?') ? liffState : '?' + liffState);
+                            currentShopId = stateParams.get('shop_id') || stateParams.get('shopId');
+                        }
+                    }
+
                     if (currentShopId) {
                         try {
                             const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}`);
                             const rawData = await response.text();
                             
-                            // --- [ส่วนที่แก้ไขใหม่] ตรวจสอบข้อมูลอย่างละเอียด ---
-                            // 1. กรณี Web App ส่งข้อมูลมาเป็น JSON (อาจจะผิดเวอร์ชัน)
-                            if (rawData.trim().startsWith('[') || rawData.trim().startsWith('{')) {
-                                try {
-                                    const shops = JSON.parse(rawData);
-                                    let found = null;
-                                    const shopList = Array.isArray(shops) ? shops : (shops.data || []);
-
-                                    // ค้นหาโดยรองรับชื่อคอลัมน์หลายแบบ (รวมถึงชื่อยาวๆ ใน Sheet ของคุณ)
-                                    found = shopList.find(s => {
-                                        // ลองดึง ID จากหลายๆ key ที่เป็นไปได้
-                                        const sId = s['Column A (ShopID)'] || s['ShopID'] || s['shopId'] || s['id'];
-                                        return sId && sId.toString().trim() === currentShopId.trim();
-                                    });
-                                    
-                                    if (found) {
-                                        // เจอร้านแล้ว ดึงชื่อร้านออกมา (รองรับชื่อคอลัมน์ยาวๆ ใน Sheet ของคุณ)
-                                        currentShopName = found['Column B (ShopName)'] || found['ShopName'] || found['shopName'] || "ไม่ระบุชื่อร้าน";
-                                    } else {
-                                        // ถ้าหาใน JSON ไม่เจอ แปลว่า Apps Script อาจจะอ่านผิด Sheet (ไปอ่าน Sheet1 แทน Shops)
-                                        currentShopName = "ไม่พบร้านค้า (กรุณาอัปเดต Web App)";
-                                        console.warn("หา ShopID ไม่เจอใน JSON ที่ส่งมา อาจเป็นเพราะ Apps Script ส่งข้อมูลผิด Sheet");
-                                    }
-                                } catch (e) {
-                                    console.error("JSON Parse Error:", e);
-                                    currentShopName = "Error Loading Data";
-                                }
-                            } else {
-                                // 2. กรณี Web App ส่งมาเป็น Text (ทำงานถูกต้อง)
-                                currentShopName = rawData;
-                            }
-                            // -------------------------------------------------------------
-
+                            // ลบเงื่อนไข JSON ออกไปเลย เพราะฝั่ง Google Script เราคืนค่าเป็น Text แน่นอน 100% แล้ว
+                            currentShopName = rawData.trim();
                             document.getElementById('shopNameDisplay').innerText = currentShopName;
 
                             if (checkVoteHistory(currentShopId)) {
@@ -565,10 +538,9 @@
                             document.getElementById('shopNameDisplay').innerText = "Connection Error";
                         }
                     } else {
-                        document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้า (No Shop ID)";
+                        document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้าในระบบ (No Shop ID)";
                     }
                 }
-                // เรียกใช้ครั้งแรกเพื่อ set ภาษาเริ่มต้น
                 changeLang(currentLang);
             } catch (error) { console.error(error); }
         }
