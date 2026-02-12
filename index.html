@@ -528,9 +528,47 @@
                             const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}`);
                             const rawData = await response.text();
                             
-                            // ดึงข้อความมาแสดงผล และตัดช่องว่างทิ้ง
-                            currentShopName = rawData.trim();
+                            // === ส่วนที่แก้ไขเพื่อป้องกัน Error หน้าจอพัง ===
+                            let textData = rawData.trim();
+                            
+                            // ตรวจสอบว่าข้อมูลที่ส่งกลับมาเป็นก้อน JSON หรือไม่ (ขึ้นต้นด้วย [ หรือ { )
+                            if (textData.startsWith('[') || textData.startsWith('{')) {
+                                try {
+                                    const jsonData = JSON.parse(textData);
+                                    let foundShop = null;
+                                    
+                                    // ถ้าเป็น Array ให้วนลูปหา
+                                    if (Array.isArray(jsonData)) {
+                                        foundShop = jsonData.find(s => {
+                                            const sId = s.ShopID || s.shopId || s.id || s['Column A (ShopID)'];
+                                            return sId && sId.toString().trim().toUpperCase() === currentShopId.trim().toUpperCase();
+                                        });
+                                    } else if (typeof jsonData === 'object') {
+                                        // ถ้าเป็น Object เดียว
+                                        foundShop = jsonData;
+                                    }
+
+                                    // ถ้าเจอร้านค้า ให้ดึงชื่อร้านมาแสดง
+                                    if (foundShop) {
+                                        currentShopName = foundShop.ShopName || foundShop.shopName || foundShop['Column B (ShopName)'] || "ไม่ระบุชื่อร้าน";
+                                    } else {
+                                        currentShopName = "ไม่พบร้านค้า (Shop Not Found)";
+                                    }
+                                } catch (e) {
+                                    console.error("JSON Parse Error:", e);
+                                    currentShopName = "ไม่พบร้านค้า (ข้อมูลผิดพลาด)";
+                                }
+                            } else {
+                                // ถ้าส่งมาเป็น Text ธรรมดา (กรณี Apps Script ทำงานถูกเป๊ะ)
+                                currentShopName = textData;
+                                // ดักกรณี Backend ส่ง HTML Error มา
+                                if (currentShopName.startsWith('<')) {
+                                    currentShopName = "ไม่พบร้านค้า (ระบบขัดข้อง)";
+                                }
+                            }
+                            
                             document.getElementById('shopNameDisplay').innerText = currentShopName;
+                            // ===========================================
 
                             if (checkVoteHistory(currentShopId)) {
                                 document.getElementById('alreadyVotedMsg').style.display = 'block';
