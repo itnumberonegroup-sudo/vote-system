@@ -251,8 +251,8 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        // 👇 วาง URL ใหม่แค่ลิงก์เดียวตรงนี้ครับ 👇
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzqivlHPlhxD6eAAWxLkar_pyGxeFmL-itm8eIjlNvXE8SRwLRDUNyCY3fXwVwoCzCf8w/exec';
+        // 👇 อัปเดตลิงก์ให้เป็นเวอร์ชันล่าสุดของคุณแล้วครับ 👇
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyZ2CiwCx8gNU9KSP4g4oAUeylMhmW7-IC1zHimjj_cT0cdhDAyPpTLN5A1S0wr4V-CkA/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -529,11 +529,11 @@
                             
                             let textData = rawData.trim();
                             
+                            // ดักจับกรณีที่ Google Apps Script ส่งหน้าเว็บ HTML แจ้ง Error กลับมา
                             if (textData.toLowerCase().includes('<!doctype html>') || textData.toLowerCase().includes('<html')) {
                                 console.error("Permission Error HTML received:", textData.substring(0, 100));
                                 currentShopName = "ข้อผิดพลาดสิทธิ์เข้าถึง (โปรดตรวจสอบการ Deploy)";
-                            }
-                            else if (textData.startsWith('[') || textData.startsWith('{')) {
+                            } else if (textData.startsWith('[') || textData.startsWith('{')) {
                                 try {
                                     const jsonData = JSON.parse(textData);
                                     let foundShop = null;
@@ -557,7 +557,12 @@
                                     currentShopName = "ข้อมูลรูปแบบผิดพลาด (JSON Error)";
                                 }
                             } else {
-                                currentShopName = textData;
+                                // ถ้าระบบส่งเป็น Text กลับมาว่าไม่พบร้านค้า ให้แสดง ID เพื่อเช็คความถูกต้อง
+                                if (textData.includes("ไม่พบร้านค้า") || textData.includes("Shop Not Found")) {
+                                    currentShopName = `ไม่พบชื่อร้านของรหัส: ${currentShopId || 'ไม่ทราบ'}`;
+                                } else {
+                                    currentShopName = textData;
+                                }
                             }
                             
                             document.getElementById('shopNameDisplay').innerText = currentShopName;
