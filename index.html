@@ -173,12 +173,12 @@
 
     <div id="loading">
         <div class="spinner"></div>
-        <p id="txt-loading" style="margin-top: 15px; font-weight: 600;">กำลังประมวลผล (V.4)...</p>
+        <p id="txt-loading" style="margin-top: 15px; font-weight: 600;">กำลังประมวลผล...</p>
     </div>
 
     <div id="customAlert" onclick="closeAlert()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <div id="modalIcon" class="modal-icon" style="font-size: 40px; margin-bottom: 10px;"></div>
+            <div id="modalIcon" style="font-size: 40px; margin-bottom: 10px;"></div>
             <h3 id="modalTitle" style="margin: 0;"></h3>
             <p id="modalMsg" style="color: #64748b; margin-top: 10px;"></p>
             <button style="margin-top: 15px; padding: 10px 30px; border-radius: 10px; border: none; background: #334155; color: white; cursor: pointer;" id="btn-modal-close" onclick="closeAlert()">ตกลง</button>
@@ -251,8 +251,7 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        // 👇 อัปเดตลิงก์ให้เป็นเวอร์ชันล่าสุดของคุณแล้วครับ 👇
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyKFmo9s16u0OgCCKIQARTSViNYpPuJIwGLktRkQWqOm-jnIdXWk1qV2idWScIuE5Nuzg/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxlbB-oXfB02K0UalsznNO63tZ0Z2iIiRpsed3t1cFr0XpUTn5mNd1xxCklni7xuVDFFQ/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -375,7 +374,7 @@
                 phonePlaceholder: "ဖုန်းနံပါတ်ထည့်ပါ",
                 rateLabel: "ဤဆိုင်ကို အဆင့်သတ်မှတ်ပါ",
                 pdpa: "သင်၏အချက်အလက်များကို ဆက်သွယ်ရန်အတွက် သိမ်းဆည်းမည်ဖြစ်သည်။ အသေးစိတ်ကို ",
-                pdpaLink: "ကိုယ်ရေးကိုယ်တာမူဝါဒ",
+                pdpaLink: "ကိုယ်ရေးကိုယ်တာမူဝါเด",
                 submit: "အဆင့်သတ်မှတ်ချက်ကို အတည်ပြုပါ",
                 loading: "သိမ်းဆည်းနေသည်...",
                 alertIncomplete: "မပြည့်စုံပါ",
@@ -385,7 +384,7 @@
                 alertPdpaError: "မူဝါဒကို သဘောတူညီပါ",
                 alertSuccess: "အောင်မြင်ပါသည်!",
                 alertSuccessMsg: "အကြံပြုချက်အတွက် ကျေးဇူးတင်ပါသည်",
-                alertFail: "အမှားအယွင်း",
+                alertFail: "အမှားအยွင်း",
                 alertFailMsg: "တစ်ခုခု မှားယွင်းနေပါသည်",
                 btnOk: "အိုကေ"
             },
@@ -473,6 +472,7 @@
             currentLang = lang;
             const t = translations[lang] || translations.th;
             
+            // อัปเดตข้อความใน UI
             document.getElementById('txt-header').innerText = t.header;
             document.getElementById('txt-subtitle').innerText = t.subtitle;
             document.getElementById('txt-prize').innerHTML = `<i class="fas fa-motorcycle"></i> ${t.prize}`;
@@ -483,12 +483,12 @@
             document.getElementById('lbl-phone').innerHTML = `<i class="fas fa-phone"></i> ${t.lblPhone}`;
             document.getElementById('phoneInput').placeholder = t.phonePlaceholder;
             document.getElementById('txt-rate-label').innerText = t.rateLabel;
-            
-            const isAlreadyVoted = currentShopId && checkVoteHistory(currentShopId);
-            document.getElementById('btnSubmit').innerText = isAlreadyVoted ? t.alreadyVoted : t.submit;
-            
             document.getElementById('txt-loading').innerText = t.loading;
             document.getElementById('btn-modal-close').innerText = t.btnOk;
+
+            // ตรวจสอบสถานะการโหวตเพื่อเปลี่ยนคำบนปุ่ม
+            const isAlreadyVoted = currentShopId && checkVoteHistory(currentShopId);
+            document.getElementById('btnSubmit').innerText = isAlreadyVoted ? t.alreadyVoted : t.submit;
             
             const pdpaSpan = document.getElementById('txt-pdpa');
             pdpaSpan.innerHTML = `${t.pdpa} <a href="https://www.numberonemarket.com/privacy.php" target="_blank" id="txt-pdpa-link">${t.pdpaLink}</a>*`;
@@ -498,9 +498,8 @@
             const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
             if (history[shopId]) {
                 const lastVoteTime = new Date(history[shopId]).getTime();
-                const currentTime = new Date().getTime();
-                const diffHours = (currentTime - lastVoteTime) / (1000 * 60 * 60);
-                if (diffHours < 24) return true;
+                const now = new Date().getTime();
+                return (now - lastVoteTime) < (24 * 60 * 60 * 1000);
             }
             return false;
         }
@@ -512,64 +511,26 @@
                     liff.login();
                 } else {
                     const urlParams = new URLSearchParams(window.location.search);
-                    let currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
+                    currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
 
-                    if (!currentShopId) {
+                    if (!currentShopId && urlParams.get('liff.state')) {
                         let liffState = urlParams.get('liff.state');
-                        if (liffState) {
-                            // ป้องกันการเข้ารหัส URL ซ้อนกันของ LINE LIFF
-                            if (liffState.startsWith('?')) liffState = liffState.substring(1);
-                            try { liffState = decodeURIComponent(liffState); } catch(e) {}
-                            liffState = '?' + liffState;
-                            
-                            const stateParams = new URLSearchParams(liffState);
-                            currentShopId = stateParams.get('shop_id') || stateParams.get('shopId');
-                        }
+                        if (liffState.startsWith('?')) liffState = liffState.substring(1);
+                        try { liffState = decodeURIComponent(liffState); } catch(e) {}
+                        const stateParams = new URLSearchParams('?' + liffState);
+                        currentShopId = stateParams.get('shop_id') || stateParams.get('shopId');
                     }
 
                     if (currentShopId) {
-                        currentShopId = currentShopId.trim().toUpperCase(); // จัดฟอร์แมตให้ตรงกับ Sheet ทันที
+                        currentShopId = currentShopId.trim().toUpperCase();
                         try {
-                            // เพิ่ม &t=... เพื่อบังคับล้าง Cache การดึงข้อมูลแบบ 100%
-                            const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}&t=${new Date().getTime()}`);
-                            const rawData = await response.text();
+                            const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}&t=${Date.now()}`);
+                            const textData = await response.text();
                             
-                            let textData = rawData.trim();
-                            
-                            // ดักจับกรณีที่ Google Apps Script ส่งหน้าเว็บ HTML แจ้ง Error กลับมา
-                            if (textData.toLowerCase().includes('<!doctype html>') || textData.toLowerCase().includes('<html')) {
-                                console.error("Permission Error HTML received:", textData.substring(0, 100));
-                                currentShopName = "ข้อผิดพลาดสิทธิ์เข้าถึง (โปรดตรวจสอบการ Deploy)";
-                            } else if (textData.startsWith('[') || textData.startsWith('{')) {
-                                try {
-                                    const jsonData = JSON.parse(textData);
-                                    let foundShop = null;
-                                    
-                                    if (Array.isArray(jsonData)) {
-                                        foundShop = jsonData.find(s => {
-                                            const sId = s.ShopID || s.shopId || s.id || s['Column A (ShopID)'];
-                                            return sId && sId.toString().trim().toUpperCase() === currentShopId.trim().toUpperCase();
-                                        });
-                                    } else if (typeof jsonData === 'object') {
-                                        foundShop = jsonData;
-                                    }
-
-                                    if (foundShop) {
-                                        currentShopName = foundShop.ShopName || foundShop.shopName || foundShop['Column B (ShopName)'] || "ไม่ระบุชื่อร้าน";
-                                    } else {
-                                        currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId || 'ไม่ทราบ'})`;
-                                    }
-                                } catch (e) {
-                                    console.error("JSON Parse Error:", e);
-                                    currentShopName = `ข้อมูลรูปแบบผิดพลาด (รหัส: ${currentShopId || 'ไม่ทราบ'})`;
-                                }
+                            if (textData === "NOT_FOUND" || textData.includes("Error")) {
+                                currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId})`;
                             } else {
-                                // ถ้าระบบส่งเป็น Text กลับมาว่าไม่พบร้านค้า ให้แสดง ID เพื่อเช็คความถูกต้อง
-                                if (textData.includes("ไม่พบร้านค้า") || textData.includes("Shop Not Found")) {
-                                    currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId || 'ไม่ทราบ'})`;
-                                } else {
-                                    currentShopName = textData;
-                                }
+                                currentShopName = textData.trim();
                             }
                             
                             document.getElementById('shopNameDisplay').innerText = currentShopName;
@@ -580,11 +541,10 @@
                                 changeLang(currentLang);
                             }
                         } catch (err) {
-                            console.error(err);
-                            document.getElementById('shopNameDisplay').innerText = "Connection Error (การเชื่อมต่อขัดข้อง)";
+                            document.getElementById('shopNameDisplay').innerText = "เชื่อมต่อข้อมูลล้มเหลว";
                         }
                     } else {
-                        document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้าในระบบ (No Shop ID)";
+                        document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้า (No Shop ID)";
                     }
                 }
                 changeLang(currentLang);
@@ -592,18 +552,17 @@
         }
 
         function showAlert(title, msg, type) {
-            const modal = document.getElementById('customAlert');
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalMsg').innerText = msg;
             const icon = document.getElementById('modalIcon');
             icon.innerHTML = type === 'success' ? '<i class="fas fa-check-circle" style="color: #28a745;"></i>' : '<i class="fas fa-exclamation-circle" style="color: #ef4444;"></i>';
-            modal.style.display = 'flex';
+            document.getElementById('customAlert').style.display = 'flex';
         }
 
         function closeAlert() { document.getElementById('customAlert').style.display = 'none'; }
 
         async function validateAndSubmit() {
-            const t = translations[currentLang];
+            const t = translations[currentLang] || translations.th;
             if (currentShopId && checkVoteHistory(currentShopId)) return showAlert(t.alertFail, t.alreadyVoted, 'error');
 
             const name = document.getElementById('nameInput').value.trim();
@@ -620,7 +579,7 @@
         }
 
         async function submitVote(name, phone, rating) {
-            const t = translations[currentLang];
+            const t = translations[currentLang] || translations.th;
             document.getElementById('loading').style.display = 'flex';
             try {
                 const profile = await liff.getProfile();
@@ -657,4 +616,3 @@
     </script>
 </body>
 </html>
-
