@@ -193,8 +193,13 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        // อัปเดต URL ล่าสุดที่คุณแจ้งมาเรียบร้อยครับ (11:00 น.)
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwbwj886NSw5uh1NRNoiyVjt7RkxBYwECvvRH-gCDitc6kMY_JG48_r6KSpwLvmdFztOA/exec';
+        
+        /** * แยก 2 URL ทำงานตามหน้าที่
+         * 1. FETCH_SHOP_URL: ไปดึงชื่อร้านจาก DataName
+         * 2. VOTE_WEB_APP_URL: ไปบันทึกคะแนนที่ Numberone Market
+         */
+        const FETCH_SHOP_URL = 'https://script.google.com/macros/s/AKfycbw4qJXQC_XMrrsO3zaGq3XLITWGpAFlk7IjAYPF85fzHHG_Oy6vmsHdUo7Ey0nbAQevmw/exec'; 
+        const VOTE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz2TRXimg821IqkDVWkmk2-SbCwYMOyvmmr9eqw6xaxTi7-lHw8YI1DW4LCTaesUKBx/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -255,11 +260,11 @@
                 if (currentShopId) {
                     currentShopId = currentShopId.trim().toUpperCase();
                     try {
-                        const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}&t=${Date.now()}`);
+                        // ดึงข้อมูลจาก FETCH_SHOP_URL (DataName)
+                        const response = await fetch(`${FETCH_SHOP_URL}?getShopName=${currentShopId}&t=${Date.now()}`);
                         const textData = await response.text();
                         
-                        // กรองข้อมูลที่ผิดพลาด ไม่ให้แสดง JSON Dump
-                        if (textData.includes("Error") || textData === "NOT_FOUND" || textData.startsWith("[") || textData.startsWith("{")) {
+                        if (textData.includes("Error") || textData === "NOT_FOUND" || textData.startsWith("[")) {
                             currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId})`;
                         } else {
                             currentShopName = textData.trim();
@@ -317,7 +322,8 @@
                     displayName: profile.displayName, fullName: name, phone: phone, quality: rating
                 });
 
-                await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: params });
+                // บันทึกไปที่ VOTE_WEB_APP_URL (Numberone Market)
+                await fetch(VOTE_WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: params });
 
                 const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
                 history[currentShopId] = new Date().toISOString();
