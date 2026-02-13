@@ -193,8 +193,8 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        // อัปเดต URL ล่าสุดที่คุณเพิ่ง Deploy เรียบร้อยครับ
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzmEXUt_rh49FzV8tMdO6-CKhq4FHSSIB9yw3zqLBpp1Dc4lXshm-IPheauAHC6wG6MKA/exec';
+        // อัปเดต URL ล่าสุดที่คุณแจ้งมาเรียบร้อยครับ (11:00 น.)
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwbwj886NSw5uh1NRNoiyVjt7RkxBYwECvvRH-gCDitc6kMY_JG48_r6KSpwLvmdFztOA/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -258,7 +258,7 @@
                         const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}&t=${Date.now()}`);
                         const textData = await response.text();
                         
-                        // ปรับการตรวจสอบให้รัดกุมขึ้น หากได้รับ JSON หรือ Error ให้แจ้งว่าไม่พบ
+                        // กรองข้อมูลที่ผิดพลาด ไม่ให้แสดง JSON Dump
                         if (textData.includes("Error") || textData === "NOT_FOUND" || textData.startsWith("[") || textData.startsWith("{")) {
                             currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId})`;
                         } else {
