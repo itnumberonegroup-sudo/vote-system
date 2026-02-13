@@ -67,7 +67,7 @@
         }
 
         .header-banner h1 { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.3; }
-        .header-banner p { margin: 8px 0 0; font-weight: 300; font-size: 14px; opacity: 0.9; }
+        .header-banner p { margin: 8px 0; font-weight: 300; font-size: 14px; opacity: 0.9; }
         .prize-badge {
             background: var(--secondary-color);
             color: #856404;
@@ -194,7 +194,7 @@
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
         // อัปเดต URL ล่าสุดที่คุณเพิ่ง Deploy เรียบร้อยครับ
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxTp80SIacEAWw72wrQ4ea4emHmEmMMB2lle83YZ4prqbRPY6ewoPZlT60wOIgWu8vHEg/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzmEXUt_rh49FzV8tMdO6-CKhq4FHSSIB9yw3zqLBpp1Dc4lXshm-IPheauAHC6wG6MKA/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -205,7 +205,6 @@
             en: { header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Vote for your favorite shop!!", prize: "Win Gold and Motorcycles!", alreadyVoted: "Already voted today", selectedShop: "Selected Shop", lblName: "Full Name (for prizes)", namePlaceholder: "Enter full name", lblPhone: "Phone Number", phonePlaceholder: "0XXXXXXXXX", rateLabel: "Rate this shop", pdpa: "Accept privacy policy", submit: "Confirm Rating", loading: "Saving...", btnOk: "OK" },
             zh: { header: "THE BEST OF NUMBER ONE MARKET", subtitle: "投票给你喜欢的店铺", prize: "赢取黄金和摩托车！", alreadyVoted: "今天已经投票了", selectedShop: "所选店铺", lblName: "姓名", namePlaceholder: "输入全名", lblPhone: "电话号码", phonePlaceholder: "请输入电话号码", rateLabel: "评价该店铺", pdpa: "接受隐私政策", submit: "确认评分", loading: "保存中...", btnOk: "确定" },
             ja: { header: "THE BEST OF NUMBER ONE MARKET", subtitle: "お気に入りの店に投票しよう", prize: "金やバイクが当たる！", alreadyVoted: "本日は投票済みです", selectedShop: "選択された店舗", lblName: "お名前", namePlaceholder: "名前を入力", lblPhone: "電話番号", phonePlaceholder: "電話番号を入力", rateLabel: "お店を評価する", pdpa: "同意する", submit: "評価を確定する", loading: "保存中...", btnOk: "はい" }
-            // เพิ่มเติมภาษาอื่นๆ ได้ตามความต้องการ
         };
 
         function changeLang(lang) {
@@ -246,7 +245,8 @@
                 currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
 
                 if (!currentShopId && urlParams.get('liff.state')) {
-                    let lState = urlParams.get('liff.state').startsWith('?') ? urlParams.get('liff.state').substring(1) : urlParams.get('liff.state');
+                    let lState = urlParams.get('liff.state');
+                    if (lState.startsWith('?')) lState = lState.substring(1);
                     try { lState = decodeURIComponent(lState); } catch(e) {}
                     const sParams = new URLSearchParams(lState);
                     currentShopId = sParams.get('shop_id') || sParams.get('shopId');
@@ -256,13 +256,13 @@
                     currentShopId = currentShopId.trim().toUpperCase();
                     try {
                         const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}&t=${Date.now()}`);
-                        const text = await response.text();
+                        const textData = await response.text();
                         
-                        // กรองข้อมูลที่ผิดพลาด ไม่ให้แสดง JSON Dump
-                        if (text.includes("Error") || text === "NOT_FOUND" || text.startsWith("[") || text.startsWith("{")) {
+                        // ปรับการตรวจสอบให้รัดกุมขึ้น หากได้รับ JSON หรือ Error ให้แจ้งว่าไม่พบ
+                        if (textData.includes("Error") || textData === "NOT_FOUND" || textData.startsWith("[") || textData.startsWith("{")) {
                             currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId})`;
                         } else {
-                            currentShopName = text.trim();
+                            currentShopName = textData.trim();
                         }
                         
                         document.getElementById('shopNameDisplay').innerText = currentShopName;
