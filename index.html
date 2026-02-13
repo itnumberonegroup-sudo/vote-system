@@ -87,84 +87,30 @@
             box-shadow: var(--card-shadow);
         }
 
-        .shop-info { 
-            text-align: center; 
-            margin-bottom: 20px; 
-            border-bottom: 2px solid #f1f5f9; 
-            padding-bottom: 15px; 
-        }
+        .shop-info { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; }
         .shop-info h2 { margin: 5px 0; color: var(--primary-color); font-size: 24px; }
 
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: #475569; }
         .input-control { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 15px; box-sizing: border-box; }
 
-        .rating-container {
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
-        }
+        .rating-container { background: #f8fafc; padding: 15px; border-radius: 20px; text-align: center; margin-bottom: 20px; border: 1px solid #e2e8f0; }
         .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; }
         .stars input { display: none; }
         .stars label { font-size: 36px; color: #cbd5e1; cursor: pointer; }
         .stars input:checked ~ label { color: var(--secondary-color); }
 
-        .pdpa-container {
-            margin: 20px 0;
-            padding: 12px;
-            background: #fffcf0;
-            border-radius: 12px;
-            border: 1px solid #ffeeba;
-            font-size: 11px;
-            color: #666;
-        }
+        .pdpa-container { margin: 20px 0; padding: 12px; background: #fffcf0; border-radius: 12px; border: 1px solid #ffeeba; font-size: 11px; color: #666; }
         .pdpa-checkbox { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
 
-        .btn-submit {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 15px;
-            width: 100%;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+        .btn-submit { background: var(--primary-color); color: white; border: none; padding: 16px; border-radius: 15px; width: 100%; font-size: 17px; font-weight: 600; cursor: pointer; }
         .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
 
-        #customAlert {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+        #customAlert { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; max-width: 320px; width: 100%; box-sizing: border-box; }
 
-        #loading {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.9);
-            z-index: 3000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .spinner {
-            width: 40px; height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+        #loading { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 3000; flex-direction: column; align-items: center; justify-content: center; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -180,7 +126,7 @@
             <div id="modalIcon" style="font-size: 40px; margin-bottom: 10px;"></div>
             <h3 id="modalTitle" style="margin: 0;"></h3>
             <p id="modalMsg" style="color: #64748b; margin-top: 10px;"></p>
-            <button style="margin-top: 15px; padding: 10px 30px; border-radius: 10px; border: none; background: #334155; color: white; cursor: pointer;" id="btn-modal-close" onclick="closeAlert()">ตกลง</button>
+            <button style="margin-top: 15px; padding: 10px 30px; border-radius: 10px; border: none; background: #334155; color: white;" id="btn-modal-close" onclick="closeAlert()">ตกลง</button>
         </div>
     </div>
 
@@ -237,10 +183,7 @@
             <div class="pdpa-container">
                 <label class="pdpa-checkbox">
                     <input type="checkbox" id="pdpaConsent">
-                    <span id="txt-pdpa">
-                        บริการจะจัดเก็บข้อมูลของท่าน เพื่อการติดต่อสื่อสาร บริษัท นัมเบอร์ วัน จำกัด ท่านสามารถศึกษารายละเอียดเพิ่มเติมได้จาก 
-                        <a href="https://www.numberonemarket.com/privacy.php" target="_blank" id="txt-pdpa-link">ประกาศความเป็นส่วนตัว</a>*
-                    </span>
+                    <span id="txt-pdpa">ยอมรับเงื่อนไขความเป็นส่วนตัว</span>
                 </label>
             </div>
 
@@ -250,228 +193,24 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        // อัปเดต URL ล่าสุดที่คุณส่งมาให้แล้วครับ
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxzMWHVfh5PB20dZgDdthkknSMgzD8joica1Tb2xq1qWxuM0uXOw8i_wq9jcQaiOUYe/exec';
+        // อัปเดต URL ล่าสุดที่คุณเพิ่ง Deploy เรียบร้อยครับ
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxTp80SIacEAWw72wrQ4ea4emHmEmMMB2lle83YZ4prqbRPY6ewoPZlT60wOIgWu8vHEg/exec';
 
         let currentShopId = "";
         let currentShopName = "";
         let currentLang = 'th';
 
         const translations = {
-            th: {
-                header: "THE BEST OF NUMBER ONE MARKET",
-                subtitle: "โหวตร้านค้าเพื่อลุ้นรับของรางวัล!!",
-                prize: "ลุ้นรับทองคำ และ รถมอเตอร์ไซค์!",
-                alreadyVoted: "วันนี้คุณโหวตร้านค้านี้ไปแล้ว",
-                selectedShop: "ร้านค้าที่ท่านเลือก",
-                lblName: "ชื่อ – นามสกุล (เพื่อรับรางวัล)",
-                namePlaceholder: "ระบุชื่อ-นามสกุล",
-                lblPhone: "เบอร์โทรศัพท์",
-                phonePlaceholder: "0XXXXXXXXX",
-                rateLabel: "ให้คะแนนร้านค้า",
-                pdpa: "บริการจะจัดเก็บข้อมูลของท่าน เพื่อการติดต่อสื่อสาร บริษัท นัมเบอร์ วัน จำกัด ท่านสามารถศึกษารายละเอียดเพิ่มเติมได้จาก ",
-                pdpaLink: "ประกาศความเป็นส่วนตัว",
-                submit: "ยืนยันการให้คะแนน",
-                loading: "กำลังบันทึกคะแนน...",
-                alertIncomplete: "ข้อมูลไม่ครบ",
-                alertIncompleteMsg: "กรุณากรอกชื่อและเบอร์โทรศัพท์",
-                alertPhoneError: "เบอร์โทรศัพท์ไม่ถูกต้อง",
-                alertRateError: "กรุณาเลือกดาว 1-5 ดาว",
-                alertPdpaError: "กรุณายอมรับเงื่อนไขความเป็นส่วนตัว",
-                alertSuccess: "สำเร็จ!",
-                alertSuccessMsg: "ขอบคุณที่ร่วมสนุกครับ",
-                alertFail: "ขออภัย",
-                alertFailMsg: "เกิดข้อผิดพลาด กรุณาลองใหม่",
-                btnOk: "ตกลง"
-            },
-            en: {
-                header: "THE BEST OF NUMBER ONE MARKET",
-                subtitle: "Vote for your favorite shop to win prizes!!",
-                prize: "Win Gold and Motorcycles!",
-                alreadyVoted: "Already voted today",
-                selectedShop: "Selected Shop",
-                lblName: "Full Name (for prizes)",
-                namePlaceholder: "Enter full name",
-                lblPhone: "Phone Number",
-                phonePlaceholder: "0XXXXXXXXX",
-                rateLabel: "Rate this shop",
-                pdpa: "Your info will be collected for communication by Number One Co., Ltd. More details in our ",
-                pdpaLink: "Privacy Policy",
-                submit: "Confirm Rating",
-                loading: "Saving...",
-                alertIncomplete: "Incomplete",
-                alertIncompleteMsg: "Please fill in all fields",
-                alertPhoneError: "Invalid phone number",
-                alertRateError: "Select 1-5 stars",
-                alertPdpaError: "Accept privacy policy",
-                alertSuccess: "Success!",
-                alertSuccessMsg: "Thank you for your feedback",
-                alertFail: "Error",
-                alertFailMsg: "Something went wrong",
-                btnOk: "OK"
-            },
-            zh: {
-                header: "THE BEST OF NUMBER ONE MARKET",
-                subtitle: "投票给你喜欢的店铺，赢取奖品！！",
-                prize: "赢取黄金和摩托车！",
-                alreadyVoted: "今天已经投票了",
-                selectedShop: "所选店铺",
-                lblName: "姓名（用于领奖）",
-                namePlaceholder: "输入全名",
-                lblPhone: "电话号码",
-                phonePlaceholder: "请输入电话号码",
-                rateLabel: "评价该店铺",
-                pdpa: "您的信息将被收集用于联系。详情请参阅 ",
-                pdpaLink: "隐私政策",
-                submit: "确认评分",
-                loading: "保存中...",
-                alertIncomplete: "信息不完整",
-                alertIncompleteMsg: "请填写所有字段",
-                alertPhoneError: "电话号码无效",
-                alertRateError: "请เลือก1-5星",
-                alertPdpaError: "请接受隐私政策",
-                alertSuccess: "成功！",
-                alertSuccessMsg: "感谢您的反馈",
-                alertFail: "错误",
-                alertFailMsg: "发生了一些错误",
-                btnOk: "确定"
-            },
-            ja: {
-                header: "THE BEST OF NUMBER ONE MARKET",
-                subtitle: "お気に入りの店に投票して賞品を当てよう！",
-                prize: "金やバイクが当たる！",
-                alreadyVoted: "本日は投票済みです",
-                selectedShop: "選択された店舗",
-                lblName: "お名前（賞品受け取り用）",
-                namePlaceholder: "フルネームを入力",
-                lblPhone: "電話番号",
-                phonePlaceholder: "電話番号を入力",
-                rateLabel: "お店を評価する",
-                pdpa: "お客様の情報は、連絡のために収集されます。詳細は ",
-                pdpaLink: "プライバシーポリシー",
-                submit: "評価を確定する",
-                loading: "保存中...",
-                alertIncomplete: "入力不備",
-                alertIncompleteMsg: "すべての項目を入力してください",
-                alertPhoneError: "電話番号が正しくありません",
-                alertRateError: "1〜5星を選択してください",
-                alertPdpaError: "プライバシーポリシーに同意してください",
-                alertSuccess: "成功！",
-                alertSuccessMsg: "フィードバックありがとうございます",
-                alertFail: "エラー",
-                alertFailMsg: "問題が発生しました",
-                btnOk: "はい"
-            },
-            my: {
-                header: "THE BEST OF NUMBER ONE MARKET",
-                subtitle: "ဆုလက်ဆောင်များရယူရန် သင်အကြိုက်ဆုံးဆိုင်ကို မဲပေးပါ!!",
-                prize: "ရွှေနှင့် ဆိုင်ကယ်များ ကံထူးနိုင်ခွင့်!",
-                alreadyVoted: "ယနေ့အတွက် မဲပေးပြီးပါပြီ",
-                selectedShop: "ရွေးချယ်ထားသောဆိုင်",
-                lblName: "အမည် (ဆုရရှိရန်အတွက်)",
-                namePlaceholder: "အမည်အပြည့်အစုံထည့်ပါ",
-                lblPhone: "ဖုန်းနံပါတ်",
-                phonePlaceholder: "ဖုန်းနံပါတ်ထည့်ပါ",
-                rateLabel: "ဤဆိုင်ကို အဆင့်သတ်မှတ်ပါ",
-                pdpa: "သင်၏အချက်အလက်များကို ဆက်သွယ်ရန်สำหรับ သိမ်းဆည်းမည်ဖြစ်သည်။ အသေးစိတ်ကို ",
-                pdpaLink: "ကိုယ်ရေးကိုယ်တာမူဝါဒ",
-                submit: "အဆင့်သတ်မှတ်ချက်ကို အတည်ပြုပါ",
-                loading: "သိမ်းဆည်းနေသည်...",
-                alertIncomplete: "မပြည့်စုံပါ",
-                alertIncompleteMsg: "အချက်အလက်အားလုံးကို ဖြည့်စွက်ပါ",
-                alertPhoneError: "ဖုန်းနံပါတ် မှားယွင်းနေပါသည်",
-                alertRateError: "ကြယ် ၁-၅ ခု ရွေးချယ်ပါ",
-                alertPdpaError: "မူဝါဒကို သဘောတူညီပါ",
-                alertSuccess: "အောင်မြင်ပါသည်!",
-                alertSuccessMsg: "အကြံပြုချက်အတွက် ကျေးဇူးတင်ပါသည်",
-                alertFail: "အမှားအယွင်း",
-                alertFailMsg: "တစ်ခုခု မှားယွင်းနေပါသည်",
-                btnOk: "အိုကေ"
-            },
-            lo: {
-                header: "THE BEST OF NUMBER ONE MARKET",
-                subtitle: "ໂຫວດຮ້ານຄ້າເພື່ອລຸ້ນຮັບຂອງລາງວັນ!!",
-                prize: "ລຸ້ນຮັບຄຳ ແລະ ລົດຈັກ!",
-                alreadyVoted: "ມື້ນີ້ທ່ານໂຫວດຮ້ານນີ້ແລ້ວ",
-                selectedShop: "ຮ້ານທີ່ທ່ານເລືອກ",
-                lblName: "ຊື່ ແລະ ນາມສະກຸນ (ເພື່ອຮັບລາງວັນ)",
-                namePlaceholder: "ໃສ່ຊື່-ນາມສະກຸນ",
-                lblPhone: "ເບີໂທລະສັບ",
-                phonePlaceholder: "ໃສ່ເບີໂທລະສັບ",
-                rateLabel: "ໃຫ້ຄະແນນຮ້ານຄ້າ",
-                pdpa: "ຂໍ້ມູນຂອງທ່ານຈະຖືກເກັບໄວ້ເພື່ອການຕິດຕໍ່. ສຶກສາເພີ່ມເຕີມໄດ້ທີ່ ",
-                pdpaLink: "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
-                submit: "ຢືນຢັນການໃຫ້ຄະແນນ",
-                loading: "ກຳລັງບັນທຶກ...",
-                alertIncomplete: "ຂໍ້ມູນບໍ່ຄົບ",
-                alertIncompleteMsg: "ກະລຸນາໃສ່ຂໍ້ມູນໃຫ້ຄົບ",
-                alertPhoneError: "ເບີໂທລະສັບບໍ່ຖືກຕ້ອງ",
-                alertRateError: "ກະລຸນາເລືອກ 1-5 ດາວ",
-                alertPdpaError: "ກະລຸນາຢືນຢັນນະໂຍບາຍ",
-                alertSuccess: "ສຳເລັດ!",
-                alertSuccessMsg: "ຂອບໃຈທີ່ຮ່ວມກິດຈະກຳ",
-                alertFail: "ຂໍອະໄພ",
-                alertFailMsg: "ເກີດຂໍ້ຜິດພາດ",
-                btnOk: "ຕົກລົງ"
-            },
-            id: {
-                header: "THE BEST OF NUMBER ONE MARKET",
-                subtitle: "Pilih toko favorit Anda untuk memenangkan hadiah!!",
-                prize: "Menangkan Emas dan Sepeda Motor!",
-                alreadyVoted: "Sudah memilih hari ini",
-                selectedShop: "Toko yang Dipilih",
-                lblName: "Nama Lengkap (untuk hadiah)",
-                namePlaceholder: "Masukkan nama lengkap",
-                lblPhone: "Nomor Telepon",
-                phonePlaceholder: "Masukkan nomor telepon",
-                rateLabel: "Beri nilai toko ini",
-                pdpa: "Data Anda akan disimpan untuk komunikasi. Detail lebih lanjut di ",
-                pdpaLink: "Kebijakan Privasi",
-                submit: "Konfirmasi Penilaian",
-                loading: "Menyimpan...",
-                alertIncomplete: "Tidak Lengkap",
-                alertIncompleteMsg: "Harap isi semua bidang",
-                alertPhoneError: "Nomor telepon tidak valid",
-                alertRateError: "Pilih 1-5 bintang",
-                alertPdpaError: "Setujui kebijakan privasi",
-                alertSuccess: "Berhasil!",
-                alertSuccessMsg: "Terima kasih atas tanggapan Anda",
-                alertFail: "Kesalahan",
-                alertFailMsg: "Terjadi kesalahan",
-                btnOk: "OKE"
-            },
-            vi: {
-                header: "THE BEST OF NUMBER ONE MARKET",
-                subtitle: "Bình chọn cho cửa hàng yêu thích để trúng thưởng!!",
-                prize: "Trúng Vàng và Xe máy!",
-                alreadyVoted: "Hôm nay bạn đã bình chọn rồi",
-                selectedShop: "Cửa hàng đã chọn",
-                lblName: "Họและtên (để nhận giải)",
-                namePlaceholder: "Nhập họและtên",
-                lblPhone: "Số điện thoại",
-                phonePlaceholder: "Nhập số điện thoại",
-                rateLabel: "Đánh giá cửa hàng",
-                pdpa: "Thông tin của bạn sẽ được thu thập để liên lạc. Chi tiết tại ",
-                pdpaLink: "Chính sách bảo mật",
-                submit: "Xác nhận đánh giá",
-                loading: "Đang lưu...",
-                alertIncomplete: "Thông tin chưa đủ",
-                alertIncompleteMsg: "Vui lòng điền đầy đủ thông tin",
-                alertPhoneError: "Số điện thoại không hợp lệ",
-                alertRateError: "Vui lòng chọn 1-5 sao",
-                alertPdpaError: "Vui lòng đồng ý chính sách",
-                alertSuccess: "Thành công!",
-                alertSuccessMsg: "Cảm ơn phản hồi của bạn",
-                alertFail: "Lỗi",
-                alertFailMsg: "Đã xảy ra lỗi",
-                btnOk: "OK"
-            }
+            th: { header: "THE BEST OF NUMBER ONE MARKET", subtitle: "โหวตร้านค้าเพื่อลุ้นรับของรางวัล!!", prize: "ลุ้นรับทองคำ และ รถมอเตอร์ไซค์!", alreadyVoted: "วันนี้คุณโหวตร้านค้านี้ไปแล้ว", selectedShop: "ร้านค้าที่ท่านเลือก", lblName: "ชื่อ – นามสกุล (เพื่อรับรางวัล)", namePlaceholder: "ระบุชื่อ-นามสกุล", lblPhone: "เบอร์โทรศัพท์", phonePlaceholder: "0XXXXXXXXX", rateLabel: "ให้คะแนนร้านค้า", pdpa: "ยอมรับเงื่อนไขความเป็นส่วนตัว", submit: "ยืนยันการให้คะแนน", loading: "กำลังบันทึกคะแนน...", btnOk: "ตกลง" },
+            en: { header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Vote for your favorite shop!!", prize: "Win Gold and Motorcycles!", alreadyVoted: "Already voted today", selectedShop: "Selected Shop", lblName: "Full Name (for prizes)", namePlaceholder: "Enter full name", lblPhone: "Phone Number", phonePlaceholder: "0XXXXXXXXX", rateLabel: "Rate this shop", pdpa: "Accept privacy policy", submit: "Confirm Rating", loading: "Saving...", btnOk: "OK" },
+            zh: { header: "THE BEST OF NUMBER ONE MARKET", subtitle: "投票给你喜欢的店铺", prize: "赢取黄金和摩托车！", alreadyVoted: "今天已经投票了", selectedShop: "所选店铺", lblName: "姓名", namePlaceholder: "输入全名", lblPhone: "电话号码", phonePlaceholder: "请输入电话号码", rateLabel: "评价该店铺", pdpa: "接受隐私政策", submit: "确认评分", loading: "保存中...", btnOk: "确定" },
+            ja: { header: "THE BEST OF NUMBER ONE MARKET", subtitle: "お気に入りの店に投票しよう", prize: "金やバイクが当たる！", alreadyVoted: "本日は投票済みです", selectedShop: "選択された店舗", lblName: "お名前", namePlaceholder: "名前を入力", lblPhone: "電話番号", phonePlaceholder: "電話番号を入力", rateLabel: "お店を評価する", pdpa: "同意する", submit: "評価を確定する", loading: "保存中...", btnOk: "はい" }
+            // เพิ่มเติมภาษาอื่นๆ ได้ตามความต้องการ
         };
 
         function changeLang(lang) {
             currentLang = lang;
             const t = translations[lang] || translations.th;
-            
             document.getElementById('txt-header').innerText = t.header;
             document.getElementById('txt-subtitle').innerText = t.subtitle;
             document.getElementById('txt-prize').innerHTML = `<i class="fas fa-motorcycle"></i> ${t.prize}`;
@@ -482,14 +221,10 @@
             document.getElementById('lbl-phone').innerHTML = `<i class="fas fa-phone"></i> ${t.lblPhone}`;
             document.getElementById('phoneInput').placeholder = t.phonePlaceholder;
             document.getElementById('txt-rate-label').innerText = t.rateLabel;
-            document.getElementById('txt-loading').innerText = t.loading;
+            document.getElementById('txt-pdpa').innerText = t.pdpa;
             document.getElementById('btn-modal-close').innerText = t.btnOk;
-
             const isAlreadyVoted = currentShopId && checkVoteHistory(currentShopId);
             document.getElementById('btnSubmit').innerText = isAlreadyVoted ? t.alreadyVoted : t.submit;
-            
-            const pdpaSpan = document.getElementById('txt-pdpa');
-            pdpaSpan.innerHTML = `${t.pdpa} <a href="https://www.numberonemarket.com/privacy.php" target="_blank" id="txt-pdpa-link">${t.pdpaLink}</a>*`;
         }
 
         function checkVoteHistory(shopId) {
@@ -505,47 +240,42 @@
         async function main() {
             try {
                 await liff.init({ liffId: LIFF_ID });
-                if (!liff.isLoggedIn()) {
-                    liff.login();
-                } else {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    // นำคำว่า let ออกเพื่อให้เก็บเข้าตัวแปร Global
-                    currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
+                if (!liff.isLoggedIn()) { liff.login(); return; }
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
 
-                    if (!currentShopId && urlParams.get('liff.state')) {
-                        let liffState = urlParams.get('liff.state');
-                        if (liffState.startsWith('?')) liffState = liffState.substring(1);
-                        try { liffState = decodeURIComponent(liffState); } catch(e) {}
-                        const stateParams = new URLSearchParams('?' + liffState);
-                        currentShopId = stateParams.get('shop_id') || stateParams.get('shopId');
-                    }
+                if (!currentShopId && urlParams.get('liff.state')) {
+                    let lState = urlParams.get('liff.state').startsWith('?') ? urlParams.get('liff.state').substring(1) : urlParams.get('liff.state');
+                    try { lState = decodeURIComponent(lState); } catch(e) {}
+                    const sParams = new URLSearchParams(lState);
+                    currentShopId = sParams.get('shop_id') || sParams.get('shopId');
+                }
 
-                    if (currentShopId) {
-                        currentShopId = currentShopId.trim().toUpperCase();
-                        try {
-                            const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}&t=${Date.now()}`);
-                            const textData = await response.text();
-                            
-                            // ล้าง Logic การเช็ค JSON ออกเพื่อความแม่นยำ เพราะ Apps Script ส่งกลับมาเป็นชื่อร้านโดยตรง
-                            if (textData.includes("Error") || textData === "NOT_FOUND" || textData.includes("No parameter")) {
-                                currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId})`;
-                            } else {
-                                currentShopName = textData.trim();
-                            }
-                            
-                            document.getElementById('shopNameDisplay').innerText = currentShopName;
-
-                            if (checkVoteHistory(currentShopId)) {
-                                document.getElementById('alreadyVotedMsg').style.display = 'block';
-                                document.getElementById('btnSubmit').disabled = true;
-                                changeLang(currentLang);
-                            }
-                        } catch (err) {
-                            document.getElementById('shopNameDisplay').innerText = "เชื่อมต่อข้อมูลล้มเหลว";
+                if (currentShopId) {
+                    currentShopId = currentShopId.trim().toUpperCase();
+                    try {
+                        const response = await fetch(`${WEB_APP_URL}?getShopName=${currentShopId}&t=${Date.now()}`);
+                        const text = await response.text();
+                        
+                        // กรองข้อมูลที่ผิดพลาด ไม่ให้แสดง JSON Dump
+                        if (text.includes("Error") || text === "NOT_FOUND" || text.startsWith("[") || text.startsWith("{")) {
+                            currentShopName = `ไม่พบข้อมูลร้านค้า (รหัส: ${currentShopId})`;
+                        } else {
+                            currentShopName = text.trim();
                         }
-                    } else {
-                        document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้า (No Shop ID)";
+                        
+                        document.getElementById('shopNameDisplay').innerText = currentShopName;
+
+                        if (checkVoteHistory(currentShopId)) {
+                            document.getElementById('alreadyVotedMsg').style.display = 'block';
+                            document.getElementById('btnSubmit').disabled = true;
+                        }
+                    } catch (err) {
+                        document.getElementById('shopNameDisplay').innerText = "การเชื่อมต่อขัดข้อง";
                     }
+                } else {
+                    document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้า (No Shop ID)";
                 }
                 changeLang(currentLang);
             } catch (error) { console.error(error); }
@@ -563,52 +293,42 @@
 
         async function validateAndSubmit() {
             const t = translations[currentLang] || translations.th;
-            if (currentShopId && checkVoteHistory(currentShopId)) return showAlert(t.alertFail, t.alreadyVoted, 'error');
-
+            if (currentShopId && checkVoteHistory(currentShopId)) return showAlert("ผิดพลาด", t.alreadyVoted, 'error');
+            
             const name = document.getElementById('nameInput').value.trim();
             const phone = document.getElementById('phoneInput').value.trim();
             const ratingEl = document.querySelector('input[name="score_quality"]:checked');
             const pdpa = document.getElementById('pdpaConsent').checked;
 
-            if (!name || !phone) return showAlert(t.alertIncomplete, t.alertIncompleteMsg, 'error');
-            if (phone.length < 9) return showAlert(t.alertPhoneError, t.alertPhoneError, 'error');
-            if (!ratingEl) return showAlert(t.alertRateError, t.alertRateError, 'error');
-            if (!pdpa) return showAlert(t.alertPdpaError, t.alertPdpaError, 'error');
+            if (!name || !phone || !ratingEl || !pdpa) {
+                return showAlert("ข้อมูลไม่ครบ", "กรุณาระบุข้อมูลและให้คะแนนให้ครบถ้วน", "error");
+            }
+            if (phone.length < 9) return showAlert("เบอร์โทรศัพท์ผิด", "กรุณาระบุเบอร์โทรศัพท์ให้ถูกต้อง", "error");
 
             submitVote(name, phone, ratingEl.value);
         }
 
         async function submitVote(name, phone, rating) {
-            const t = translations[currentLang] || translations.th;
             document.getElementById('loading').style.display = 'flex';
             try {
                 const profile = await liff.getProfile();
                 const params = new URLSearchParams({
-                    shopId: currentShopId,
-                    shopName: currentShopName,
-                    userId: profile.userId,
-                    displayName: profile.displayName,
-                    fullName: name,
-                    phone: phone,
-                    quality: rating
+                    shopId: currentShopId, shopName: currentShopName, userId: profile.userId,
+                    displayName: profile.displayName, fullName: name, phone: phone, quality: rating
                 });
 
-                await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: params
-                });
+                await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: params });
 
                 const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
                 history[currentShopId] = new Date().toISOString();
                 localStorage.setItem('vote_history', JSON.stringify(history));
 
                 document.getElementById('loading').style.display = 'none';
-                showAlert(t.alertSuccess, t.alertSuccessMsg, 'success');
+                showAlert("สำเร็จ!", "ขอบคุณที่ร่วมสนุกกับเราครับ", "success");
                 setTimeout(() => { liff.closeWindow(); }, 2500);
             } catch (e) {
                 document.getElementById('loading').style.display = 'none';
-                showAlert(t.alertFail, t.alertFailMsg, 'error');
+                showAlert("ผิดพลาด", "ไม่สามารถส่งข้อมูลได้", 'error');
             }
         }
 
