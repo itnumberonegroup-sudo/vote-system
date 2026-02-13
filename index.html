@@ -118,7 +118,7 @@
 
     <div id="loading">
         <div class="spinner"></div>
-        <p id="txt-loading" style="margin-top: 15px; font-weight: 600;">กำลังบันทึกคะแนน...</p>
+        <p id="txt-loading" style="margin-top: 15px; font-weight: 600;">กำลังประมวลผล...</p>
     </div>
 
     <div id="customAlert" onclick="closeAlert()">
@@ -196,8 +196,10 @@
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
         
+        // ดึงชื่อร้านจาก DataName
         const FETCH_SHOP_URL = 'https://script.google.com/macros/s/AKfycbwy6XUJz55kVuxf7zoZH4KLCpfM_ihJCr85BwB17Nh2rzP7X5jxZCAdj5uGx9-6I6Jb/exec'; 
-        const VOTE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyzkmEU1Wu7i5oLrbFQfeW9J6z5UtxXPGnSYlvb2LezuPWTcwYBagy1Dh63nysnkJW5lQ/exec';
+        // บันทึกโหวตที่ Numberone Market (อัปเดต URL ล่าสุดที่คุณแจ้งมา)
+        const VOTE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoXkfpkxhrBxSMooKEKt4lNtx1PPTpaoj4cxBKZPuJoeNy6WUtJjFJSo8mrOjcb1g32A/exec';
 
         let currentShopId = "";
         let currentShopName = "";
@@ -236,7 +238,7 @@
                 alreadyVoted: "本日は投票済みです", selectedShop: "選択されたお店", lblName: "氏名（景品受取用）",
                 namePlaceholder: "氏名を入力してください", lblPhone: "電話番号", phonePlaceholder: "番号を入力", rateLabel: "お店を評価する",
                 pdpa: "プライバシーポリシーに同意する", submit: "評価を送信する", loading: "保存中...",
-                alertIncomplete: "入力不備", alertIncompleteMsg: "氏名と電話番号を入力してください", alertPhoneError: "番号が正しくありません",
+                alertIncomplete: "入力不備", alertIncompleteMsg: "氏名と電話番号を入力してください", alertPhoneError: "番号ที่ถูกต้อง",
                 alertRateError: "1〜5星を選択してください", alertPdpaError: "ポリシーに同意してください",
                 alertSuccess: "完了！", alertSuccessMsg: "ご協力ありがとうございました", alertFail: "エラー", alertFailMsg: "エラーが発生しました", btnOk: "はい"
             },
@@ -255,8 +257,8 @@
                 namePlaceholder: "ໃສ່ຊື່-ນາມສະກຸນ", lblPhone: "ເບີໂທລະສັບ", phonePlaceholder: "ໃສ່ເບີໂທ", rateLabel: "ໃຫ້ຄະແນນຮ້ານຄ້າ",
                 pdpa: "ຍອມຮັບເງື່ອນໄຂຄວາມເປັນສ່ວນຕົວ", submit: "ຢືນຢັນການໃຫ້ຄະແນນ", loading: "ກຳລັງບັນທຶກ...",
                 alertIncomplete: "ຂໍ້ມູນບໍ່ຄົບ", alertIncompleteMsg: "ກະລຸນາໃສ່ຊື່ ແລະ ເບີໂທໃຫ້ຄົບ", alertPhoneError: "ເບີໂທບໍ່ຖືກຕ້ອງ",
-                alertRateError: "ກະລุนາເລືອກ 1-5 ດາວ", alertPdpaError: "ກະລຸນາຍອມຮັບເງື່ອນໄຂ",
-                alertSuccess: "ສຳເລັດ!", alertSuccessMsg: "ຂອບໃຈທີ່ຮ່ວມກິດຈະກຳ", alertFail: "ຂໍອະໄພ", alertFailMsg: "ເກີດຂໍ້ຜິດພາດ", btnOk: "ຕົກລົງ"
+                alertRateError: "ກະລຸນາເລືອກ 1-5 ດາວ", alertPdpaError: "ກະລຸນາຍອມຮັບເງື່ອນໄຂ",
+                alertSuccess: "ສຳເລັດ!", alertSuccessMsg: "ຂອບໃຈທີ່ຮ່ວມກິດຈະກຳ", alertFail: "ຂໍອະໄພ", alertFailMsg: "ເກີดຂໍ້ຜິດພາດ", btnOk: "ຕົກລົງ"
             },
             id: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Vote toko favorit Anda untuk hadiah!!", prize: "Menangkan Emas dan Motor!",
@@ -270,9 +272,9 @@
             vi: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Bình chọn cửa hàng để nhận quà!!", prize: "Trúng Vàng và Xe máy!",
                 alreadyVoted: "Bạn đã bình chọn rồi", selectedShop: "Cửa hàng đã chọn", lblName: "Họ và tên (nhận thưởng)",
-                namePlaceholder: "Nhập họ và tên", lblPhone: "Số điện thoại", phonePlaceholder: "Nhập số điện thoại", rateLabel: "Đánh giá cửa hàng",
+                namePlaceholder: "Nhập họและtên", lblPhone: "Số điện thoại", phonePlaceholder: "Nhập số điện thoại", rateLabel: "Đánh giá cửa hàng",
                 pdpa: "Đồng ý điều khoản bảo mật", submit: "Xác nhận đánh giá", loading: "Đang lưu...",
-                alertIncomplete: "Chưa đủ thông tin", alertIncompleteMsg: "Vui lòng nhập tên và số điện thoại", alertPhoneError: "Số điện thoại sai",
+                alertIncomplete: "Chưa đủ thông tin", alertIncompleteMsg: "Vui lòng nhập tênและsố điện thoại", alertPhoneError: "Số điện thoại sai",
                 alertRateError: "Vui lòng chọn 1-5 sao", alertPdpaError: "Vui lòng chấp nhận điều khoản",
                 alertSuccess: "Thành công!", alertSuccessMsg: "Cảm ơn bạn đã tham gia", alertFail: "Lỗi", alertFailMsg: "Đã xảy ra lỗi", btnOk: "OK"
             }
@@ -281,7 +283,6 @@
         function changeLang(lang) {
             currentLang = lang;
             const t = translations[lang] || translations.th;
-            
             document.getElementById('txt-header').innerText = t.header;
             document.getElementById('txt-subtitle').innerText = t.subtitle;
             document.getElementById('txt-prize').innerHTML = `<i class="fas fa-motorcycle"></i> ${t.prize}`;
@@ -296,18 +297,14 @@
             document.getElementById('txt-loading').innerText = t.loading;
             document.getElementById('btn-modal-close').innerText = t.btnOk;
 
-            // ปรับปุ่มตามประวัติการโหวต
             const isAlreadyVoted = currentShopId && checkVoteHistory(currentShopId);
             document.getElementById('btnSubmit').innerText = isAlreadyVoted ? t.alreadyVoted : t.submit;
         }
 
         function checkVoteHistory(shopId) {
             const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
-            if (history[shopId]) {
-                const lastVoteTime = new Date(history[shopId]).getTime();
-                const now = new Date().getTime();
-                return (now - lastVoteTime) < (24 * 60 * 60 * 1000);
-            }
+            const today = new Date().toLocaleDateString('th-TH'); // ใช้แค่วันที่ เพื่อความแม่นยำรายวัน
+            if (history[shopId] === today) return true;
             return false;
         }
 
@@ -338,19 +335,14 @@
                         } else {
                             currentShopName = textData.trim();
                         }
-                        
                         document.getElementById('shopNameDisplay').innerText = currentShopName;
 
                         if (checkVoteHistory(currentShopId)) {
                             document.getElementById('alreadyVotedMsg').style.display = 'block';
                             document.getElementById('btnSubmit').disabled = true;
                         }
-                    } catch (err) {
-                        document.getElementById('shopNameDisplay').innerText = "การเชื่อมต่อขัดข้อง";
-                    }
-                } else {
-                    document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้า (No Shop ID)";
-                }
+                    } catch (err) { document.getElementById('shopNameDisplay').innerText = "การเชื่อมต่อขัดข้อง"; }
+                } else { document.getElementById('shopNameDisplay').innerText = "ไม่พบรหัสร้านค้า (No Shop ID)"; }
                 changeLang(currentLang);
             } catch (error) { console.error(error); }
         }
@@ -367,17 +359,15 @@
 
         async function validateAndSubmit() {
             const t = translations[currentLang] || translations.th;
-            if (currentShopId && checkVoteHistory(currentShopId)) return showAlert(t.alertFail, t.alreadyVoted, 'error');
+            if (currentShopId && checkVoteHistory(currentShopId)) return showAlert("ผิดพลาด", t.alreadyVoted, 'error');
             
             const name = document.getElementById('nameInput').value.trim();
             const phone = document.getElementById('phoneInput').value.trim();
             const ratingEl = document.querySelector('input[name="score_quality"]:checked');
             const pdpa = document.getElementById('pdpaConsent').checked;
 
-            if (!name || !phone || !ratingEl || !pdpa) {
-                return showAlert(t.alertIncomplete, t.alertIncompleteMsg, 'error');
-            }
-            if (phone.length < 9) return showAlert(t.alertPhoneError, t.alertPhoneError, 'error');
+            if (!name || !phone || !ratingEl || !pdpa) return showAlert("ข้อมูลไม่ครบ", t.alertIncompleteMsg, 'error');
+            if (phone.length < 9) return showAlert("เบอร์โทรศัพท์ผิด", t.alertPhoneError, 'error');
 
             submitVote(name, phone, ratingEl.value);
         }
@@ -392,10 +382,15 @@
                     displayName: profile.displayName, fullName: name, phone: phone, quality: rating
                 });
 
-                await fetch(VOTE_WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: params });
+                // ส่งข้อมูลไปที่ Numberone Market
+                const resp = await fetch(VOTE_WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: params });
 
+                /** * บันทึกลงเครื่องหลังจากส่งข้อมูลแล้วเท่านั้น
+                 * ปรับปรุง: ใช้แค่วันที่เพื่อเช็ครายวัน
+                 */
                 const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
-                history[currentShopId] = new Date().toISOString();
+                const today = new Date().toLocaleDateString('th-TH');
+                history[currentShopId] = today;
                 localStorage.setItem('vote_history', JSON.stringify(history));
 
                 document.getElementById('loading').style.display = 'none';
@@ -403,12 +398,10 @@
                 setTimeout(() => { liff.closeWindow(); }, 2500);
             } catch (e) {
                 document.getElementById('loading').style.display = 'none';
-                showAlert(t.alertFail, t.alertFailMsg, 'error');
+                showAlert("ผิดพลาด", "ไม่สามารถส่งข้อมูลได้", 'error');
             }
         }
-
         main();
     </script>
 </body>
 </html>
-
