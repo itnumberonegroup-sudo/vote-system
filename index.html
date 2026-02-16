@@ -18,6 +18,9 @@
             --text-dark: #1e293b;
             --error-color: #ef4444;
             --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            
+            /* --- [ตำแหน่งที่ 1: ใส่ URL รูปภาพจาก GitHub] --- */
+            --banner-url: url(''); 
         }
 
         body {
@@ -54,20 +57,49 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
+        /* --- [ตำแหน่งที่ 2: ปรับขนาดและสัดส่วนภาพที่นี่] --- */
         .header-banner {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1555529771-835f59fc5efe?auto=format&fit=crop&q=80&w=1000');
+            background-image: var(--banner-url);
             background-size: cover;
             background-position: center;
-            color: white;
-            padding: 40px 20px;
+            background-repeat: no-repeat;
+            background-color: #cbd5e1; /* สีพื้นหลังระหว่างรอโหลดภาพ */
+            
+            width: 100%;
+            /* aspect-ratio: [กว้าง] / [สูง] -> 2 / 1 คือ แนวนอนกว้างๆ */
+            aspect-ratio: 2 / 1; 
+            
             border-radius: 30px 30px 0 0;
-            text-align: center;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
         }
 
-        .header-banner h1 { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.3; }
-        .header-banner p { margin: 8px 0; font-weight: 300; font-size: 14px; opacity: 0.9; }
+        /* Overlay จางๆ เพื่อให้ข้อความบนภาพอ่านออกง่ายขึ้น */
+        .header-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+
+        .header-banner h1, .header-banner p, .header-banner .prize-badge {
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            /* หากคุณใส่ข้อความในรูปภาพไปแล้ว และต้องการซ่อนข้อความเดิมใน HTML ให้เพิ่มคำสั่งด้านล่างนี้ */
+            /* display: none; */
+        }
+
+        .header-banner h1 { font-size: 20px; font-weight: 600; line-height: 1.3; }
+        .header-banner p { margin-top: 5px; font-weight: 300; font-size: 14px; opacity: 0.9; }
+        
         .prize-badge {
             background: var(--secondary-color);
             color: #856404;
@@ -76,7 +108,7 @@
             border-radius: 50px;
             font-weight: 600;
             font-size: 13px;
-            margin-top: 12px;
+            margin-top: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
@@ -195,10 +227,7 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
-        
-        // ดึงชื่อร้านจาก DataName
         const FETCH_SHOP_URL = 'https://script.google.com/macros/s/AKfycbwy6XUJz55kVuxf7zoZH4KLCpfM_ihJCr85BwB17Nh2rzP7X5jxZCAdj5uGx9-6I6Jb/exec'; 
-        // บันทึกโหวตที่ Numberone Market (อัปเดต URL ล่าสุดที่คุณแจ้งมา)
         const VOTE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoXkfpkxhrBxSMooKEKt4lNtx1PPTpaoj4cxBKZPuJoeNy6WUtJjFJSo8mrOjcb1g32A/exec';
 
         let currentShopId = "";
@@ -235,7 +264,7 @@
             },
             ja: {
                 header: "ナンバーワン・マーケット・ベスト店", subtitle: "お気に入りの店に投票して賞品を当てよう！", prize: "金やバイクが当たる！",
-                alreadyVoted: "本日は投票済みです", selectedShop: "選択されたお店", lblName: "氏名（景品受取用）",
+                alreadyVoted: "本日は投票済みです", selectedShop: "選択された店舗", lblName: "氏名（景品受取用）",
                 namePlaceholder: "氏名を入力してください", lblPhone: "電話番号", phonePlaceholder: "番号を入力", rateLabel: "お店を評価する",
                 pdpa: "プライバシーポリシーに同意する", submit: "評価を送信する", loading: "保存中...",
                 alertIncomplete: "入力不備", alertIncompleteMsg: "氏名と電話番号を入力してください", alertPhoneError: "番号ที่ถูกต้อง",
@@ -246,10 +275,10 @@
                 header: "NUMBER ONE MARKET အကောင်းဆုံးဆိုင်", subtitle: "ဆုလက်ဆောင်များရယူရန် မဲပေးပါ!!", prize: "ရွှေနှင့် ဆိုင်ကယ်များ ကံစမ်းရန်!",
                 alreadyVoted: "ယနေ့အတွက် မဲပေးပြီးပါပြီ", selectedShop: "သင်ရွေးချယ်သောဆိုင်", lblName: "အမည် (ဆုရယူရန်)",
                 namePlaceholder: "အမည်အပြည့်အစုံရိုက်ပါ", lblPhone: "ဖုန်းနံပါတ်", phonePlaceholder: "ဖုန်းနံပါတ်ရိုက်ပါ", rateLabel: "ဆိုင်ကို အဆင့်သတ်မှတ်ရန်",
-                pdpa: "စည်းကမ်းချက်များကို သဘောတူပါသည်", submit: "အတည်ပြုရန်", loading: "သိမ်းဆည်းနေသည်...",
-                alertIncomplete: "မပြည့်စုံပါ", alertIncompleteMsg: "အမည်နှင့် ဖုန်းနံပါတ်ထည့်ပါ", alertPhoneError: "ဖုန်းနံပါတ်မှားနေပါသည်",
-                alertRateError: "ကြယ် ၁-၅ လုံးရွေးပါ", alertPdpaError: "စည်းကမ်းချက်သဘောတူပါ",
-                alertSuccess: "အောင်မြင်သည်!", alertSuccessMsg: "ပါဝင်မှုအတွက် ကျေးဇူးတင်ပါသည်", alertFail: "မှားယွင်းသည်", alertFailMsg: "ထပ်မံကြိုးစားပါ", btnOk: "အိုကေ"
+                pdpa: "စည်းကမ်းချက်များကို သဘောတူပါသည်", submit: "အတည်ပြုရန်", loading: "သိမ်းဆည်းเนသည်...",
+                alertIncomplete: "မပြည့်စုံပါ", alertIncompleteMsg: "အမည်และฟုန်းนံပါတ်ထည့်ပါ", alertPhoneError: "ဖုန်းနံပါတ်မှားနေပါသည်",
+                alertRateError: "ကြယ် ၁-၅ လုံးရွေးပါ", alertPdpaError: "စည်းကမ်းချက်သဘောตူပါ",
+                alertSuccess: "အောင်မြင်သည်!", alertSuccessMsg: "ပါဝင်မှုสำหรับ ကျေးဇူးတင်ပါသည်", alertFail: "မှားယွင်းသည်", alertFailMsg: "ထပ်မံကြိုးစားပါ", btnOk: "အိုကေ"
             },
             lo: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "ໂຫວດຮ້ານຄ້າເພື່ອລຸ້ນຮັບລາງວັນ!!", prize: "ລຸ້ນຮັບຄຳ ແລະ ລົດມໍເຕີໄຊ!",
@@ -262,10 +291,10 @@
             },
             id: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Vote toko favorit Anda untuk hadiah!!", prize: "Menangkan Emas dan Motor!",
-                alreadyVoted: "Sudah memilih hari ini", selectedShop: "Toko yang dipilih", lblName: "Nama Lengkap (untuk hadiah)",
+                alreadyVoted: "Sudah memilih hari ini", selectedShop: "Tokoที่ถูกเลือก", lblName: "Nama Lengkap (untuk hadiah)",
                 namePlaceholder: "Masukkan nama lengkap", lblPhone: "Nomor Telepon", phonePlaceholder: "Masukkan nomor", rateLabel: "Beri nilai toko ini",
                 pdpa: "Setujui kebijakan privasi", submit: "Konfirmasi Penilaian", loading: "Menyimpan...",
-                alertIncomplete: "Tidak Lengkap", alertIncompleteMsg: "Harap isi nama dan nomor telepon", alertPhoneError: "Nomor tidak valid",
+                alertIncomplete: "Tidak Lengkap", alertIncompleteMsg: "Harap isi namaและnomor telepon", alertPhoneError: "Nomor tidak valid",
                 alertRateError: "Pilih 1-5 bintang", alertPdpaError: "Harap setujui kebijakan",
                 alertSuccess: "Berhasil!", alertSuccessMsg: "Terima kasih atas partisipasi Anda", alertFail: "Kesalahan", alertFailMsg: "Terjadi kesalahan", btnOk: "OK"
             },
@@ -303,7 +332,7 @@
 
         function checkVoteHistory(shopId) {
             const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
-            const today = new Date().toLocaleDateString('th-TH'); // ใช้แค่วันที่ เพื่อความแม่นยำรายวัน
+            const today = new Date().toLocaleDateString('th-TH');
             if (history[shopId] === today) return true;
             return false;
         }
@@ -382,12 +411,8 @@
                     displayName: profile.displayName, fullName: name, phone: phone, quality: rating
                 });
 
-                // ส่งข้อมูลไปที่ Numberone Market
                 const resp = await fetch(VOTE_WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: params });
 
-                /** * บันทึกลงเครื่องหลังจากส่งข้อมูลแล้วเท่านั้น
-                 * ปรับปรุง: ใช้แค่วันที่เพื่อเช็ครายวัน
-                 */
                 const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
                 const today = new Date().toLocaleDateString('th-TH');
                 history[currentShopId] = today;
