@@ -18,9 +18,6 @@
             --text-dark: #1e293b;
             --error-color: #ef4444;
             --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            
-            /* --- [ตำแหน่งที่ 1: ใส่ URL รูปภาพจาก GitHub] --- */
-            --banner-url: url(''); 
         }
 
         body {
@@ -57,18 +54,13 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        /* --- [ตำแหน่งที่ 2: ปรับขนาดและสัดส่วนภาพที่นี่] --- */
+        /* --- [ส่วนปรับขนาดแบนเนอร์ที่เหมาะสม] --- */
         .header-banner {
-            background-image: var(--banner-url);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-color: #cbd5e1; /* สีพื้นหลังระหว่างรอโหลดภาพ */
-            
             width: 100%;
-            /* aspect-ratio: [กว้าง] / [สูง] -> 2 / 1 คือ แนวนอนกว้างๆ */
+            /* ปรับสัดส่วนที่นี่: 2/1 สำหรับแนวนอนกว้าง, 16/9 สำหรับวิดีโอมาตรฐาน, 1/1 สำหรับจัตุรัส */
             aspect-ratio: 2 / 1; 
             
+            background-color: #cbd5e1;
             border-radius: 30px 30px 0 0;
             position: relative;
             overflow: hidden;
@@ -80,21 +72,31 @@
             color: white;
         }
 
-        /* Overlay จางๆ เพื่อให้ข้อความบนภาพอ่านออกง่ายขึ้น */
+        /* สไตล์สำหรับทั้ง Video และ Image ให้เต็มพื้นที่ */
+        .banner-media {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            display: none; /* ซ่อนไว้ก่อนจนกว่าจะโหลด URL */
+        }
+
+        /* Overlay สำหรับทำให้ตัวหนังสืออ่านง่ายขึ้น */
         .header-banner::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3));
-            z-index: 1;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4));
+            z-index: 2;
         }
 
         .header-banner h1, .header-banner p, .header-banner .prize-badge {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             margin: 0;
-            /* หากคุณใส่ข้อความในรูปภาพไปแล้ว และต้องการซ่อนข้อความเดิมใน HTML ให้เพิ่มคำสั่งด้านล่างนี้ */
-            /* display: none; */
         }
 
         .header-banner h1 { font-size: 20px; font-weight: 600; line-height: 1.3; }
@@ -170,7 +172,7 @@
                 <option value="en">English</option>
                 <option value="zh">中文 (Chinese)</option>
                 <option value="ja">日本語 (Japanese)</option>
-                <option value="my">မြန်မာဘာသာ (Myanmar)</option>
+                <option value="my">မြันမာဘာသာ (Myanmar)</option>
                 <option value="lo">ພາສາລາວ (Lao)</option>
                 <option value="id">Bahasa Indonesia</option>
                 <option value="vi">Tiếng Việt (Vietnamese)</option>
@@ -178,6 +180,14 @@
         </div>
 
         <div class="header-banner">
+            <!-- ส่วนแสดองวิดีโอ -->
+            <video autoplay muted loop playsinline class="banner-media" id="bannerVideo">
+                <source src="" type="video/mp4">
+            </video>
+            
+            <!-- ส่วนแสดงรูปภาพ (.jpg, .png, .svg, .gif) -->
+            <img src="" class="banner-media" id="bannerImage" alt="Banner">
+            
             <h1 id="txt-header">THE BEST OF NUMBER ONE MARKET</h1>
             <p id="txt-subtitle">โหวตร้านค้าเพื่อลุ้นรับของรางวัล!!</p>
             <div class="prize-badge" id="txt-prize"><i class="fas fa-motorcycle"></i> ลุ้นรับทองคำ และ รถมอเตอร์ไซค์!</div>
@@ -227,12 +237,42 @@
 
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
+        
+        /**
+         * ส่วนที่ 1: ตั้งค่าลิงก์วิดีโอ (เน้น .mp4)
+         * หากใส่ลิงก์นี้ ระบบจะแสดงวิดีโอเป็นอันดับแรก
+         */
+        const BANNER_VIDEO_URL = ''; 
+
+        /**
+         * ส่วนที่ 2: ตั้งค่าลิงก์รูปภาพ (รองรับ .jpg, .png, .svg, .gif)
+         * จะแสดงก็ต่อเมื่อ BANNER_VIDEO_URL เป็นค่าว่าง
+         */
+        const BANNER_IMAGE_URL = ''; 
+
         const FETCH_SHOP_URL = 'https://script.google.com/macros/s/AKfycbwy6XUJz55kVuxf7zoZH4KLCpfM_ihJCr85BwB17Nh2rzP7X5jxZCAdj5uGx9-6I6Jb/exec'; 
         const VOTE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoXkfpkxhrBxSMooKEKt4lNtx1PPTpaoj4cxBKZPuJoeNy6WUtJjFJSo8mrOjcb1g32A/exec';
 
         let currentShopId = "";
         let currentShopName = "";
         let currentLang = 'th';
+
+        // ระบบจัดการสื่อแบนเนอร์
+        function initBanner() {
+            const v = document.getElementById('bannerVideo');
+            const i = document.getElementById('bannerImage');
+            
+            if(BANNER_VIDEO_URL) {
+                v.querySelector('source').src = BANNER_VIDEO_URL;
+                v.load();
+                v.style.display = 'block';
+                i.style.display = 'none';
+            } else if(BANNER_IMAGE_URL) {
+                i.src = BANNER_IMAGE_URL;
+                i.style.display = 'block';
+                v.style.display = 'none';
+            }
+        }
 
         const translations = {
             th: {
@@ -259,7 +299,7 @@
                 namePlaceholder: "请输入您的姓名", lblPhone: "电话号码", phonePlaceholder: "请输入号码", rateLabel: "店铺评分",
                 pdpa: "接受隐私条款 (Number One Market)", submit: "确认评分", loading: "正在保存...",
                 alertIncomplete: "信息不完整", alertIncompleteMsg: "请输入您的姓名和电话", alertPhoneError: "电话号码错误",
-                alertRateError: "请选择1-5星级", alertPdpaError: "请接受隐私条款",
+                alertRateError: "请เลือก1-5星级", alertPdpaError: "请接受隐私条款",
                 alertSuccess: "成功！", alertSuccessMsg: "感谢您的参与与反馈", alertFail: "失败", alertFailMsg: "发生错误，请稍后再试", btnOk: "确定"
             },
             ja: {
@@ -275,10 +315,10 @@
                 header: "NUMBER ONE MARKET အကောင်းဆုံးဆိုင်", subtitle: "ဆုလက်ဆောင်များရယူရန် မဲပေးပါ!!", prize: "ရွှေနှင့် ဆိုင်ကယ်များ ကံစမ်းရန်!",
                 alreadyVoted: "ယနေ့အတွက် မဲပေးပြီးပါပြီ", selectedShop: "သင်ရွေးချယ်သောဆိုင်", lblName: "အမည် (ဆုရယူရန်)",
                 namePlaceholder: "အမည်အပြည့်အစုံရိုက်ပါ", lblPhone: "ဖုန်းနံပါတ်", phonePlaceholder: "ဖုန်းနံပါတ်ရိုက်ပါ", rateLabel: "ဆိုင်ကို အဆင့်သတ်မှတ်ရန်",
-                pdpa: "စည်းကမ်းချက်များကို သဘောတူပါသည်", submit: "အတည်ပြုရန်", loading: "သိမ်းဆည်းเนသည်...",
-                alertIncomplete: "မပြည့်စုံပါ", alertIncompleteMsg: "အမည်และฟုန်းนံပါတ်ထည့်ပါ", alertPhoneError: "ဖုန်းနံပါတ်မှားနေပါသည်",
-                alertRateError: "ကြယ် ၁-၅ လုံးရွေးပါ", alertPdpaError: "စည်းကမ်းချက်သဘောตူပါ",
-                alertSuccess: "အောင်မြင်သည်!", alertSuccessMsg: "ပါဝင်မှုสำหรับ ကျေးဇူးတင်ပါသည်", alertFail: "မှားယွင်းသည်", alertFailMsg: "ထပ်မံကြိုးစားပါ", btnOk: "အိုကေ"
+                pdpa: "စည်းကမ်းချက်များကို သဘောတူပါသည်", submit: "အတည်ပြုရန်", loading: "သိမ်းဆည်းနေသည်...",
+                alertIncomplete: "မပြည့်စုံပါ", alertIncompleteMsg: "အမည်နှင့် ဖုန်းနံพาတ်ထည့်ပါ", alertPhoneError: "ဖုန်းနံพาတ်မှားနေပါသည်",
+                alertRateError: "ကြယ် ၁-๕ လုံးရွေးပါ", alertPdpaError: "စည်းกัมส์ချက်သဘောตူပါ",
+                alertSuccess: "အောင်မြင်သည်!", alertSuccessMsg: "ပါဝင်မှုအတွက် ကျေးဇူးတင်ပါသည်", alertFail: "မှားယွင်းသည်", alertFailMsg: "ထပ်မံကြိုးစားပါ", btnOk: "အိုကေ"
             },
             lo: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "ໂຫວດຮ້ານຄ້າເພື່ອລຸ້ນຮັບລາງວັນ!!", prize: "ລຸ້ນຮັບຄຳ ແລະ ລົດມໍເຕີໄຊ!",
@@ -338,6 +378,7 @@
         }
 
         async function main() {
+            initBanner();
             try {
                 await liff.init({ liffId: LIFF_ID });
                 if (!liff.isLoggedIn()) { liff.login(); return; }
