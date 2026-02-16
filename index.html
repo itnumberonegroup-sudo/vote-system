@@ -54,12 +54,9 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        /* --- [ส่วนปรับขนาดแบนเนอร์ที่เหมาะสม] --- */
         .header-banner {
             width: 100%;
-            /* ปรับสัดส่วนที่นี่: 2/1 สำหรับแนวนอนกว้าง, 16/9 สำหรับวิดีโอมาตรฐาน, 1/1 สำหรับจัตุรัส */
             aspect-ratio: 2 / 1; 
-            
             background-color: #cbd5e1;
             border-radius: 30px 30px 0 0;
             position: relative;
@@ -72,7 +69,6 @@
             color: white;
         }
 
-        /* สไตล์สำหรับทั้ง Video และ Image ให้เต็มพื้นที่ */
         .banner-media {
             position: absolute;
             top: 0;
@@ -81,10 +77,9 @@
             height: 100%;
             object-fit: cover;
             z-index: 1;
-            display: none; /* ซ่อนไว้ก่อนจนกว่าจะโหลด URL */
+            display: none;
         }
 
-        /* Overlay สำหรับทำให้ตัวหนังสืออ่านง่ายขึ้น */
         .header-banner::before {
             content: '';
             position: absolute;
@@ -134,8 +129,15 @@
         .stars label { font-size: 36px; color: #cbd5e1; cursor: pointer; }
         .stars input:checked ~ label { color: var(--secondary-color); }
 
-        .pdpa-container { margin: 20px 0; padding: 12px; background: #fffcf0; border-radius: 12px; border: 1px solid #ffeeba; font-size: 11px; color: #666; }
+        .pdpa-container { margin: 20px 0; padding: 12px; background: #fffcf0; border-radius: 12px; border: 1px solid #ffeeba; font-size: 11px; color: #666; line-height: 1.6; }
         .pdpa-checkbox { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+        .pdpa-checkbox input { margin-top: 4px; flex-shrink: 0; }
+        
+        .pdpa-container a {
+            color: var(--primary-color);
+            text-decoration: underline;
+            font-weight: 600;
+        }
 
         .btn-submit { background: var(--primary-color); color: white; border: none; padding: 16px; border-radius: 15px; width: 100%; font-size: 17px; font-weight: 600; cursor: pointer; }
         .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
@@ -187,10 +189,6 @@
             
             <!-- ส่วนแสดงรูปภาพ (.jpg, .png, .svg, .gif) -->
             <img src="" class="banner-media" id="bannerImage" alt="Banner">
-            
-           <!-- <h1 id="txt-header">THE BEST OF NUMBER ONE MARKET</h1>
-            <p id="txt-subtitle">โหวตร้านค้าเพื่อลุ้นรับของรางวัล!!</p> 
-            <div class="prize-badge" id="txt-prize"><i class="fas fa-motorcycle"></i> ลุ้นรับทองคำ และ รถมอเตอร์ไซค์!</div> -->
         </div>
 
         <div id="voteForm">
@@ -226,9 +224,7 @@
                 <label class="pdpa-checkbox">
                     <input type="checkbox" id="pdpaConsent">
                     <span id="txt-pdpa">
-                        บริการจะจัดเก็บข้อมูลของท่าน เพื่อการติดต่อสื่อสาร หรือแจ้งข้อมูลข่าวสารและสืบประโยชน์เกี่ยวข้องกับผลิตภัณฑ์
-                        บริการ รวมถึงการปฏิบัติตามกฎหมายอื่นที่เกี่ยวข้อง บริษัท นัมเบอร์ วัน ห้าม ท่านสามารถศึกษารายละเอียดเพิ่มเติมเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคลได้จาก
-                        ประกาศความเป็นส่วนตัว ฉบับการขอแสดงความคิดเห็น : <a href="https://www.numberonemarket.com/privacy.php" target="_blank">
+                        <!-- ข้อความจะถูกเติมโดย JavaScript อัตโนมัติ -->
                     </span>
                 </label>
             </div>
@@ -240,16 +236,8 @@
     <script>
         const LIFF_ID = '2009067055-3oHER0LB'; 
         
-        /**
-         * ส่วนที่ 1: ตั้งค่าลิงก์วิดีโอ (เน้น .mp4)
-         * หากใส่ลิงก์นี้ ระบบจะแสดงวิดีโอเป็นอันดับแรก
-         */
+        // --- [การตั้งค่าสื่อแบนเนอร์] ---
         const BANNER_VIDEO_URL = ''; 
-
-        /**
-         * ส่วนที่ 2: ตั้งค่าลิงก์รูปภาพ (รองรับ .jpg, .png, .svg, .gif)
-         * จะแสดงก็ต่อเมื่อ BANNER_VIDEO_URL เป็นค่าว่าง
-         */
         const BANNER_IMAGE_URL = 'https://raw.githubusercontent.com/itnumberonegroup-sudo/vote-system/main/Banner.svg'; 
 
         const FETCH_SHOP_URL = 'https://script.google.com/macros/s/AKfycbwy6XUJz55kVuxf7zoZH4KLCpfM_ihJCr85BwB17Nh2rzP7X5jxZCAdj5uGx9-6I6Jb/exec'; 
@@ -259,7 +247,6 @@
         let currentShopName = "";
         let currentLang = 'th';
 
-        // ระบบจัดการสื่อแบนเนอร์
         function initBanner() {
             const v = document.getElementById('bannerVideo');
             const i = document.getElementById('bannerImage');
@@ -281,7 +268,8 @@
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "โหวตร้านค้าเพื่อลุ้นรับของรางวัล!!", prize: "ลุ้นรับทองคำ และ รถมอเตอร์ไซค์!",
                 alreadyVoted: "วันนี้คุณโหวตร้านค้านี้ไปแล้ว", selectedShop: "ร้านค้าที่ท่านเลือก", lblName: "ชื่อ – นามสกุล (เพื่อรับรางวัล)",
                 namePlaceholder: "ระบุชื่อ-นามสกุล", lblPhone: "เบอร์โทรศัพท์", phonePlaceholder: "0XXXXXXXXX", rateLabel: "ให้คะแนนร้านค้า",
-                pdpa: "ยอมรับเงื่อนไขความเป็นส่วนตัว (บริษัท นัมเบอร์ วัน จำกัด)", submit: "ยืนยันการให้คะแนน", loading: "กำลังบันทึกคะแนน...",
+                pdpa: "** บริการจะจัดเก็บข้อมูลของท่าน เพื่อการติดต่อสื่อสาร หรือแจ้งข้อมูลข่าวสารและสืบประโยชน์เกี่ยวข้องกับผลิตภัณฑ์ บริการ รวมถึงการปฏิบัติตามกฎหมายอื่นที่เกี่ยวข้อง บริษัท นัมเบอร์ วัน จำกัด ท่านสามารถศึกษารายละเอียดเพิ่มเติมเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคลได้จาก <br>ประกาศความเป็นส่วนตัว ฉบับการขอแสดงความคิดเห็น : <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>https://www.numberonemarket.com/privacy.php</a>", 
+                submit: "ยืนยันการให้คะแนน", loading: "กำลังบันทึกคะแนน...",
                 alertIncomplete: "ข้อมูลไม่ครบ", alertIncompleteMsg: "กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วน", alertPhoneError: "เบอร์โทรศัพท์ไม่ถูกต้อง",
                 alertRateError: "กรุณาเลือกดาว 1-5 ดาว", alertPdpaError: "กรุณายอมรับเงื่อนไขความเป็นส่วนตัว",
                 alertSuccess: "สำเร็จ!", alertSuccessMsg: "ขอบคุณที่ร่วมสนุกครับ", alertFail: "ขออภัย", alertFailMsg: "เกิดข้อผิดพลาด กรุณาลองใหม่", btnOk: "ตกลง"
@@ -290,7 +278,8 @@
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Vote for your favorite shop to win prizes!!", prize: "Win Gold and Motorcycles!",
                 alreadyVoted: "Already voted for this shop today", selectedShop: "Your selected shop", lblName: "Full Name (to receive prize)",
                 namePlaceholder: "Enter your full name", lblPhone: "Phone Number", phonePlaceholder: "0XXXXXXXXX", rateLabel: "Rate this shop",
-                pdpa: "Accept privacy policy (Number One Market)", submit: "Confirm Rating", loading: "Saving your score...",
+                pdpa: "** Your information will be collected for communication. Study more details from our <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>Privacy Notice here</a>", 
+                submit: "Confirm Rating", loading: "Saving your score...",
                 alertIncomplete: "Incomplete", alertIncompleteMsg: "Please fill in name and phone number", alertPhoneError: "Invalid phone number",
                 alertRateError: "Please select 1-5 stars", alertPdpaError: "Please accept privacy notice",
                 alertSuccess: "Success!", alertSuccessMsg: "Thank you for your feedback", alertFail: "Error", alertFailMsg: "Something went wrong, please try again", btnOk: "OK"
@@ -299,7 +288,8 @@
                 header: "第一市场最佳评选", subtitle: "为你心仪的店铺投票，赢取丰厚大奖！", prize: "赢取黄金和摩托车大奖！",
                 alreadyVoted: "您今天已经投票了", selectedShop: "您选择的店铺", lblName: "姓名（用于领奖）",
                 namePlaceholder: "请输入您的姓名", lblPhone: "电话号码", phonePlaceholder: "请输入号码", rateLabel: "店铺评分",
-                pdpa: "接受隐私条款 (Number One Market)", submit: "确认评分", loading: "正在保存...",
+                pdpa: "**我们将收集您的数据用于沟通。详情请参阅 <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>隐私声明</a>", 
+                submit: "确认评分", loading: "正在保存...",
                 alertIncomplete: "信息不完整", alertIncompleteMsg: "请输入您的姓名和电话", alertPhoneError: "电话号码错误",
                 alertRateError: "请เลือก1-5星级", alertPdpaError: "请接受隐私条款",
                 alertSuccess: "成功！", alertSuccessMsg: "感谢您的参与与反馈", alertFail: "失败", alertFailMsg: "发生错误，请稍后再试", btnOk: "确定"
@@ -308,7 +298,8 @@
                 header: "ナンバーワン・マーケット・ベスト店", subtitle: "お気に入りの店に投票して賞品を当てよう！", prize: "金やバイクが当たる！",
                 alreadyVoted: "本日は投票済みです", selectedShop: "選択された店舗", lblName: "氏名（景品受取用）",
                 namePlaceholder: "氏名を入力してください", lblPhone: "電話番号", phonePlaceholder: "番号を入力", rateLabel: "お店を評価する",
-                pdpa: "プライバシーポリシーに同意する", submit: "評価を送信する", loading: "保存中...",
+                pdpa: "**連絡やニュース配信のためにデータを収集します。詳細は <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>こちら</a> をご覧ください", 
+                submit: "評価を送信する", loading: "保存中...",
                 alertIncomplete: "入力不備", alertIncompleteMsg: "氏名と電話番号を入力してください", alertPhoneError: "番号ที่ถูกต้อง",
                 alertRateError: "1〜5星を選択してください", alertPdpaError: "ポリシーに同意してください",
                 alertSuccess: "完了！", alertSuccessMsg: "ご協力ありがとうございました", alertFail: "エラー", alertFailMsg: "エラーが発生しました", btnOk: "はい"
@@ -316,35 +307,39 @@
             my: {
                 header: "NUMBER ONE MARKET အကောင်းဆုံးဆိုင်", subtitle: "ဆုလက်ဆောင်များရယူရန် မဲပေးပါ!!", prize: "ရွှေနှင့် ဆိုင်ကယ်များ ကံစမ်းရန်!",
                 alreadyVoted: "ယနေ့အတွက် မဲပေးပြီးပါပြီ", selectedShop: "သင်ရွေးချယ်သောဆိုင်", lblName: "အမည် (ဆုရယူရန်)",
-                namePlaceholder: "အမည်အပြည့်อစုံရိုက်ပါ", lblPhone: "ဖုန်းနံပါတ်", phonePlaceholder: "ဖုန်းนံพาတ်ရိုက်ပါ", rateLabel: "ဆိုင်ကို အဆင့်သတ်မှတ်ရန်",
-                pdpa: "စည်းกัมส์ချက်များကို သဘောတူပါသည်", submit: "အတည်ပြုရန်", loading: "သိမ်းဆည်းเนသည်...",
-                alertIncomplete: "မပြည့်စုံပါ", alertIncompleteMsg: "အမည်နှင့် ဖုန်းนံพาတ်ထည့်ပါ", alertPhoneError: "ဖုန်းนံพาတ်မှားနေပါသည်",
-                alertRateError: "ကြယ် ၁-๕ လုံးရွေးပါ", alertPdpaError: "စည်းกัมส์ချက်သဘอตူပါ",
-                alertSuccess: "အောင်မြင်သည်!", alertSuccessMsg: "ပါဝင်မှုสำหรับ ကျေးซူးတင်ပါသည်", alertFail: "မှားယွင်းသည်", alertFailMsg: "ထပ်မံကြိုးစားပါ", btnOk: "အိုကေ"
+                namePlaceholder: "အမည်အပြည့်อစုံရိုက်ပါ", lblPhone: "ဖုန်းနံပါတ်", phonePlaceholder: "ဖုန်းนံพาတ်รိုက်ပါ", rateLabel: "ဆိုင်ကို อဆင့်သတ်မှတ်ရန်",
+                pdpa: "**ဆက်သွယ်ရန်အတွက် อချက်แลงก์များကို စုဆောင်းပါမည်။ အသေးစိတ်ကို <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>ဤနေရာတွင်</a> ဖတ်ရှုပါ", 
+                submit: "အတည်ပြုရန်", loading: "သိမ်းဆည်းเนသည်...",
+                alertIncomplete: "မပြည့်စုံပါ", alertIncompleteMsg: "အမည်และဖုန်းนံพาတ်ထည့်ပါ", alertPhoneError: "ဖုန်းนံพาတ်မှားနေပါသည်",
+                alertRateError: "ကြယ် ၁-๕ လုံးรွေးပါ", alertPdpaError: "စည်းกัมส์ချက်သဘอตูပါ",
+                alertSuccess: "အောင်မြင်သည်!", alertSuccessMsg: "ပါဝင်မှုสำหรับ ကျေးซူးတင်ပါသည်", alertFail: "မှားยွင်းသည်", alertFailMsg: "ထပ်มံကြိုးစားပါ", btnOk: "အိုကေ"
             },
             lo: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "ໂຫວດຮ້ານຄ້າເພື່ອລຸ້ນຮັບລາງວັນ!!", prize: "ລຸ້ນຮັບຄຳ ແລະ ລົດມໍເຕີໄຊ!",
-                alreadyVoted: "ມື້ນີ້ທ່ານໂຫວດແລ້ວ", selectedShop: "ຮ້ານທີ່ທ່ານເລືອກ", lblName: "ຊື່ ແລະ ນາມສະກຸນ (ເພື່ອຮັບລາງວັນ)",
-                namePlaceholder: "ໃສ່ຊື່-ນາມສະກຸນ", lblPhone: "ເບີໂທລະສັບ", phonePlaceholder: "ໃສ່ເບີໂທ", rateLabel: "ໃຫ້ຄະແນນຮ້านຄ້າ",
-                pdpa: "ຍອມຮັບເງື່ອນໄຂຄວາມເປັນສ່ວນຕົວ", submit: "ຢືນຢັນການໃຫ້ຄະແນນ", loading: "ກຳລັງບັນທຶກ...",
-                alertIncomplete: "ຂໍ້ມູນບໍ່ຄົບ", alertIncompleteMsg: "ກະລຸນາໃສ່ຊື່ ແລະ ເບີໂທໃຫ້ຄົບ", alertPhoneError: "ເບີໂທບໍ່ຖືກຕ້ອງ",
+                alreadyVoted: "ມື້ນີ້ທ່ານໂຫວດແລ້ວ", selectedShop: "ຮ້ານที่ท่านเลือก", lblName: "ຊື່ ແລະ ນາມສະກຸນ (ເພື່ອຮັບລາງວັນ)",
+                namePlaceholder: "ໃສ່ຊື່-ນາມສະກຸນ", lblPhone: "ເບີໂທລະສັບ", phonePlaceholder: "ໃສ່ເບີໂທ", rateLabel: "ໃຫ້ຄະແນນຮ້ານຄ້າ",
+                pdpa: "**ບໍລິສັດຈະເກັບກຳຂໍ້ມູນຂອງທ່ານເພື່ອການຕິດຕໍ່. ສຶກສາເພີ່ມເຕีม <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>ໄດ້ที่นี่</a>", 
+                submit: "ຢືນຢັນການໃຫ້ຄະແນນ", loading: "ກຳລັງບັນທຶກ...",
+                alertIncomplete: "ຂໍ້ມູນບໍ່ຄົບ", alertIncompleteMsg: "ກະລຸນາໃສ່ຊື່ ແລະ ເບີໂທໃຫ້ຄົບ", alertPhoneError: "ເบີໂທບໍ່ຖືກຕ້ອງ",
                 alertRateError: "ກະລຸນາເລືອກ 1-5 ດາວ", alertPdpaError: "ກະລຸນາຍອມຮັບເງື່ອນໄຂ",
-                alertSuccess: "ສຳເລັດ!", alertSuccessMsg: "ຂອບໃຈທີ່ຮ່ວມກິດຈະກຳ", alertFail: "ຂໍອະໄພ", alertFailMsg: "ເກີดຂໍ້ຜິດພາດ", btnOk: "ຕົກລົງ"
+                alertSuccess: "ສຳເລັດ!", alertSuccessMsg: "ຂອບໃຈທີ່ຮ່ວมກິດຈະກຳ", alertFail: "ຂໍອະໄພ", alertFailMsg: "ເກີດຂໍ้ຜິດພາດ", btnOk: "ຕົກລົງ"
             },
             id: {
-                header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Vote toko favorit Anda untuk hadiah!!", prize: "Menangkan Emas dan Motor!",
+                header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Vote toko favorit Anda untuk hadiah!!", prize: "Menangkan Emas and Motor!",
                 alreadyVoted: "Sudah memilih hari ini", selectedShop: "Tokoที่ถูกเลือก", lblName: "Nama Lengkap (untuk hadiah)",
                 namePlaceholder: "Masukkan nama lengkap", lblPhone: "Nomor Telepon", phonePlaceholder: "Masukkan nomor", rateLabel: "Beri nilai toko ini",
-                pdpa: "Setujui kebijakan privasi", submit: "Konfirmasi Penilaian", loading: "Menyimpan...",
+                pdpa: "**Perusahaan akan mengumpulkan data Anda untuk komunikasi. Info lebih lanjut: <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>Kebijakan Privasi</a>", 
+                submit: "Konfirmasi Penilaian", loading: "Menยิปัน...",
                 alertIncomplete: "Tidak Lengkap", alertIncompleteMsg: "Harap isi namaและnomor telepon", alertPhoneError: "Nomor tidak valid",
                 alertRateError: "Pilih 1-5 bintang", alertPdpaError: "Harap setujui kebijakan",
                 alertSuccess: "Berhasil!", alertSuccessMsg: "Terima kasih atas partisipasi Anda", alertFail: "Kesalahan", alertFailMsg: "Terjadi kesalahan", btnOk: "OK"
             },
             vi: {
-                header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Bình chọn cửa hàng để nhận quà!!", prize: "Trúng Vàng và Xe máy!",
-                alreadyVoted: "Bạn đã bình chọn rồi", selectedShop: "Cửa hàng đã chọn", lblName: "Họ và tên (nhận thưởng)",
+                header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Bình chọn cửa hàng เพื่อรับ quà!!", prize: "Trúng Vàng and Xe máy!",
+                alreadyVoted: "Bạn đã bình chọn rồi", selectedShop: "Cửa hàng đã chọn", lblName: "Họและtên (nhận thưởng)",
                 namePlaceholder: "Nhập họและtên", lblPhone: "Số điện thoại", phonePlaceholder: "Nhập số điện thoại", rateLabel: "Đánh giá cửa hàng",
-                pdpa: "Đồng ý điều khoản bảo mật", submit: "Xác nhận đánh giá", loading: "Đang lưu...",
+                pdpa: "**Công ty sẽ thu thập dữ liệuของท่านเพื่อ liên lạc. Chi tiết tại <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>Thông báo bảo mật</a>", 
+                submit: "Xác nhận đánh giá", loading: "Đang lưu...",
                 alertIncomplete: "Chưa đủ thông tin", alertIncompleteMsg: "Vui lòng nhập tênและsố điện thoại", alertPhoneError: "Số điện thoại sai",
                 alertRateError: "Vui lòng chọn 1-5 sao", alertPdpaError: "Vui lòng chấp nhận điều khoản",
                 alertSuccess: "Thành công!", alertSuccessMsg: "Cảm ơn bạn đã tham gia", alertFail: "Lỗi", alertFailMsg: "Đã xảy ra lỗi", btnOk: "OK"
@@ -354,9 +349,6 @@
         function changeLang(lang) {
             currentLang = lang;
             const t = translations[lang] || translations.th;
-            document.getElementById('txt-header').innerText = t.header;
-            document.getElementById('txt-subtitle').innerText = t.subtitle;
-            document.getElementById('txt-prize').innerHTML = `<i class="fas fa-motorcycle"></i> ${t.prize}`;
             document.getElementById('alreadyVotedMsg').innerText = t.alreadyVoted;
             document.getElementById('txt-selected-shop').innerText = t.selectedShop;
             document.getElementById('lbl-name').innerHTML = `<i class="fas fa-user"></i> ${t.lblName}`;
@@ -364,7 +356,10 @@
             document.getElementById('lbl-phone').innerHTML = `<i class="fas fa-phone"></i> ${t.lblPhone}`;
             document.getElementById('phoneInput').placeholder = t.phonePlaceholder;
             document.getElementById('txt-rate-label').innerText = t.rateLabel;
-            document.getElementById('txt-pdpa').innerText = t.pdpa;
+            
+            // [แก้ไขจุดนี้] ใช้ .innerHTML เพื่อให้คลิกลิงก์ได้
+            document.getElementById('txt-pdpa').innerHTML = t.pdpa;
+            
             document.getElementById('txt-loading').innerText = t.loading;
             document.getElementById('btn-modal-close').innerText = t.btnOk;
 
@@ -473,7 +468,3 @@
     </script>
 </body>
 </html>
-
-
-
-
