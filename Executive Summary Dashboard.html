@@ -346,7 +346,7 @@
             
             document.getElementById('overall-stats').innerHTML = `
                 <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-blue text-white"><p class="stat-label text-white opacity-80 uppercase">จำนวนโหวตรวม</p><p class="text-lg md:text-3xl font-black text-white stat-value">${overall.votes.toLocaleString()}</p></div>
-                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-purple text-white"><p class="stat-label text-white opacity-80 uppercase">ร้านที่โหวต</p><p class="text-lg md:text-3xl font-black text-white stat-value">${overall.shops.size.toLocaleString()}</p></div>
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-purple text-white"><p class="stat-label text-white opacity-80 uppercase">จำนวนร้านค้าที่ถูกโหวต</p><p class="text-lg md:text-3xl font-black text-white stat-value">${overall.shops.size.toLocaleString()}</p></div>
                 <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-emerald text-white"><p class="stat-label text-white opacity-80 uppercase">คะแนนรวม</p><p class="text-lg md:text-3xl font-black text-white stat-value">${overall.score.toLocaleString()}</p></div>
                 <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-sunset text-white"><p class="stat-label text-white opacity-80 uppercase">เฉลี่ยรวม</p><p class="text-lg md:text-3xl font-black text-white stat-value">${overallAvg}%</p></div>
             `;
@@ -484,3 +484,4 @@
     </script>
 </body>
 </html>
+
