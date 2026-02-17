@@ -116,7 +116,7 @@
         <div class="flex flex-col items-center gap-4 text-center px-6">
             <div class="spinner"></div>
             <div class="space-y-1">
-                <p id="loading-text" class="text-[10px] font-black text-[#2D2D2D] uppercase tracking-[0.5em]">Starting Engine</p>
+                <p id="loading-text" class="text-[10px] font-black text-[#2D2D2D] uppercase tracking-[0.5em]">Initializing Dashboard</p>
                 <p id="loading-subtext" class="text-[9px] font-bold text-[#8D8A7E] uppercase tracking-widest opacity-60">Connecting to number one market servers...</p>
             </div>
         </div>
@@ -127,11 +127,11 @@
         <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4 w-full md:w-auto">
                 <div id="logo-container" class="h-10 md:h-14 w-fit min-w-[80px] max-w-[200px] md:max-w-[280px] bg-white/95 rounded-xl md:rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-white px-3 md:px-4 py-1.5 transition-all shrink-0">
-                    <!-- Logo injected -->
+                    <!-- Logo placeholder -->
                 </div>
                 <div class="min-w-0">
                     <h1 class="text-base md:text-2xl font-black text-[#2D2D2D] leading-none uppercase truncate tracking-tight">Administrator</h1>
-                    <p id="status-tag" class="text-[8px] md:text-[10px] font-bold text-[#8D8A7E] uppercase mt-1 truncate">Synchronizing...</p>
+                    <p id="status-tag" class="text-[8px] md:text-[10px] font-bold text-[#8D8A7E] uppercase mt-1 truncate">Status: Checking Cloud...</p>
                 </div>
             </div>
 
@@ -151,7 +151,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#2D2D2D] group-hover:rotate-180 transition-transform duration-500"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><polyline points="21 3 21 8 16 8"/></svg>
                     </button>
                     <button onclick="toggleSettings(true)" class="p-2.5 md:p-3 bg-white hover:bg-blue-50 transition-all rounded-xl shadow-sm border border-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#2D2D2D]"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 2 2 0 0 1 2 2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 2 2 0 0 1 2 2h.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#2D2D2D]"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 2 2 0 0 1 2 2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1-2-2 2 2 2 2 0 0 1 2 2h.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                     </button>
                 </div>
             </div>
@@ -239,7 +239,7 @@
             <div class="p-8 md:p-10 border-b border-black/5 flex justify-between items-center">
                 <h2 class="font-black text-[#2D2D2D] uppercase tracking-wider text-xl">Dashboard Config</h2>
                 <button onclick="toggleSettings(false)" class="p-3 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" i1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             <div class="p-8 md:p-10 space-y-8 max-h-[60vh] overflow-y-auto">
@@ -250,7 +250,7 @@
                 <div id="zone-settings" class="space-y-6"></div>
             </div>
             <div class="p-8 md:p-10 bg-gray-50 border-t border-black/5">
-                <button onclick="saveSettings()" class="w-full bg-[#2D2D2D] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.01] transition-all">Save To Cloud</button>
+                <button id="save-btn" onclick="saveSettings()" class="w-full bg-[#2D2D2D] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.01] transition-all">Save To Cloud</button>
             </div>
         </div>
     </div>
@@ -261,7 +261,7 @@
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Local Settings First for Speed
+        // Global default settings
         window.appSettings = {
             logoUrl: "https://raw.githubusercontent.com/itnumberonegroup-sudo/vote-system/main/new.png",
             zones: {
@@ -273,61 +273,77 @@
         };
 
         const PROXY_API_URL = "https://script.google.com/macros/s/AKfycbxWrZn1pifaCGyIuRLCJQ8_qnZfvt_b74WVPbvkeGmGh-wtfGNTjqmhsoi6WtMB9yrEAg/exec";
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'it-market-v18';
-
+        
         let growthChart = null;
         let rawData = [];
-        let isSettingsLoaded = false;
+        let db = null;
+        let auth = null;
+        let appId = 'it-market-v18';
 
+        // Initialization Logic
         async function initApp() {
-            // Speed Trick 1: Fetch Market Data and Auth in Parallel
-            const dataPromise = fetchData();
-            
-            // Speed Trick 2: Handle Auth and Cloud Sync background
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
+            // Start Fetching Market Data immediately (Doesn't wait for Firebase)
+            const dataTask = fetchData();
 
-                if (auth.currentUser) {
+            // Setup Firebase Safely
+            try {
+                const firebaseConfStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+                const appIdInjected = typeof __app_id !== 'undefined' ? __app_id : 'it-market-v18';
+                appId = appIdInjected;
+
+                if (firebaseConfStr) {
+                    const config = JSON.parse(firebaseConfStr);
+                    const app = initializeApp(config);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    // Auth background
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    // Cloud Sync background
                     const settingsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_config', 'settings');
                     onSnapshot(settingsDocRef, (snap) => {
                         if (snap.exists()) {
                             window.appSettings = snap.data();
-                            isSettingsLoaded = true;
                             updateLogo();
-                            document.getElementById('status-tag').innerText = "Cloud Synced";
+                            document.getElementById('status-tag').innerText = "Status: Cloud Active";
                             if (rawData.length > 0) processData();
                         }
+                    }, (err) => {
+                        console.warn("Firestore access restricted, using defaults.");
+                        document.getElementById('status-tag').innerText = "Status: Limited Mode";
                     });
+                } else {
+                    document.getElementById('status-tag').innerText = "Status: Local View";
                 }
             } catch (err) {
-                console.warn("Cloud Sync Fail, using local settings");
-                document.getElementById('status-tag').innerText = "Local Mode";
+                console.error("Initialization warning:", err);
+                document.getElementById('status-tag').innerText = "Status: Offline/Local";
             }
 
-            await dataPromise; // Ensure data is fetched before proceeding
+            await dataTask;
         }
 
         window.fetchData = async () => {
-            const loadingSub = document.getElementById('loading-subtext');
-            if(loadingSub) loadingSub.innerText = "Fetching real-time market responses...";
+            const loadingText = document.getElementById('loading-text');
+            if (loadingText) loadingText.innerText = "Syncing Market Data";
             
             try {
                 const response = await fetch(PROXY_API_URL + "?_=" + new Date().getTime());
+                if (!response.ok) throw new Error("API Offline");
                 rawData = await response.json();
                 processData();
                 
-                // Hide loading screen as soon as we have market data
+                // Success! Hide loading immediately
                 document.getElementById('loading-screen')?.classList.add('hidden');
             } catch (err) {
-                console.error("API Error:", err);
+                console.error("Market API Error:", err);
+                // Even on error, show what we can
+                document.getElementById('loading-screen')?.classList.add('hidden');
             }
         };
 
@@ -397,7 +413,7 @@
             });
             datasets.push({ label: 'Goal', data: months.map(() => window.appSettings.minVoteGoal), type: 'line', borderColor: '#2D2D2D', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false });
             if (growthChart) growthChart.destroy();
-            growthChart = new Chart(ctx, { type: 'bar', data: { labels: months, datasets: datasets }, options: { responsive: true, maintainAspectRatio: false, animation: { duration: 500 }, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } } });
+            growthChart = new Chart(ctx, { type: 'bar', data: { labels: months, datasets: datasets }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } } });
         }
 
         function renderMinVoteSupport(shopList) {
@@ -406,7 +422,7 @@
             if (supportTop5.length === 0) { container.innerHTML = `<p class="text-center py-10 opacity-50 font-bold">Excellent! All shops reached the goal.</p>`; return; }
             container.innerHTML = supportTop5.map((s, i) => `
                 <div class="flex items-center justify-between">
-                    <div class="min-w-0 pr-2">
+                    <div class="min-w-0 pr-2 text-left">
                         <p class="text-xs font-black text-[#2D2D2D] truncate uppercase leading-tight">${s.name}</p>
                         <p class="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">Score: ${s.score.toLocaleString()}</p>
                     </div>
@@ -423,15 +439,15 @@
             const overallAvg = (overall.votes > 0 ? ((overall.score / (overall.votes * 5)) * 100).toFixed(0) : 0);
             
             document.getElementById('overall-stats').innerHTML = `
-                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-blue"><p class="text-[9px] font-bold uppercase opacity-80">โหวตรวม</p><p class="text-lg md:text-3xl font-black">${overall.votes.toLocaleString()}</p></div>
-                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-purple"><p class="text-[9px] font-bold uppercase opacity-80">ร้านที่โหวต</p><p class="text-lg md:text-3xl font-black">${overall.shops.size.toLocaleString()}</p></div>
-                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-emerald"><p class="text-[9px] font-bold uppercase opacity-80">คะแนนรวม</p><p class="text-lg md:text-3xl font-black">${overall.score.toLocaleString()}</p></div>
-                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-sunset"><p class="text-[9px] font-bold uppercase opacity-80">เฉลี่ยรวม</p><p class="text-lg md:text-3xl font-black">${overallAvg}%</p></div>
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-blue"><p class="text-[9px] font-bold uppercase opacity-80 text-white">โหวตรวม</p><p class="text-lg md:text-3xl font-black text-white">${overall.votes.toLocaleString()}</p></div>
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-purple"><p class="text-[9px] font-bold uppercase opacity-80 text-white">ร้านที่โหวต</p><p class="text-lg md:text-3xl font-black text-white">${overall.shops.size.toLocaleString()}</p></div>
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-emerald"><p class="text-[9px] font-bold uppercase opacity-80 text-white">คะแนนรวม</p><p class="text-lg md:text-3xl font-black text-white">${overall.score.toLocaleString()}</p></div>
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-sunset"><p class="text-[9px] font-bold uppercase opacity-80 text-white">เฉลี่ยรวม</p><p class="text-lg md:text-3xl font-black text-white">${overallAvg}%</p></div>
             `;
 
             document.getElementById('zone-table-body').innerHTML = Object.values(zoneData).map(z => {
                 const avgPct = (z.votes > 0 ? ((z.score / (z.votes * 5)) * 100).toFixed(0) : 0);
-                return `<tr class="rounded-xl overflow-hidden"><td class="py-3 px-2 md:py-4 md:px-4 rounded-l-xl border-l-[4px] border-[${z.color}] font-bold truncate max-w-[120px] md:max-w-none text-[11px] md:text-sm">${z.name}</td><td class="text-center font-mono text-[10px] md:text-sm">${z.votes.toLocaleString()}</td><td class="text-center font-mono text-[10px] md:text-sm">${z.shops.size}</td><td class="text-center font-mono text-[10px] md:text-sm">${z.score.toLocaleString()}</td><td class="text-right px-2 md:px-4 rounded-r-xl font-black text-[10px] md:text-sm ${avgPct >= 80 ? 'text-[#2D2D2D]' : 'text-orange-500'}">${avgPct}%</td></tr>`;
+                return `<tr class="rounded-xl overflow-hidden text-left"><td class="py-3 px-2 md:py-4 md:px-4 rounded-l-xl border-l-[4px] border-[${z.color}] font-bold truncate max-w-[120px] md:max-w-none text-[11px] md:text-sm text-left">${z.name}</td><td class="text-center font-mono text-[10px] md:text-sm">${z.votes.toLocaleString()}</td><td class="text-center font-mono text-[10px] md:text-sm">${z.shops.size}</td><td class="text-center font-mono text-[10px] md:text-sm">${z.score.toLocaleString()}</td><td class="text-right px-2 md:px-4 rounded-r-xl font-black text-[10px] md:text-sm ${avgPct >= 80 ? 'text-[#2D2D2D]' : 'text-orange-500'}">${avgPct}%</td></tr>`;
             }).join('');
 
             Object.values(zoneData).forEach((z, idx) => {
@@ -439,7 +455,7 @@
                 const container = document.getElementById(`donut-zone${idx+1}`);
                 if (container) {
                     const radius = 42; const circumference = 2 * Math.PI * radius; const offset = circumference - (avgPct / 100) * circumference;
-                    container.innerHTML = `<div class="min-w-0 pr-2"><p class="text-[9px] font-black text-[#A3A092] uppercase truncate tracking-widest">${z.name}</p><p class="text-xl font-black text-[#2D2D2D]">${z.votes.toLocaleString()} <span class="text-[8px] opacity-50">VOTES</span></p></div><div class="relative shrink-0 w-16 h-16 md:w-20 md:h-20"><svg class="w-full h-full -rotate-90" viewBox="0 0 100 100"><circle class="fill-none stroke-gray-100" cx="50" cy="50" r="${radius}" stroke-width="10"></circle><circle class="fill-none transition-all duration-1000" cx="50" cy="50" r="${radius}" stroke-width="10" stroke="${z.color}" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round"></circle></svg><div class="absolute inset-0 flex items-center justify-center font-black text-[10px] md:text-xs">${avgPct}%</div></div>`;
+                    container.innerHTML = `<div class="min-w-0 pr-2 text-left"><p class="text-[9px] font-black text-[#A3A092] uppercase truncate tracking-widest text-left">${z.name}</p><p class="text-xl font-black text-[#2D2D2D] text-left">${z.votes.toLocaleString()} <span class="text-[8px] opacity-50">VOTES</span></p></div><div class="relative shrink-0 w-16 h-16 md:w-20 md:h-20"><svg class="w-full h-full -rotate-90" viewBox="0 0 100 100"><circle class="fill-none stroke-gray-100" cx="50" cy="50" r="${radius}" stroke-width="10"></circle><circle class="fill-none transition-all duration-1000" cx="50" cy="50" r="${radius}" stroke-width="10" stroke="${z.color}" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round"></circle></svg><div class="absolute inset-0 flex items-center justify-center font-black text-[10px] md:text-xs">${avgPct}%</div></div>`;
                 }
             });
 
@@ -448,7 +464,7 @@
                 const filtered = shopList.filter(s => s.zone === z.name).sort((a,b) => b.score - a.score).slice(0, 5);
                 const top5El = document.getElementById(`top5-zone${idx+1}`);
                 if (top5El) {
-                    top5El.innerHTML = `<div class="flex justify-between items-center mb-6 pb-2 border-b border-black/5"><h3 class="text-[10px] font-black text-[#8D8A7E] uppercase truncate tracking-widest">${z.name} Top 5</h3><span class="w-2 h-2 rounded-full" style="background-color: ${z.color}"></span></div><div class="space-y-4">${filtered.map((s, i) => `<div class="flex justify-between items-center"><div class="min-w-0 pr-2"><p class="text-xs font-black truncate leading-none mb-1">${s.name}</p><p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Score: ${s.score.toLocaleString()}</p></div><p class="text-xs font-black shrink-0" style="color: ${z.color}">${s.percent}%</p></div>`).join('')}</div>`;
+                    top5El.innerHTML = `<div class="flex justify-between items-center mb-6 pb-2 border-b border-black/5"><h3 class="text-[10px] font-black text-[#8D8A7E] uppercase truncate tracking-widest text-left">${z.name} Top 5</h3><span class="w-2 h-2 rounded-full" style="background-color: ${z.color}"></span></div><div class="space-y-4 text-left">${filtered.map((s, i) => `<div class="flex justify-between items-center text-left"><div class="min-w-0 pr-2 text-left"><p class="text-xs font-black truncate leading-none mb-1 text-left">${s.name}</p><p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter text-left">Score: ${s.score.toLocaleString()}</p></div><p class="text-xs font-black shrink-0" style="color: ${z.color}">${s.percent}%</p></div>`).join('')}</div>`;
                 }
             });
 
@@ -473,7 +489,11 @@
         };
 
         window.saveSettings = async () => {
-            if (!auth.currentUser) return;
+            if (!auth || !auth.currentUser) {
+                console.error("Cloud Save blocked: Not authenticated");
+                document.getElementById('save-btn').innerText = "Cloud Sync Disabled";
+                return;
+            }
             const newSettings = JSON.parse(JSON.stringify(window.appSettings));
             newSettings.logoUrl = document.getElementById('input-logo').value.trim();
             Object.keys(newSettings.zones).forEach(key => {
@@ -487,4 +507,3 @@
     </script>
 </body>
 </html>
-
