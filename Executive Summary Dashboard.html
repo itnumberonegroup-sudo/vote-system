@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Number One Market - Soft Minimalism Dashboard</title>
+    <title>The Best OF Number One Market - Soft Minimalism Dashboard</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -488,9 +488,9 @@
             
             overallStatsEl.innerHTML = `
                 ${renderHeaderItem("จำนวนโหวตรวม", overall.votes, "bg-viz-blue")}
-                ${renderHeaderItem("ร้านที่โหวต", overall.shops.size, "bg-viz-purple")}
-                ${renderHeaderItem("คะแนนรวม", overall.score, "bg-viz-emerald")}
-                ${renderHeaderItem("เฉลี่ยความพึงพอใจ", overallAvg + "%", "bg-viz-sunset")}
+                ${renderHeaderItem("จำนวนร้านที่ถูกโหวต", overall.shops.size, "bg-viz-purple")}
+                ${renderHeaderItem("คะแนนโหวตรวม", overall.score, "bg-viz-emerald")}
+                ${renderHeaderItem("คะแนนโหวตเฉลี่ย", overallAvg + "%", "bg-viz-sunset")}
             `;
 
             const tbody = document.getElementById('zone-table-body');
@@ -663,3 +663,4 @@
     </script>
 </body>
 </html>
+
