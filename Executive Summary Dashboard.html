@@ -3,329 +3,663 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Best of Number One Market - Modern Dashboard</title>
-
-    <link rel="apple-touch-icon" href="my-logo.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="my-logo.png">
-    <meta name="theme-color" content="#2563eb">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Number One Market - Soft Minimalism Dashboard</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --font-main: 'IBM Plex Sans Thai', 'Inter', sans-serif;
-            --font-display: 'Inter', 'IBM Plex Sans Thai', sans-serif;
+            --bg-cream: #F7F4E9;
+            --text-charcoal: #2D2D2D;
+            --accent-yellow: #FFD95A;
+            --card-glass: rgba(255, 255, 255, 0.75);
+            --secondary-gray: #E5E1D3;
+            
+            /* Modern Data-Viz Gradients */
+            --viz-blue: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+            --viz-purple: linear-gradient(135deg, #a855f7 0%, #d946ef 100%);
+            --viz-emerald: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            --viz-sunset: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+
+            /* Pastel Borders Colors */
+            --pastel-pink: #FFD1DC;
+            --pastel-green: #D0F0C0;
+            --pastel-purple: #E6E6FA;
+            --pastel-orange: #FFDAB9;
         }
+
         body { 
             font-family: var(--font-main);
-            background: #f8fafc;
-            color: #1e293b;
+            background-color: var(--bg-cream);
+            color: var(--text-charcoal);
+            background-image: 
+                radial-gradient(circle at 5% 5%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 95% 95%, rgba(245, 158, 11, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+            overflow-x: hidden;
         }
-        h1, h2, h3, .stat-value { font-family: var(--font-display); }
-        .glass { 
-            backdrop-filter: blur(20px) saturate(180%);
-            background-color: rgba(255, 255, 255, 0.8);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+
+        .glass-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px -10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
-        .text-gradient {
-            background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+
+        @media (min-width: 768px) {
+            .glass-card { border-radius: 2rem; }
         }
-        .card-hover { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
+
+        .card-viz {
+            border: none;
+            color: white !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-viz::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+
+        .bg-viz-blue { background: var(--viz-blue); box-shadow: 0 8px 16px -4px rgba(59, 130, 246, 0.3); }
+        .bg-viz-purple { background: var(--viz-purple); box-shadow: 0 8px 16px -4px rgba(168, 85, 247, 0.3); }
+        .bg-viz-emerald { background: var(--viz-emerald); box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.3); }
+        .bg-viz-sunset { background: var(--viz-sunset); box-shadow: 0 8px 16px -4px rgba(245, 158, 11, 0.3); }
+
+        .border-pink-pastel { border-color: var(--pastel-pink); }
+        .border-green-pastel { border-color: var(--pastel-green); }
+        .border-purple-pastel { border-color: var(--pastel-purple); }
+        .border-orange-pastel { border-color: var(--pastel-orange); }
+        .border-blue-pastel { border-color: #B4E4FF; }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container { position: relative; width: 85px; height: 85px; }
+        @media (min-width: 768px) { .chart-container { width: 110px; height: 110px; } }
+        
+        .chart-svg { transform: rotate(-90deg); }
+        .chart-bg { fill: none; stroke: var(--secondary-gray); stroke-width: 12; }
+        .chart-progress { 
+            fill: none; 
+            stroke-width: 12; 
+            stroke-linecap: round; 
+            transition: stroke-dashoffset 1.5s ease-out; 
+        }
+
+        .spinner {
+            border: 3px solid rgba(45, 45, 45, 0.05);
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%; width: 40px; height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .custom-table th { 
+            color: #A3A092; 
+            font-size: 0.7rem; 
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 1rem 0.5rem;
+        }
+        .custom-table tr { 
+            background: rgba(255, 255, 255, 0.45); 
+            transition: background 0.2s;
+        }
+        .custom-table td { padding: 1rem 0.5rem; }
+
+        @media (max-width: 640px) {
+            .mobile-font-sm { font-size: 0.875rem; }
+            .mobile-p-4 { padding: 1rem; }
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-cream); }
+        ::-webkit-scrollbar-thumb { background: #D1CDBC; border-radius: 10px; }
     </style>
 </head>
 <body class="min-h-screen pb-12">
 
     <!-- Loading Screen -->
-    <div id="loading-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-white transition-opacity duration-700">
-        <div class="flex flex-col items-center gap-6">
-            <div class="relative w-16 h-16">
-                <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            </div>
-            <p class="font-medium text-slate-500 animate-pulse text-sm">กำลังอัปเดตข้อมูลผ่าน Proxy API...</p>
+    <div id="loading-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#F7F4E9]">
+        <div class="flex flex-col items-center gap-4">
+            <div class="spinner"></div>
+            <p class="text-[10px] font-black text-[#2D2D2D] uppercase tracking-[0.5em]">Optimizing Dashboard</p>
         </div>
     </div>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-4 overflow-y-auto">
-        <div class="my-auto w-full max-w-xl rounded-[2.5rem] bg-white p-8 shadow-2xl scale-95 transition-all border border-slate-100">
-            <div class="mb-8 flex items-center justify-between border-b border-slate-50 pb-5">
-                <h2 class="text-2xl font-bold flex items-center gap-3">
-                    <span class="p-2.5 bg-blue-600 rounded-2xl text-white shadow-lg shadow-blue-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+    <!-- Header -->
+    <header class="p-4 md:p-6 bg-white/40 backdrop-blur-lg sticky top-0 z-40 border-b border-white/60">
+        <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4 w-full md:w-auto">
+                <!-- Flexible Logo Container -->
+                <div id="logo-container" class="h-10 md:h-14 w-fit min-w-[80px] max-w-[200px] md:max-w-[280px] bg-white/95 rounded-xl md:rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-white px-3 md:px-4 py-1.5 transition-all shrink-0">
+                    <!-- Logo injected here -->
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-base md:text-2xl font-black text-[#2D2D2D] leading-none uppercase truncate tracking-tight">Administrator</h1>
+                    <p class="text-[8px] md:text-[10px] font-bold text-[#8D8A7E] uppercase mt-1 truncate">Market Insights Live</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between md:justify-end w-full md:w-auto gap-4">
+                <div class="text-right">
+                    <span id="last-update" class="text-[9px] font-bold text-[#8D8A7E] block leading-none">--:--:--</span>
+                    <span class="text-[10px] md:text-xs font-black text-[#2D2D2D] uppercase mt-1 inline-flex items-center gap-1.5">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                        </span> 
+                        LIVE
                     </span>
-                    ตั้งค่าระบบ
-                </h2>
-                <button onclick="toggleSettings(false)" class="rounded-2xl bg-slate-50 p-2 text-slate-400 hover:bg-slate-100 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            
-            <div class="space-y-8">
-                <div class="space-y-3">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                        ตั้งค่า LOGO ตลาด (ทรงยาว)
-                    </label>
-                    <div class="flex gap-3">
-                        <input id="input-logo" type="text" placeholder="วางลิงก์รูปภาพที่นี่" class="flex-1 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 outline-none transition-all">
-                    </div>
                 </div>
-
-                <div class="space-y-4">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        กำหนดโซนร้านค้า
-                    </label>
-                    <div id="zone-configs-container" class="grid gap-4"></div>
+                <div class="flex gap-2">
+                    <button onclick="fetchData()" class="p-2.5 md:p-3 bg-white hover:bg-blue-50 transition-all rounded-xl shadow-sm border border-white group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#2D2D2D] group-hover:rotate-180 transition-transform duration-500"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><polyline points="21 3 21 8 16 8"/></svg>
+                    </button>
+                    <button onclick="toggleSettings(true)" class="p-2.5 md:p-3 bg-white hover:bg-blue-50 transition-all rounded-xl shadow-sm border border-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#2D2D2D]"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 2 2 0 0 1 2 2h.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </button>
                 </div>
-            </div>
-
-            <button onclick="saveSettings()" class="mt-10 w-full flex items-center justify-center gap-3 rounded-[1.8rem] bg-slate-900 py-5 font-bold text-white shadow-xl shadow-slate-200 hover:bg-blue-600 active:scale-[0.98] transition-all">
-                บันทึกการตั้งค่า
-            </button>
-        </div>
-    </div>
-
-    <!-- Header Section -->
-    <header class="sticky top-0 z-40 glass px-4 py-6 md:px-10">
-        <div class="max-w-7xl mx-auto flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div class="flex flex-col items-center text-center lg:items-start lg:text-left">
-                <div id="logo-display-container" class="mb-4 transition-all duration-500 min-h-[80px] flex items-center"></div>
-                <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight sm:text-4xl uppercase">
-                    THE BEST OF <span class="text-gradient">NUMBER ONE MARKET</span>
-                </h1>
-                <div class="mt-3 flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.25em]">
-                    <span class="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-                    ฐานข้อมูล (🔒 ข้อมูลลูกค้าถูกกรองผ่าน Proxy): <span id="last-update" class="text-slate-600">--:--:--</span>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-center gap-3">
-                <button onclick="toggleSettings(true)" class="group flex items-center gap-2 rounded-2xl bg-white px-6 py-4 text-xs font-bold text-slate-700 shadow-sm border border-slate-200 hover:border-blue-400 hover:text-blue-600 transition-all">
-                    ตั้งค่า
-                </button>
-                <button onclick="fetchData()" class="flex items-center gap-2 rounded-2xl bg-blue-600 px-8 py-4 text-xs font-bold text-white shadow-xl shadow-blue-500/30 hover:bg-blue-700 transition-all uppercase">
-                    อัปเดตข้อมูล
-                </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 md:px-10 mt-10 space-y-12">
-        <div id="stats-grid" class="grid grid-cols-2 gap-5 lg:grid-cols-4"></div>
-        <section class="space-y-6">
-            <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-3">
-                <span class="w-2 h-8 bg-blue-500 rounded-full"></span>
-                สรุปผลคะแนนรายโซน
-            </h2>
-            <div id="zone-summary-grid" class="grid grid-cols-1 gap-6 lg:grid-cols-3"></div>
+    <main class="max-w-[1600px] mx-auto px-4 md:px-8 py-6 space-y-6 md:space-y-10">
+
+        <!-- Header Stats (Dynamic Grid) -->
+        <div id="overall-stats" class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
+            <!-- Stats Injected Here -->
+        </div>
+
+        <!-- Section 1: Chart & Support (Stack on Mobile) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10">
+            <!-- Monthly Chart -->
+            <section class="lg:col-span-8 glass-card p-5 md:p-10 border-purple-pastel">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 md:mb-10">
+                    <div class="flex items-center gap-3">
+                        <span class="w-1.5 h-6 md:h-8 bg-[#2D2D2D] rounded-full"></span>
+                        <div>
+                            <h3 class="text-sm md:text-xl font-black uppercase tracking-tight">Monthly Engagement</h3>
+                            <p class="text-[8px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">เกณฑ์ขั้นต่ำรายเดือน</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white/50 px-4 py-2 rounded-xl border border-white text-[9px] md:text-[10px]">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-[#3b82f6]"></span>
+                            <span class="font-bold uppercase tracking-wider">โหวตจริง</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-0.5 bg-[#2D2D2D] opacity-30 border-t-2 border-dashed"></span>
+                            <span class="font-bold uppercase tracking-wider">เป้าหมาย</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-[250px] md:h-[350px] w-full">
+                    <canvas id="monthlyGrowthChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Support List -->
+            <section class="lg:col-span-4 glass-card p-5 md:p-10 flex flex-col border-orange-pastel">
+                <div class="flex items-center gap-3 mb-6 md:mb-8">
+                    <span class="w-1.5 h-6 md:h-8 bg-orange-500 rounded-full"></span>
+                    <div>
+                        <h3 class="text-sm md:text-lg font-black uppercase tracking-tight">Support Ranking</h3>
+                        <p class="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">ต้องเร่งกระตุ้นการโหวต</p>
+                    </div>
+                </div>
+                <div id="min-vote-support-list" class="space-y-4 md:space-y-6 flex-1 overflow-y-auto">
+                    <!-- Injected Here -->
+                </div>
+                <div class="mt-6 pt-5 border-t border-black/5 text-center">
+                    <p class="text-[9px] md:text-[10px] font-bold text-orange-600 uppercase tracking-widest animate-pulse">🎯 Target Activation Point</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Section 2: Zone Table (Horizontal Scroll on Mobile) -->
+        <section class="glass-card p-5 md:p-10 border-green-pastel">
+            <div class="flex items-center gap-3 mb-8 md:mb-10">
+                <span class="w-1.5 h-6 md:h-8 bg-[#10b981] rounded-full"></span>
+                <h3 class="text-base md:text-xl font-black uppercase tracking-tight">สรุปผลการโหวตรายโซน</h3>
+            </div>
+            <div class="overflow-x-auto -mx-2 px-2">
+                <table class="w-full text-left border-separate border-spacing-y-2 md:border-spacing-y-3 custom-table min-w-[650px]">
+                    <thead>
+                        <tr class="text-[9px] md:text-xs">
+                            <th class="px-4">โซน/พื้นที่</th>
+                            <th class="px-2 text-center">จำนวนโหวต</th>
+                            <th class="px-2 text-center">จำนวนร้าน</th>
+                            <th class="px-2 text-center">คะแนนรวม</th>
+                            <th class="px-4 text-right">คะแนนเฉลี่ย (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="zone-table-body" class="text-xs md:text-sm font-bold">
+                        <!-- Data Injected Here -->
+                    </tbody>
+                </table>
+            </div>
         </section>
-        <section id="top-5-grid" class="grid grid-cols-1 gap-8 md:grid-cols-3"></section>
-        <section class="relative rounded-[3rem] bg-slate-900 p-8 sm:p-14 shadow-3xl text-white overflow-hidden">
-            <div id="top-10-list" class="grid grid-cols-1 gap-5 md:grid-cols-2 relative z-10"></div>
+
+        <!-- Section 3: Zone Donut Details (1 col mobile, 3 col desk) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
+            <div id="donut-zone1" class="glass-card p-6 md:p-8 flex items-center justify-between border-blue-pastel"></div>
+            <div id="donut-zone2" class="glass-card p-6 md:p-8 flex items-center justify-between border-purple-pastel"></div>
+            <div id="donut-zone3" class="glass-card p-6 md:p-8 flex items-center justify-between border-green-pastel"></div>
+        </div>
+
+        <!-- Section 4: TOP 5 Rankings -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
+            <div id="top5-zone1" class="glass-card p-5 md:p-8 border-pink-pastel"></div>
+            <div id="top5-zone2" class="glass-card p-5 md:p-8 border-pink-pastel"></div>
+            <div id="top5-zone3" class="glass-card p-5 md:p-8 border-pink-pastel"></div>
+        </div>
+
+        <!-- Section 5: TOP 10 Overall Leaderboard -->
+        <section class="glass-card overflow-hidden border-blue-pastel">
+            <div class="bg-[#2D2D2D] p-6 md:p-10 flex items-center gap-5">
+                <div class="w-12 h-12 md:w-20 md:h-20 bg-white/10 rounded-2xl flex items-center justify-center text-2xl md:text-4xl shadow-inner">🏆</div>
+                <div>
+                    <h2 class="text-lg md:text-3xl font-black text-white leading-none uppercase tracking-tight">Overall Top 10</h2>
+                    <p class="text-[9px] md:text-[11px] font-bold text-white/40 uppercase tracking-[0.3em] mt-2">คะแนนรวมสูงสุดประจำโครงการ</p>
+                </div>
+            </div>
+            <div id="top10-overall-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 divide-x divide-y divide-black/5 bg-white/10">
+                <!-- Top 10 Injected Here -->
+            </div>
         </section>
+
     </main>
 
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+        <div class="bg-white rounded-[2rem] w-full max-w-xl shadow-2xl overflow-hidden animate-in zoom-in duration-300">
+            <div class="p-6 md:p-10 border-b border-black/5 flex justify-between items-center">
+                <h2 class="font-black text-[#2D2D2D] uppercase tracking-wider text-base md:text-xl">Settings</h2>
+                <button onclick="toggleSettings(false)" class="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="p-6 md:p-10 space-y-6 md:space-y-8 max-h-[65vh] overflow-y-auto">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-[#8D8A7E] uppercase tracking-widest ml-1">Logo URL</label>
+                    <input id="input-logo" type="text" class="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 md:py-4 px-5 text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/20">
+                </div>
+                <div id="zone-settings" class="space-y-4 md:space-y-6"></div>
+            </div>
+            <div class="p-6 md:p-10 bg-gray-50 border-t border-black/5">
+                <button onclick="saveSettings()" class="w-full bg-[#2D2D2D] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:scale-[1.01] transition-all">Save Config</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // *** ใช้งาน Web App URL ที่คุณให้มาเรียบร้อยแล้ว ***
         const PROXY_API_URL = "https://script.google.com/macros/s/AKfycbzYqf3clGc9goZOhScx44uWU1XCX96y0GhvyRrw7gGmvYk3kujHyfLRg8GrRtWSsZ2V5w/exec";
 
         let appSettings = {
             logoUrl: "https://lh3.googleusercontent.com/d/1tUpAvRAPs2WPkrYzpXs77VQ13fRB172y",
             zones: {
-                zone1: { name: "โซน 1 ตลาดนัมเบอร์วัน", start: 1, end: 50, color: 'blue' },
-                zone2: { name: "โซน 2 One Food Street", start: 51, end: 100, color: 'purple' },
-                zone3: { name: "โซน 3 โต้รุ่ง", start: 101, end: 300, color: 'orange' }
-            }
+                zone1: { name: "1.ตลาดนัมเบอร์วัน", start: 1, end: 50, color: '#3b82f6' },
+                zone2: { name: "2.One Food Street", start: 51, end: 100, color: '#a855f7' },
+                zone3: { name: "3.โต้รุ่ง", start: 101, end: 999, color: '#10b981' }
+            },
+            minVoteGoal: 20
         };
 
         let rawData = [];
+        let growthChart = null;
 
-        // ฟังก์ชันแปลงลิงก์ Google Drive ให้เป็น Direct Link
-        function convertDriveUrl(url) {
+        function convertUrl(url) {
             if (!url) return "";
-            if (url.startsWith('https://lh3.googleusercontent.com/d/')) return url;
-            let id = "";
-            if (url.includes('drive.google.com/file/d/')) {
-                const parts = url.split('/d/');
-                if (parts.length > 1) id = parts[1].split('/')[0].split('?')[0];
-            } else if (url.includes('id=')) {
-                id = url.split('id=')[1].split('&')[0];
+            if (url.includes('github.com') && url.includes('/blob/')) return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+            if (url.includes('drive.google.com')) {
+                let id = "";
+                if (url.includes('/d/')) id = url.split('/d/')[1].split('/')[0];
+                else if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
+                return id ? `https://lh3.googleusercontent.com/d/${id}` : url;
             }
-            return id ? `https://lh3.googleusercontent.com/d/${id}` : url;
+            return url;
         }
+
+        const calcAvg = (score, votes) => (votes > 0 ? ((score / (votes * 5)) * 100).toFixed(0) : 0);
 
         async function fetchData() {
             try {
-                // ดึงข้อมูลผ่าน Proxy API เพื่อความปลอดภัย
                 const response = await fetch(PROXY_API_URL + "?_=" + new Date().getTime());
-                if (!response.ok) throw new Error("API Connection failed");
-                
+                if (!response.ok) throw new Error("API Failure");
                 rawData = await response.json();
                 processData();
-                hideLoading();
+                setTimeout(() => document.getElementById('loading-screen')?.classList.add('hidden'), 500);
             } catch (err) {
                 console.error("Fetch Error:", err);
-                hideLoading();
             }
         }
 
         function processData() {
-            const stats = { totalVotes: rawData.length, totalScore: 0 };
-            const shops = new Set();
+            const overall = { votes: rawData.length, shops: new Set(), score: 0 };
+            const zoneData = {};
             const shopPerformance = {};
-            const zoneStats = {};
-            
-            Object.values(appSettings.zones).forEach(z => zoneStats[z.name] = { votes: 0, shops: new Set(), score: 0 });
-            zoneStats["อื่นๆ"] = { votes: 0, shops: new Set(), score: 0 };
+            const monthlyStats = {};
+
+            Object.values(appSettings.zones).forEach(z => {
+                zoneData[z.name] = { name: z.name, votes: 0, shops: new Set(), score: 0, color: z.color };
+            });
 
             rawData.forEach(d => {
                 const shopId = d.ShopID || "";
-                const shopName = d.ShopName || "ร้านไม่ระบุชื่อ";
-                const scoreQuality = parseFloat(d.Score_Quality) || 0;
-                if (!shopId) return;
+                const shopName = d.ShopName || "Shop";
+                const score = parseFloat(d.Score_Quality) || 0;
+                const idNum = parseInt(shopId.replace(/\D/g, '')) || 0;
+                const timestamp = d.Timestamp || new Date().toISOString();
+                
+                const dateObj = new Date(timestamp);
+                const monthKey = dateObj.toLocaleDateString('th-TH', { month: 'short', year: 'numeric' });
+                if (!monthlyStats[monthKey]) monthlyStats[monthKey] = {};
 
-                shops.add(shopId);
-                stats.totalScore += scoreQuality;
+                overall.shops.add(shopId);
+                overall.score += score;
 
-                const n = parseInt(shopId.replace(/\D/g, '')) || 0;
-                let zoneName = "อื่นๆ";
+                let targetZone = "อื่นๆ";
                 for (const key in appSettings.zones) {
                     const z = appSettings.zones[key];
-                    if (n >= z.start && n <= z.end) { zoneName = z.name; break; }
+                    if (idNum >= z.start && idNum <= z.end) { 
+                        targetZone = z.name; 
+                        monthlyStats[monthKey][key] = (monthlyStats[monthKey][key] || 0) + 1;
+                        break; 
+                    }
                 }
 
-                if (!zoneStats[zoneName]) zoneStats[zoneName] = { votes: 0, shops: new Set(), score: 0 };
-                zoneStats[zoneName].votes++;
-                zoneStats[zoneName].shops.add(shopId);
-                zoneStats[zoneName].score += scoreQuality;
+                if (zoneData[targetZone]) {
+                    zoneData[targetZone].votes++;
+                    zoneData[targetZone].shops.add(shopId);
+                    zoneData[targetZone].score += score;
+                }
 
                 if (!shopPerformance[shopId]) {
-                    shopPerformance[shopId] = { name: shopName, zone: zoneName, votes: 0, score: 0 };
+                    shopPerformance[shopId] = { id: shopId, name: shopName, zone: targetZone, votes: 0, score: 0 };
                 }
                 shopPerformance[shopId].votes++;
-                shopPerformance[shopId].score += scoreQuality;
+                shopPerformance[shopId].score += score;
             });
 
             const shopList = Object.values(shopPerformance).map(s => ({
                 ...s,
-                percent: s.votes > 0 ? ((s.score / (s.votes * 5)) * 100).toFixed(1) : 0
+                percent: parseFloat(calcAvg(s.score, s.votes))
             }));
 
-            renderUI(stats, shops.size, zoneStats, shopList);
+            renderUI(overall, zoneData, shopList);
+            renderMonthlyChart(monthlyStats);
+            renderMinVoteSupport(shopList);
         }
 
-        function renderUI(stats, uniqueShopsCount, zoneStats, shopList) {
-            document.getElementById('last-update').innerText = new Date().toLocaleTimeString('th-TH');
-            const avgSatisfy = stats.totalVotes > 0 ? ((stats.totalScore / (stats.totalVotes * 5)) * 100).toFixed(1) : 0;
+        function renderMonthlyChart(stats) {
+            const ctx = document.getElementById('monthlyGrowthChart').getContext('2d');
+            const months = Object.keys(stats).slice(-6);
             
-            document.getElementById('stats-grid').innerHTML = `
-                ${renderStatCard("จำนวนโหวตทั้งหมด", stats.totalVotes, "VOTES", "blue")}
-                ${renderStatCard("จำนวนร้านค้า", uniqueShopsCount, "SHOPS", "purple")}
-                ${renderStatCard("คะแนนรวม", stats.totalScore, "POINTS", "orange")}
-                ${renderStatCard("ความพึงพอใจเฉลี่ย", avgSatisfy, "%", "emerald")}
-            `;
-
-            const zoneGrid = document.getElementById('zone-summary-grid');
-            zoneGrid.innerHTML = '';
-            Object.keys(appSettings.zones).forEach(key => {
-                const z = appSettings.zones[key];
-                const data = zoneStats[z.name] || { votes: 0, score: 0 };
-                const percent = data.votes > 0 ? ((data.score / (data.votes * 5)) * 100).toFixed(1) : 0;
-                zoneGrid.innerHTML += `
-                    <div class="rounded-[2rem] bg-white p-7 shadow-sm border-l-8 border-blue-500 card-hover">
-                        <div class="mb-5 flex justify-between items-start">
-                            <h3 class="text-sm font-extrabold text-slate-800 uppercase">${z.name}</h3>
-                            <span class="text-2xl font-black text-slate-900">${percent}%</span>
-                        </div>
-                        <div class="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-                            <div class="h-full bg-blue-600" style="width: ${percent}%"></div>
-                        </div>
-                    </div>
-                `;
+            const datasets = Object.keys(appSettings.zones).map(key => {
+                const zone = appSettings.zones[key];
+                return {
+                    label: zone.name,
+                    data: months.map(m => stats[m][key] || 0),
+                    backgroundColor: zone.color + 'CC',
+                    borderRadius: 6,
+                    barThickness: window.innerWidth < 768 ? 12 : 20
+                };
             });
 
-            const top10 = shopList.sort((a,b) => b.percent - a.percent).slice(0, 10);
-            document.getElementById('top-10-list').innerHTML = top10.map((s, i) => `
-                <div class="flex items-center gap-5 rounded-[1.8rem] bg-white/5 p-5 border border-white/5 transition-all hover:bg-white/10">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl font-black ${i < 3 ? 'bg-blue-600 text-white' : 'bg-white/10 text-slate-400'}">${i+1}</div>
-                    <div class="flex-1 min-w-0"><h3 class="truncate font-bold text-white">${s.name}</h3></div>
-                    <div class="text-right"><div class="text-2xl font-black text-blue-400">${s.percent}%</div></div>
+            datasets.push({
+                label: 'Goal',
+                data: months.map(() => appSettings.minVoteGoal),
+                type: 'line',
+                borderColor: '#2D2D2D',
+                borderDash: [5, 5],
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false
+            });
+
+            if (growthChart) growthChart.destroy();
+            growthChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: months, datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { font: { size: 9 } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+                    }
+                }
+            });
+        }
+
+        function renderMinVoteSupport(shopList) {
+            const container = document.getElementById('min-vote-support-list');
+            if (!container) return;
+
+            const supportTop5 = [...shopList]
+                .filter(s => s.votes < appSettings.minVoteGoal)
+                .sort((a,b) => a.votes - b.votes || a.score - b.score)
+                .slice(0, 5);
+
+            if (supportTop5.length === 0) {
+                container.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-center opacity-40 py-10"><p class="text-xs font-bold uppercase tracking-widest">Completed</p></div>`;
+                return;
+            }
+
+            container.innerHTML = supportTop5.map((s, i) => `
+                <div class="flex items-center justify-between group">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="text-[10px] font-black text-gray-300">0${i+1}</span>
+                        <div class="min-w-0">
+                            <p class="text-[11px] md:text-xs font-black text-[#2D2D2D] truncate uppercase leading-tight">${s.name}</p>
+                            <p class="text-[8px] font-bold text-gray-400 mt-0.5 uppercase">Zone: ${s.zone}</p>
+                        </div>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span class="block text-[11px] font-black text-orange-600">${s.votes} ครั้ง</span>
+                        <div class="w-14 h-1 bg-gray-100 rounded-full mt-1 overflow-hidden">
+                            <div class="h-full bg-orange-400" style="width: ${(s.votes / appSettings.minVoteGoal * 100)}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderUI(overall, zoneData, shopList) {
+            document.getElementById('last-update').innerText = new Date().toLocaleTimeString('th-TH');
+            
+            const overallAvg = calcAvg(overall.score, overall.votes);
+            const overallStatsEl = document.getElementById('overall-stats');
+            
+            overallStatsEl.innerHTML = `
+                ${renderHeaderItem("จำนวนโหวตรวม", overall.votes, "bg-viz-blue")}
+                ${renderHeaderItem("ร้านที่โหวต", overall.shops.size, "bg-viz-purple")}
+                ${renderHeaderItem("คะแนนรวม", overall.score, "bg-viz-emerald")}
+                ${renderHeaderItem("เฉลี่ยความพึงพอใจ", overallAvg + "%", "bg-viz-sunset")}
+            `;
+
+            const tbody = document.getElementById('zone-table-body');
+            tbody.innerHTML = Object.values(zoneData).map(z => {
+                const avgPct = calcAvg(z.score, z.votes);
+                return `
+                    <tr class="rounded-xl overflow-hidden">
+                        <td class="py-4 px-4 rounded-l-xl border-l-[4px] border-[${z.color}]">${z.name}</td>
+                        <td class="text-center text-gray-400 font-mono">${z.votes.toLocaleString()}</td>
+                        <td class="text-center text-gray-400 font-mono">${z.shops.size}</td>
+                        <td class="text-center text-gray-400 font-mono">${z.score.toLocaleString()}</td>
+                        <td class="text-right px-4 rounded-r-xl font-black ${avgPct >= 80 ? 'text-[#2D2D2D]' : 'text-orange-500'}">${avgPct}%</td>
+                    </tr>
+                `;
+            }).join('');
+
+            Object.values(zoneData).forEach((z, idx) => {
+                const avgPct = calcAvg(z.score, z.votes);
+                const container = document.getElementById(`donut-zone${idx+1}`);
+                if(container) {
+                    container.innerHTML = `
+                        <div class="min-w-0 pr-2">
+                            <p class="text-[9px] font-black text-[#A3A092] uppercase tracking-[0.1em] mb-1 truncate">${z.name}</p>
+                            <p class="text-xl md:text-2xl font-black text-[#2D2D2D]">${z.votes.toLocaleString()} <span class="text-[9px] text-gray-400 font-bold uppercase">Votes</span></p>
+                        </div>
+                        ${renderDonut(avgPct, z.color)}
+                    `;
+                }
+            });
+
+            Object.keys(appSettings.zones).forEach((key, idx) => {
+                const z = appSettings.zones[key];
+                const filtered = shopList.filter(s => s.zone === z.name)
+                    .sort((a,b) => b.score - a.score || b.percent - a.percent)
+                    .slice(0, 5);
+                const top5El = document.getElementById(`top5-zone${idx+1}`);
+                if (top5El) {
+                    top5El.innerHTML = renderRankingCard(`TOP 5 ${z.name.split('.')[1] || z.name}`, filtered, z.color);
+                }
+            });
+
+            const top10 = [...shopList]
+                .sort((a,b) => b.score - a.score || b.percent - a.percent)
+                .slice(0, 10);
+                
+            const top10El = document.getElementById('top10-overall-list');
+            top10El.innerHTML = top10.map((s, i) => `
+                <div class="p-6 md:p-10 flex flex-col items-center justify-center text-center group hover:bg-white transition-all">
+                    <span class="text-[#2D2D2D] text-[9px] font-black uppercase mb-3 tracking-tighter">Ranking #${i+1}</span>
+                    <h3 class="text-xs md:text-sm font-black text-[#2D2D2D] uppercase truncate w-full mb-1">${s.name}</h3>
+                    <p class="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-4 italic">${s.zone}</p>
+                    <div class="text-2xl md:text-3xl font-black text-[#2D2D2D] mb-4">${s.percent}%</div>
+                    <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.5)]" style="width: ${s.percent}%"></div>
+                    </div>
+                    <div class="flex flex-col gap-0.5 mt-4">
+                        <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">${s.votes.toLocaleString()} โหวต</p>
+                        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Score: ${s.score.toLocaleString()}</p>
+                    </div>
                 </div>
             `).join('');
 
-            // Render Top 5 per Zone
-            const top5Grid = document.getElementById('top-5-grid');
-            top5Grid.innerHTML = '';
-            Object.values(appSettings.zones).forEach(z => {
-                const filtered = shopList.filter(s => s.zone === z.name).sort((a,b) => b.percent - a.percent).slice(0, 5);
-                top5Grid.innerHTML += `
-                    <div class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-slate-100 card-hover">
-                        <h3 class="mb-7 text-[11px] font-extrabold text-slate-800 border-b border-slate-100 pb-4 uppercase tracking-widest">${z.name}</h3>
-                        <div class="space-y-4">
-                            ${filtered.length > 0 ? filtered.map((s, i) => `<div class="flex justify-between text-xs font-bold"><span>${i+1}. ${s.name}</span><span class="text-blue-600">${s.percent}%</span></div>`).join('') : '<p class="text-[10px] text-slate-300 italic">ไม่มีข้อมูล</p>'}
-                        </div>
+            updateLogo();
+        }
+
+        function renderHeaderItem(label, value, colorClass) {
+            return `
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center space-y-1 md:space-y-2 text-center transition-all ${colorClass}">
+                    <p class="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.1em] opacity-80">${label}</p>
+                    <p class="text-lg md:text-3xl font-black">${value.toLocaleString()}</p>
+                </div>
+            `;
+        }
+
+        function renderDonut(percent, color) {
+            const radius = 42;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (percent / 100) * circumference;
+            return `
+                <div class="chart-container shrink-0 ml-4">
+                    <svg class="chart-svg w-full h-full" viewBox="0 0 120 120">
+                        <circle class="chart-bg" cx="60" cy="60" r="${radius}"></circle>
+                        <circle class="chart-progress" cx="60" cy="60" r="${radius}" 
+                            style="stroke: ${color}; stroke-dasharray: ${circumference}; stroke-dashoffset: ${offset}; filter: drop-shadow(0 0 6px ${color}30)">
+                        </circle>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="text-sm md:text-xl font-black text-[#2D2D2D]">${percent}%</span>
                     </div>
-                `;
-            });
+                </div>
+            `;
         }
 
-        function renderStatCard(title, value, unit, color) {
-            const colors = { blue: 'from-blue-600 to-blue-500', purple: 'from-purple-600 to-purple-500', orange: 'from-orange-500 to-orange-400', emerald: 'from-emerald-600 to-emerald-500' };
-            return `<div class="rounded-[2.5rem] bg-gradient-to-br ${colors[color]} p-6 text-white shadow-lg"><p class="text-[10px] font-extrabold uppercase opacity-70 mb-4">${title}</p><div class="flex items-baseline gap-2"><span class="text-3xl font-black">${value}</span><span class="text-[11px] font-bold opacity-50 uppercase">${unit}</span></div></div>`;
+        function renderRankingCard(title, list, color) {
+            return `
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6 md:mb-8 pb-3 border-b border-black/5">
+                        <h3 class="text-[9px] md:text-[11px] font-black text-[#8D8A7E] uppercase tracking-widest truncate mr-2">${title}</h3>
+                        <span class="w-2 h-2 md:w-3 md:h-3 rounded-full shrink-0" style="background-color: ${color}"></span>
+                    </div>
+                    <div class="space-y-4 md:space-y-5">
+                        ${list.length > 0 ? list.map((s, i) => `
+                            <div class="flex items-center justify-between group">
+                                <div class="flex items-center gap-2 md:gap-3 min-w-0">
+                                    <span class="text-[9px] font-bold text-gray-300">#${i+1}</span>
+                                    <div class="min-w-0">
+                                        <p class="text-[11px] md:text-sm font-black text-[#2D2D2D] uppercase truncate leading-none">${s.name}</p>
+                                        <p class="text-[8px] md:text-[9px] font-bold text-gray-400 mt-1 uppercase">Score: ${s.score.toLocaleString()} (${s.votes})</p>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] md:text-xs font-black shrink-0 px-2 py-0.5 rounded-lg bg-white/60" style="color: ${color}">${s.percent}%</span>
+                            </div>
+                        `).join('') : '<p class="text-[9px] text-gray-300 italic text-center py-4">No Activity</p>'}
+                    </div>
+                </div>
+            `;
         }
 
-        function updateLogoDisplay() {
-            const container = document.getElementById('logo-display-container');
-            const url = convertDriveUrl(appSettings.logoUrl);
+        function updateLogo() {
+            const container = document.getElementById('logo-container');
+            const url = convertUrl(appSettings.logoUrl);
             if (url) {
-                container.innerHTML = `<img src="${url}" alt="Market Logo" class="h-24 w-auto object-contain drop-shadow-md rounded-xl">`;
-            } else {
-                container.innerHTML = `<div class="flex h-20 w-64 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 cursor-pointer font-bold text-[10px] uppercase" onclick="toggleSettings(true)">คลิกเพื่อตั้งค่า LOGO</div>`;
+                container.innerHTML = `<img src="${url}" class="h-full w-auto max-w-full object-contain transition-opacity duration-300" onload="this.style.opacity=1" style="opacity:0">`;
             }
         }
 
-        function renderZoneInputs() {
-            const container = document.getElementById('zone-configs-container');
-            container.innerHTML = '';
-            Object.keys(appSettings.zones).forEach(key => {
-                const z = appSettings.zones[key];
-                container.innerHTML += `
-                    <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5">
-                        <div class="mb-3"><label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">ชื่อโซน</label><input id="${key}-name" type="text" value="${z.name}" class="w-full rounded-xl border border-slate-200 p-2 text-sm font-bold"></div>
-                        <div class="flex gap-4">
-                            <div class="flex-1"><label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">ID เริ่ม</label><input id="${key}-start" type="number" value="${z.start}" class="w-full rounded-xl border border-slate-200 p-2 text-center font-bold"></div>
-                            <div class="flex-1"><label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">ID จบ</label><input id="${key}-end" type="number" value="${z.end}" class="w-full rounded-xl border border-slate-200 p-2 text-center font-bold"></div>
+        function toggleSettings(show) {
+            if (show) {
+                document.getElementById('input-logo').value = appSettings.logoUrl;
+                const zoneContainer = document.getElementById('zone-settings');
+                zoneContainer.innerHTML = Object.keys(appSettings.zones).map(key => {
+                    const z = appSettings.zones[key];
+                    return `
+                        <div class="p-4 md:p-6 bg-gray-50 rounded-2xl space-y-3 md:space-y-4 border border-gray-100 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <label class="text-[9px] font-black text-[#A3A092] uppercase tracking-widest">${z.name}</label>
+                                <span class="w-3 h-3 rounded-full" style="background-color: ${z.color}"></span>
+                            </div>
+                            <input id="${key}-name" type="text" value="${z.name}" class="w-full bg-white border border-gray-100 rounded-xl py-3 px-4 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-400">
+                            <div class="grid grid-cols-2 gap-3">
+                                <input id="${key}-start" type="number" value="${z.start}" class="bg-white border border-gray-100 rounded-xl py-3 px-2 text-xs text-center font-mono">
+                                <input id="${key}-end" type="number" value="${z.end}" class="bg-white border border-gray-100 rounded-xl py-3 px-2 text-xs text-center font-mono">
+                            </div>
                         </div>
-                    </div>`;
-            });
+                    `;
+                }).join('');
+            }
+            document.getElementById('settings-modal').classList.toggle('hidden', !show);
         }
 
-        function hideLoading() { document.getElementById('loading-screen').classList.add('opacity-0'); setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 700); }
-        function toggleSettings(show) { if(show) renderZoneInputs(); document.getElementById('settings-modal').classList.toggle('hidden', !show); }
-        function loadSettings() { const saved = localStorage.getItem('market_settings_v5'); if (saved) appSettings = {...appSettings, ...JSON.parse(saved)}; }
-        function saveSettings() { 
-            const logoIn = document.getElementById('input-logo').value.trim();
-            if(logoIn) appSettings.logoUrl = logoIn;
+        function saveSettings() {
+            appSettings.logoUrl = document.getElementById('input-logo').value.trim();
             Object.keys(appSettings.zones).forEach(key => {
                 appSettings.zones[key].name = document.getElementById(`${key}-name`).value;
                 appSettings.zones[key].start = parseInt(document.getElementById(`${key}-start`).value);
                 appSettings.zones[key].end = parseInt(document.getElementById(`${key}-end`).value);
             });
-            localStorage.setItem('market_settings_v5', JSON.stringify(appSettings)); 
-            toggleSettings(false); 
-            updateLogoDisplay();
-            fetchData(); 
+            localStorage.setItem('market_v18_final_responsive', JSON.stringify(appSettings));
+            toggleSettings(false);
+            processData();
         }
 
-        window.onload = () => { loadSettings(); updateLogoDisplay(); fetchData(); setInterval(fetchData, 30000); };
+        window.onload = () => {
+            const saved = localStorage.getItem('market_v18_final_responsive');
+            if (saved) appSettings = JSON.parse(saved);
+            updateLogo(); 
+            fetchData(); 
+            setInterval(fetchData, 60000); 
+        };
     </script>
 </body>
 </html>
