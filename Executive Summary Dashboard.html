@@ -396,10 +396,10 @@
             document.getElementById('last-update').innerText = new Date().toLocaleTimeString('th-TH');
             const overallAvg = (overall.votes > 0 ? ((overall.score / (overall.votes * 5)) * 100).toFixed(0) : 0);
             document.getElementById('overall-stats').innerHTML = `
-                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-blue"><p class="text-[9px] font-bold uppercase opacity-80 text-white">โหวตรวม</p><p class="text-lg md:text-3xl font-black text-white">${overall.votes.toLocaleString()}</p></div>
-                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-purple"><p class="text-[9px] font-bold uppercase opacity-80 text-white">ร้านที่โหวต</p><p class="text-lg md:text-3xl font-black text-white">${overall.shops.size.toLocaleString()}</p></div>
-                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-emerald"><p class="text-[9px] font-bold uppercase opacity-80 text-white">คะแนนรวม</p><p class="text-lg md:text-3xl font-black text-white">${overall.score.toLocaleString()}</p></div>
-                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-sunset"><p class="text-[9px] font-bold uppercase opacity-80 text-white">เฉลี่ยรวม</p><p class="text-lg md:text-3xl font-black text-white">${overallAvg}%</p></div>
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-blue"><p class="text-[9px] font-bold uppercase opacity-80 text-white">จำนวนโหวตรวม</p><p class="text-lg md:text-3xl font-black text-white">${overall.votes.toLocaleString()}</p></div>
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-purple"><p class="text-[9px] font-bold uppercase opacity-80 text-white">จำนวนร้านที่ถูกโหวต</p><p class="text-lg md:text-3xl font-black text-white">${overall.shops.size.toLocaleString()}</p></div>
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-emerald"><p class="text-[9px] font-bold uppercase opacity-80 text-white">คะแนนโหวตรวม</p><p class="text-lg md:text-3xl font-black text-white">${overall.score.toLocaleString()}</p></div>
+                <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-sunset"><p class="text-[9px] font-bold uppercase opacity-80 text-white">คะแนนโหวตเฉลี่ยรวม</p><p class="text-lg md:text-3xl font-black text-white">${overallAvg}%</p></div>
             `;
             document.getElementById('zone-table-body').innerHTML = Object.values(zoneData).map(z => {
                 const avgPct = (z.votes > 0 ? ((z.score / (z.votes * 5)) * 100).toFixed(0) : 0);
@@ -437,3 +437,4 @@
     </script>
 </body>
 </html>
+
