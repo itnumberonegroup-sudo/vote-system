@@ -81,18 +81,6 @@
             box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
         }
 
-        .chart-container { position: relative; width: 85px; height: 85px; }
-        @media (min-width: 768px) { .chart-container { width: 110px; height: 110px; } }
-        
-        .chart-svg { transform: rotate(-90deg); }
-        .chart-bg { fill: none; stroke: var(--secondary-gray); stroke-width: 12; }
-        .chart-progress { 
-            fill: none; 
-            stroke-width: 12; 
-            stroke-linecap: round; 
-            transition: stroke-dashoffset 1.5s ease-out; 
-        }
-
         .spinner {
             border: 3px solid rgba(45, 45, 45, 0.05);
             border-top: 3px solid #3b82f6;
@@ -103,13 +91,17 @@
 
         .custom-table th { 
             color: #A3A092; 
-            font-size: 0.75rem; 
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
         .custom-table tr { 
             background: rgba(255, 255, 255, 0.45); 
             transition: background 0.2s;
+        }
+
+        @media (max-width: 640px) {
+            .custom-table th { font-size: 10px; padding: 0.5rem 0.25rem; }
+            .custom-table td { font-size: 11px; padding: 0.75rem 0.25rem !important; }
         }
 
         ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -121,21 +113,25 @@
 
     <!-- Loading Screen -->
     <div id="loading-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#F7F4E9]">
-        <div class="flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4 text-center px-6">
             <div class="spinner"></div>
-            <p id="loading-text" class="text-[10px] font-black text-[#2D2D2D] uppercase tracking-[0.5em]">Initialising Cloud Sync</p>
+            <div class="space-y-1">
+                <p id="loading-text" class="text-[10px] font-black text-[#2D2D2D] uppercase tracking-[0.5em]">Starting Engine</p>
+                <p id="loading-subtext" class="text-[9px] font-bold text-[#8D8A7E] uppercase tracking-widest opacity-60">Connecting to number one market servers...</p>
+            </div>
         </div>
     </div>
 
+    <!-- Header -->
     <header class="p-4 md:p-6 bg-white/40 backdrop-blur-lg sticky top-0 z-40 border-b border-white/60">
         <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4 w-full md:w-auto">
                 <div id="logo-container" class="h-10 md:h-14 w-fit min-w-[80px] max-w-[200px] md:max-w-[280px] bg-white/95 rounded-xl md:rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-white px-3 md:px-4 py-1.5 transition-all shrink-0">
-                    <!-- Logo injected here -->
+                    <!-- Logo injected -->
                 </div>
                 <div class="min-w-0">
                     <h1 class="text-base md:text-2xl font-black text-[#2D2D2D] leading-none uppercase truncate tracking-tight">Administrator</h1>
-                    <p class="text-[8px] md:text-[10px] font-bold text-[#8D8A7E] uppercase mt-1 truncate">Market Insights (Cloud Mode)</p>
+                    <p id="status-tag" class="text-[8px] md:text-[10px] font-bold text-[#8D8A7E] uppercase mt-1 truncate">Synchronizing...</p>
                 </div>
             </div>
 
@@ -220,7 +216,6 @@
             <div id="donut-zone3" class="glass-card p-8 flex items-center justify-between border-green-pastel"></div>
         </div>
 
-        <!-- Section 4: TOP 5 Per Zone with Scores -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             <div id="top5-zone1" class="glass-card p-6 md:p-8 border-pink-pastel"></div>
             <div id="top5-zone2" class="glass-card p-6 md:p-8 border-pink-pastel"></div>
@@ -244,7 +239,7 @@
             <div class="p-8 md:p-10 border-b border-black/5 flex justify-between items-center">
                 <h2 class="font-black text-[#2D2D2D] uppercase tracking-wider text-xl">Dashboard Config</h2>
                 <button onclick="toggleSettings(false)" class="p-3 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" i1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             <div class="p-8 md:p-10 space-y-8 max-h-[60vh] overflow-y-auto">
@@ -266,6 +261,7 @@
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
+        // Local Settings First for Speed
         window.appSettings = {
             logoUrl: "https://raw.githubusercontent.com/itnumberonegroup-sudo/vote-system/main/new.png",
             zones: {
@@ -276,48 +272,62 @@
             minVoteGoal: 20
         };
 
+        const PROXY_API_URL = "https://script.google.com/macros/s/AKfycbzYqf3clGc9goZOhScx44uWU1XCX96y0GhvyRrw7gGmvYk3kujHyfLRg8GrRtWSsZ2V5w/exec";
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'it-market-v18';
-        const PROXY_API_URL = "https://script.google.com/macros/s/AKfycbzYqf3clGc9goZOhScx44uWU1XCX96y0GhvyRrw7gGmvYk3kujHyfLRg8GrRtWSsZ2V5w/exec";
 
         let growthChart = null;
         let rawData = [];
+        let isSettingsLoaded = false;
 
         async function initApp() {
+            // Speed Trick 1: Fetch Market Data and Auth in Parallel
+            const dataPromise = fetchData();
+            
+            // Speed Trick 2: Handle Auth and Cloud Sync background
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
                     await signInAnonymously(auth);
                 }
-                if (!auth.currentUser) throw new Error("Authentication failed");
-                const settingsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_config', 'settings');
-                onSnapshot(settingsDocRef, (snap) => {
-                    if (snap.exists()) {
-                        window.appSettings = snap.data();
-                        updateLogo();
-                        if (rawData.length > 0) processData();
-                    }
-                }, (err) => console.error("Firestore Listen Error:", err));
-                fetchData();
-                setInterval(fetchData, 60000);
+
+                if (auth.currentUser) {
+                    const settingsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_config', 'settings');
+                    onSnapshot(settingsDocRef, (snap) => {
+                        if (snap.exists()) {
+                            window.appSettings = snap.data();
+                            isSettingsLoaded = true;
+                            updateLogo();
+                            document.getElementById('status-tag').innerText = "Cloud Synced";
+                            if (rawData.length > 0) processData();
+                        }
+                    });
+                }
             } catch (err) {
-                console.error("Auth/Init Error:", err);
-                setTimeout(initApp, 5000);
+                console.warn("Cloud Sync Fail, using local settings");
+                document.getElementById('status-tag').innerText = "Local Mode";
             }
+
+            await dataPromise; // Ensure data is fetched before proceeding
         }
 
         window.fetchData = async () => {
+            const loadingSub = document.getElementById('loading-subtext');
+            if(loadingSub) loadingSub.innerText = "Fetching real-time market responses...";
+            
             try {
                 const response = await fetch(PROXY_API_URL + "?_=" + new Date().getTime());
                 rawData = await response.json();
                 processData();
+                
+                // Hide loading screen as soon as we have market data
                 document.getElementById('loading-screen')?.classList.add('hidden');
             } catch (err) {
-                console.error("API Fetch Error:", err);
+                console.error("API Error:", err);
             }
         };
 
@@ -337,18 +347,33 @@
                 const score = parseFloat(d.Score_Quality) || 0;
                 const idNum = parseInt(shopId.replace(/\D/g, '')) || 0;
                 const timestamp = d.Timestamp || new Date().toISOString();
+                
                 const dateObj = new Date(timestamp);
                 const monthKey = dateObj.toLocaleDateString('th-TH', { month: 'short', year: 'numeric' });
                 if (!monthlyStats[monthKey]) monthlyStats[monthKey] = {};
+
                 overall.shops.add(shopId);
                 overall.score += score;
+
                 let targetZone = "อื่นๆ";
                 for (const key in window.appSettings.zones) {
                     const z = window.appSettings.zones[key];
-                    if (idNum >= z.start && idNum <= z.end) { targetZone = z.name; monthlyStats[monthKey][key] = (monthlyStats[monthKey][key] || 0) + 1; break; }
+                    if (idNum >= z.start && idNum <= z.end) { 
+                        targetZone = z.name; 
+                        monthlyStats[monthKey][key] = (monthlyStats[monthKey][key] || 0) + 1;
+                        break; 
+                    }
                 }
-                if (zoneData[targetZone]) { zoneData[targetZone].votes++; zoneData[targetZone].shops.add(shopId); zoneData[targetZone].score += score; }
-                if (!shopPerformance[shopId]) { shopPerformance[shopId] = { id: shopId, name: shopName, zone: targetZone, votes: 0, score: 0 }; }
+
+                if (zoneData[targetZone]) {
+                    zoneData[targetZone].votes++;
+                    zoneData[targetZone].shops.add(shopId);
+                    zoneData[targetZone].score += score;
+                }
+
+                if (!shopPerformance[shopId]) {
+                    shopPerformance[shopId] = { id: shopId, name: shopName, zone: targetZone, votes: 0, score: 0 };
+                }
                 shopPerformance[shopId].votes++;
                 shopPerformance[shopId].score += score;
             });
@@ -357,6 +382,7 @@
                 ...s,
                 percent: (s.votes > 0 ? ((s.score / (s.votes * 5)) * 100).toFixed(0) : 0)
             }));
+
             renderUI(overall, zoneData, shopList);
             renderMonthlyChart(monthlyStats);
             renderMinVoteSupport(shopList);
@@ -371,18 +397,18 @@
             });
             datasets.push({ label: 'Goal', data: months.map(() => window.appSettings.minVoteGoal), type: 'line', borderColor: '#2D2D2D', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false });
             if (growthChart) growthChart.destroy();
-            growthChart = new Chart(ctx, { type: 'bar', data: { labels: months, datasets: datasets }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } } });
+            growthChart = new Chart(ctx, { type: 'bar', data: { labels: months, datasets: datasets }, options: { responsive: true, maintainAspectRatio: false, animation: { duration: 500 }, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } } });
         }
 
         function renderMinVoteSupport(shopList) {
             const container = document.getElementById('min-vote-support-list');
             const supportTop5 = [...shopList].filter(s => s.votes < window.appSettings.minVoteGoal).sort((a,b) => a.votes - b.votes || a.score - b.score).slice(0, 5);
-            if (supportTop5.length === 0) { container.innerHTML = `<p class="text-center py-10 opacity-50">All shops reached goal!</p>`; return; }
+            if (supportTop5.length === 0) { container.innerHTML = `<p class="text-center py-10 opacity-50 font-bold">Excellent! All shops reached the goal.</p>`; return; }
             container.innerHTML = supportTop5.map((s, i) => `
                 <div class="flex items-center justify-between">
                     <div class="min-w-0 pr-2">
-                        <p class="text-xs font-black text-[#2D2D2D] truncate uppercase">${s.name}</p>
-                        <p class="text-[8px] font-bold text-gray-400 uppercase">Score: ${s.score.toLocaleString()}</p>
+                        <p class="text-xs font-black text-[#2D2D2D] truncate uppercase leading-tight">${s.name}</p>
+                        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">Score: ${s.score.toLocaleString()}</p>
                     </div>
                     <div class="text-right shrink-0">
                         <span class="text-[11px] font-black text-orange-600">${s.votes} Votes</span>
@@ -395,15 +421,17 @@
         function renderUI(overall, zoneData, shopList) {
             document.getElementById('last-update').innerText = new Date().toLocaleTimeString('th-TH');
             const overallAvg = (overall.votes > 0 ? ((overall.score / (overall.votes * 5)) * 100).toFixed(0) : 0);
+            
             document.getElementById('overall-stats').innerHTML = `
                 <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-blue"><p class="text-[9px] font-bold uppercase opacity-80">โหวตรวม</p><p class="text-lg md:text-3xl font-black">${overall.votes.toLocaleString()}</p></div>
                 <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-purple"><p class="text-[9px] font-bold uppercase opacity-80">ร้านที่โหวต</p><p class="text-lg md:text-3xl font-black">${overall.shops.size.toLocaleString()}</p></div>
                 <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-emerald"><p class="text-[9px] font-bold uppercase opacity-80">คะแนนรวม</p><p class="text-lg md:text-3xl font-black">${overall.score.toLocaleString()}</p></div>
                 <div class="glass-card card-viz p-4 md:p-6 flex flex-col items-center justify-center bg-viz-sunset"><p class="text-[9px] font-bold uppercase opacity-80">เฉลี่ยรวม</p><p class="text-lg md:text-3xl font-black">${overallAvg}%</p></div>
             `;
+
             document.getElementById('zone-table-body').innerHTML = Object.values(zoneData).map(z => {
                 const avgPct = (z.votes > 0 ? ((z.score / (z.votes * 5)) * 100).toFixed(0) : 0);
-                return `<tr class="rounded-xl overflow-hidden"><td class="py-3 px-2 md:py-4 md:px-4 rounded-l-xl border-l-[4px] border-[${z.color}] text-[11px] md:text-sm font-bold truncate max-w-[120px] md:max-w-none">${z.name}</td><td class="text-center font-mono text-[10px] md:text-sm px-1">${z.votes.toLocaleString()}</td><td class="text-center font-mono text-[10px] md:text-sm px-1">${z.shops.size}</td><td class="text-center font-mono text-[10px] md:text-sm px-1">${z.score.toLocaleString()}</td><td class="text-right px-2 md:px-4 rounded-r-xl font-black text-[10px] md:text-sm ${avgPct >= 80 ? 'text-[#2D2D2D]' : 'text-orange-500'}">${avgPct}%</td></tr>`;
+                return `<tr class="rounded-xl overflow-hidden"><td class="py-3 px-2 md:py-4 md:px-4 rounded-l-xl border-l-[4px] border-[${z.color}] font-bold truncate max-w-[120px] md:max-w-none text-[11px] md:text-sm">${z.name}</td><td class="text-center font-mono text-[10px] md:text-sm">${z.votes.toLocaleString()}</td><td class="text-center font-mono text-[10px] md:text-sm">${z.shops.size}</td><td class="text-center font-mono text-[10px] md:text-sm">${z.score.toLocaleString()}</td><td class="text-right px-2 md:px-4 rounded-r-xl font-black text-[10px] md:text-sm ${avgPct >= 80 ? 'text-[#2D2D2D]' : 'text-orange-500'}">${avgPct}%</td></tr>`;
             }).join('');
 
             Object.values(zoneData).forEach((z, idx) => {
@@ -411,7 +439,7 @@
                 const container = document.getElementById(`donut-zone${idx+1}`);
                 if (container) {
                     const radius = 42; const circumference = 2 * Math.PI * radius; const offset = circumference - (avgPct / 100) * circumference;
-                    container.innerHTML = `<div class="min-w-0 pr-2"><p class="text-[9px] font-black text-[#A3A092] uppercase truncate">${z.name}</p><p class="text-xl font-black text-[#2D2D2D]">${z.votes.toLocaleString()} <span class="text-[8px] opacity-50 uppercase">Votes</span></p></div><div class="relative shrink-0 w-16 h-16 md:w-20 md:h-20"><svg class="w-full h-full -rotate-90" viewBox="0 0 100 100"><circle class="fill-none stroke-gray-100" cx="50" cy="50" r="${radius}" stroke-width="10"></circle><circle class="fill-none transition-all duration-1000" cx="50" cy="50" r="${radius}" stroke-width="10" stroke="${z.color}" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round"></circle></svg><div class="absolute inset-0 flex items-center justify-center font-black text-[10px] md:text-xs">${avgPct}%</div></div>`;
+                    container.innerHTML = `<div class="min-w-0 pr-2"><p class="text-[9px] font-black text-[#A3A092] uppercase truncate tracking-widest">${z.name}</p><p class="text-xl font-black text-[#2D2D2D]">${z.votes.toLocaleString()} <span class="text-[8px] opacity-50">VOTES</span></p></div><div class="relative shrink-0 w-16 h-16 md:w-20 md:h-20"><svg class="w-full h-full -rotate-90" viewBox="0 0 100 100"><circle class="fill-none stroke-gray-100" cx="50" cy="50" r="${radius}" stroke-width="10"></circle><circle class="fill-none transition-all duration-1000" cx="50" cy="50" r="${radius}" stroke-width="10" stroke="${z.color}" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round"></circle></svg><div class="absolute inset-0 flex items-center justify-center font-black text-[10px] md:text-xs">${avgPct}%</div></div>`;
                 }
             });
 
@@ -420,43 +448,25 @@
                 const filtered = shopList.filter(s => s.zone === z.name).sort((a,b) => b.score - a.score).slice(0, 5);
                 const top5El = document.getElementById(`top5-zone${idx+1}`);
                 if (top5El) {
-                    top5El.innerHTML = `
-                        <div class="flex justify-between items-center mb-6 pb-2 border-b border-black/5">
-                            <h3 class="text-[10px] font-black text-[#8D8A7E] uppercase truncate">${z.name} Top 5</h3>
-                            <span class="w-2 h-2 rounded-full" style="background-color: ${z.color}"></span>
-                        </div>
-                        <div class="space-y-4">
-                            ${filtered.map((s, i) => `
-                                <div class="flex justify-between items-center">
-                                    <div class="min-w-0 pr-2">
-                                        <p class="text-xs font-black truncate">${s.name}</p>
-                                        <p class="text-[9px] font-bold text-gray-400">คะแนน: ${s.score.toLocaleString()}</p>
-                                    </div>
-                                    <p class="text-xs font-black shrink-0" style="color: ${z.color}">${s.percent}%</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
+                    top5El.innerHTML = `<div class="flex justify-between items-center mb-6 pb-2 border-b border-black/5"><h3 class="text-[10px] font-black text-[#8D8A7E] uppercase truncate tracking-widest">${z.name} Top 5</h3><span class="w-2 h-2 rounded-full" style="background-color: ${z.color}"></span></div><div class="space-y-4">${filtered.map((s, i) => `<div class="flex justify-between items-center"><div class="min-w-0 pr-2"><p class="text-xs font-black truncate leading-none mb-1">${s.name}</p><p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Score: ${s.score.toLocaleString()}</p></div><p class="text-xs font-black shrink-0" style="color: ${z.color}">${s.percent}%</p></div>`).join('')}</div>`;
                 }
             });
 
             const top10 = [...shopList].sort((a,b) => b.score - a.score).slice(0, 10);
-            document.getElementById('top10-overall-list').innerHTML = top10.map((s, i) => `
-                <div class="p-6 md:p-8 flex flex-col items-center justify-center text-center transition-all hover:bg-white/50"><span class="text-[9px] font-black text-gray-300 uppercase mb-2">Rank #${i+1}</span><p class="text-xs font-black text-[#2D2D2D] truncate w-full uppercase">${s.name}</p><p class="text-[8px] font-bold text-gray-400 mb-4 italic uppercase">${s.zone}</p><p class="text-2xl font-black text-[#2D2D2D] mb-3">${s.percent}%</p><div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden mb-4"><div class="h-full bg-blue-500" style="width: ${s.percent}%"></div></div><div class="text-[9px] font-bold text-gray-400">Score: ${s.score.toLocaleString()} (${s.votes} v)</div></div>
-            `).join('');
+            document.getElementById('top10-overall-list').innerHTML = top10.map((s, i) => `<div class="p-6 md:p-8 flex flex-col items-center justify-center text-center transition-all hover:bg-white/50"><span class="text-[9px] font-black text-gray-300 uppercase mb-2">Rank #${i+1}</span><p class="text-xs font-black text-[#2D2D2D] truncate w-full uppercase leading-tight mb-1">${s.name}</p><p class="text-[8px] font-bold text-gray-400 mb-4 italic uppercase tracking-tighter">${s.zone}</p><p class="text-2xl font-black text-[#2D2D2D] mb-3">${s.percent}%</p><div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden mb-4"><div class="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.3)]" style="width: ${s.percent}%"></div></div><div class="text-[9px] font-bold text-gray-400 tracking-tight">Score: ${s.score.toLocaleString()} (${s.votes} v)</div></div>`).join('');
             updateLogo();
         }
 
         function convertUrl(url) { if (!url) return ""; if (url.includes('github.com') && url.includes('/blob/')) return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/'); if (url.includes('drive.google.com')) { let id = url.includes('/d/') ? url.split('/d/')[1].split('/')[0] : (url.includes('id=') ? url.split('id=')[1].split('&')[0] : ""); return id ? `https://lh3.googleusercontent.com/d/${id}` : url; } return url; }
 
-        window.updateLogo = () => { const container = document.getElementById('logo-container'); if (!container) return; const url = convertUrl(window.appSettings.logoUrl); container.innerHTML = url ? `<img src="${url}" class="h-full w-auto max-w-full object-contain">` : `<span class="text-[10px] font-bold opacity-30">NO LOGO</span>`; };
+        window.updateLogo = () => { const container = document.getElementById('logo-container'); if (!container) return; const url = convertUrl(window.appSettings.logoUrl); container.innerHTML = url ? `<img src="${url}" class="h-full w-auto max-w-full object-contain">` : `<span class="text-[10px] font-bold opacity-30">SET LOGO</span>`; };
 
         window.toggleSettings = (show) => {
             if (show) {
                 document.getElementById('input-logo').value = window.appSettings.logoUrl;
                 document.getElementById('zone-settings').innerHTML = Object.keys(window.appSettings.zones).map(key => {
                     const z = window.appSettings.zones[key];
-                    return `<div class="p-5 bg-gray-50 rounded-2xl space-y-3"><label class="text-[10px] font-black opacity-50 uppercase">${z.name}</label><input id="${key}-name" type="text" value="${z.name}" class="w-full bg-white border border-gray-100 rounded-xl py-3 px-4 text-xs font-bold"><div class="grid grid-cols-2 gap-3"><input id="${key}-start" type="number" value="${z.start}" class="bg-white border border-gray-100 rounded-xl py-3 px-2 text-xs text-center font-mono"><input id="${key}-end" type="number" value="${z.end}" class="bg-white border border-gray-100 rounded-xl py-3 px-2 text-xs text-center font-mono"></div></div>`;
+                    return `<div class="p-5 bg-gray-50 rounded-2xl space-y-3"><label class="text-[10px] font-black opacity-50 uppercase tracking-widest">${z.name}</label><input id="${key}-name" type="text" value="${z.name}" class="w-full bg-white border border-gray-100 rounded-xl py-3 px-4 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-400 transition-all"><div class="grid grid-cols-2 gap-3"><input id="${key}-start" type="number" value="${z.start}" class="bg-white border border-gray-100 rounded-xl py-3 px-2 text-xs text-center font-mono" placeholder="Start ID"><input id="${key}-end" type="number" value="${z.end}" class="bg-white border border-gray-100 rounded-xl py-3 px-2 text-xs text-center font-mono" placeholder="End ID"></div></div>`;
                 }).join('');
             }
             document.getElementById('settings-modal').classList.toggle('hidden', !show);
