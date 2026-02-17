@@ -142,8 +142,10 @@
         .btn-submit { background: var(--primary-color); color: white; border: none; padding: 16px; border-radius: 15px; width: 100%; font-size: 17px; font-weight: 600; cursor: pointer; }
         .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
 
-        #customAlert { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        #customAlert, #friendAlert { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; max-width: 320px; width: 100%; box-sizing: border-box; }
+        
+        .qr-image { width: 180px; height: 180px; margin: 15px auto; display: block; border: 1px solid #e2e8f0; border-radius: 10px; }
 
         #loading { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 3000; flex-direction: column; align-items: center; justify-content: center; }
         .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -166,6 +168,18 @@
         </div>
     </div>
 
+    <!-- Alert สำหรับบังคับเพิ่มเพื่อน -->
+    <div id="friendAlert">
+        <div class="modal-content">
+            <div style="font-size: 40px; margin-bottom: 10px;"><i class="fas fa-user-plus" style="color: var(--primary-color);"></i></div>
+            <h3 id="friendTitle" style="margin: 0;">กรุณาเพิ่มเพื่อน</h3>
+            <p id="friendMsg" style="color: #64748b; margin-top: 10px; font-size: 14px;">กรุณาเพิ่มเพื่อนกับ LINE Official ของเราเพื่อสิทธิ์ในการร่วมสนุกและโหวตร้านค้า</p>
+            <img id="qrDisplay" src="" class="qr-image" alt="QR Code Add Friend">
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 10px;">สแกน QR Code หรือคลิกปุ่มด้านล่างเพื่อเพิ่มเพื่อน</p>
+            <button style="margin-top: 15px; padding: 14px 20px; border-radius: 12px; border: none; background: var(--primary-color); color: white; width: 100%; font-weight: 600; font-size: 16px;" id="btn-add-friend" onclick="redirectToOA()">เพิ่มเพื่อนตอนนี้</button>
+        </div>
+    </div>
+
     <div class="container">
         <div class="lang-switcher-container">
             <span class="lang-label"><i class="fas fa-globe"></i> Language:</span>
@@ -182,12 +196,9 @@
         </div>
 
         <div class="header-banner">
-            <!-- ส่วนแสดองวิดีโอ -->
             <video autoplay muted loop playsinline class="banner-media" id="bannerVideo">
                 <source src="" type="video/mp4">
             </video>
-            
-            <!-- ส่วนแสดงรูปภาพ (.jpg, .png, .svg, .gif) -->
             <img src="" class="banner-media" id="bannerImage" alt="Banner">
         </div>
 
@@ -223,9 +234,7 @@
             <div class="pdpa-container">
                 <label class="pdpa-checkbox">
                     <input type="checkbox" id="pdpaConsent">
-                    <span id="txt-pdpa">
-                        <!-- ข้อความจะถูกเติมโดย JavaScript อัตโนมัติ -->
-                    </span>
+                    <span id="txt-pdpa"></span>
                 </label>
             </div>
 
@@ -236,9 +245,11 @@
     <script>
         const LIFF_ID = '2009152489-dQiWopB9'; 
         
-        // --- [การตั้งค่าสื่อแบนเนอร์] ---
+        // --- [การตั้งค่าสื่อแบนเนอร์ & LINE OA] ---
         const BANNER_VIDEO_URL = ''; 
         const BANNER_IMAGE_URL = 'https://raw.githubusercontent.com/itnumberonegroup-sudo/vote-system/main/Banner.svg'; 
+        const LINE_OA_URL = 'https://line.me/R/ti/p/@numberone_market'; 
+        const QR_CODE_ADD_FRIEND = 'https://raw.githubusercontent.com/itnumberonegroup-sudo/vote-system/main/OA_QR.png'; 
 
         const FETCH_SHOP_URL = 'https://script.google.com/macros/s/AKfycbwy6XUJz55kVuxf7zoZH4KLCpfM_ihJCr85BwB17Nh2rzP7X5jxZCAdj5uGx9-6I6Jb/exec'; 
         const VOTE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoXkfpkxhrBxSMooKEKt4lNtx1PPTpaoj4cxBKZPuJoeNy6WUtJjFJSo8mrOjcb1g32A/exec';
@@ -250,6 +261,7 @@
         function initBanner() {
             const v = document.getElementById('bannerVideo');
             const i = document.getElementById('bannerImage');
+            document.getElementById('qrDisplay').src = QR_CODE_ADD_FRIEND;
             
             if(BANNER_VIDEO_URL) {
                 v.querySelector('source').src = BANNER_VIDEO_URL;
@@ -268,11 +280,12 @@
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "โหวตร้านค้าเพื่อลุ้นรับของรางวัล!!", prize: "ลุ้นรับทองคำ และ รถมอเตอร์ไซค์!",
                 alreadyVoted: "วันนี้คุณโหวตร้านค้านี้ไปแล้ว", selectedShop: "ร้านค้าที่ท่านเลือก", lblName: "ชื่อ – นามสกุล (เพื่อรับรางวัล)",
                 namePlaceholder: "ระบุชื่อ-นามสกุล", lblPhone: "เบอร์โทรศัพท์", phonePlaceholder: "0XXXXXXXXX", rateLabel: "ให้คะแนนร้านค้า",
-                pdpa: "** บริการจะจัดเก็บข้อมูลของท่าน เพื่อการติดต่อสื่อสาร หรือแจ้งข้อมูลข่าวสารและสืบประโยชน์เกี่ยวข้องกับผลิตภัณฑ์ บริการ รวมถึงการปฏิบัติตามกฎหมายอื่นที่เกี่ยวข้อง บริษัท นัมเบอร์ วัน จำกัด ท่านสามารถศึกษารายละเอียดเพิ่มเติมเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคลได้จาก <br>ประกาศความเป็นส่วนตัว ฉบับการขอแสดงความคิดเห็น : <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>https://www.numberonemarket.com/privacy.php</a>", 
+                pdpa: "** บริการจะจัดเก็บข้อมูลของท่าน เพื่อการติดต่อสื่อสาร หรือแจ้งข้อมูลข่าวสารและสืบประโยชน์เกี่ยวข้องกับผลิตภัณฑ์ บริการ รวมถึงการปฏิบัติตามกฎหมายอื่นที่เกี่ยวข้อง บริษัท นัมเบอร์ วัน จำกัด ท่านสามารถศึกษารายละเอียดเพิ่มเติมเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคลได้จาก <br>ประกาศความเป็นส่วนตัว ฉบับการขอแสดงความคิดเห็น : <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>คลิกที่นี่</a>", 
                 submit: "ยืนยันการให้คะแนน", loading: "กำลังบันทึกคะแนน...",
                 alertIncomplete: "ข้อมูลไม่ครบ", alertIncompleteMsg: "กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วน", alertPhoneError: "เบอร์โทรศัพท์ไม่ถูกต้อง",
                 alertRateError: "กรุณาเลือกดาว 1-5 ดาว", alertPdpaError: "กรุณายอมรับเงื่อนไขความเป็นส่วนตัว",
-                alertSuccess: "สำเร็จ!", alertSuccessMsg: "ขอบคุณที่ร่วมสนุกครับ", alertFail: "ขออภัย", alertFailMsg: "เกิดข้อผิดพลาด กรุณาลองใหม่", btnOk: "ตกลง"
+                alertSuccess: "สำเร็จ!", alertSuccessMsg: "ขอบคุณที่ร่วมสนุกครับ", alertFail: "ขออภัย", alertFailMsg: "เกิดข้อผิดพลาด กรุณาลองใหม่", btnOk: "ตกลง",
+                friendTitle: "กรุณาเพิ่มเพื่อน", friendMsg: "กรุณาเพิ่มเพื่อนกับ LINE Official ของเราเพื่อทำการโหวตและรับสิทธิ์ลุ้นรางวัล", btnAddFriend: "เพิ่มเพื่อนตอนนี้"
             },
             en: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Vote for your favorite shop to win prizes!!", prize: "Win Gold and Motorcycles!",
@@ -282,7 +295,8 @@
                 submit: "Confirm Rating", loading: "Saving your score...",
                 alertIncomplete: "Incomplete", alertIncompleteMsg: "Please fill in name and phone number", alertPhoneError: "Invalid phone number",
                 alertRateError: "Please select 1-5 stars", alertPdpaError: "Please accept privacy notice",
-                alertSuccess: "Success!", alertSuccessMsg: "Thank you for your feedback", alertFail: "Error", alertFailMsg: "Something went wrong, please try again", btnOk: "OK"
+                alertSuccess: "Success!", alertSuccessMsg: "Thank you for your feedback", alertFail: "Error", alertFailMsg: "Something went wrong, please try again", btnOk: "OK",
+                friendTitle: "Please Add Friend", friendMsg: "Please add our LINE Official account as a friend to vote and win prizes.", btnAddFriend: "Add Friend Now"
             },
             zh: {
                 header: "第一市场最佳评选", subtitle: "为你心仪的店铺投票，赢取丰厚大奖！", prize: "赢取黄金和摩托车大奖！",
@@ -292,7 +306,8 @@
                 submit: "确认评分", loading: "正在保存...",
                 alertIncomplete: "信息不完整", alertIncompleteMsg: "请输入您的姓名和电话", alertPhoneError: "电话号码错误",
                 alertRateError: "请เลือก1-5星级", alertPdpaError: "请接受隐私条款",
-                alertSuccess: "成功！", alertSuccessMsg: "感谢您的参与与反馈", alertFail: "失败", alertFailMsg: "发生错误，请稍后再试", btnOk: "确定"
+                alertSuccess: "成功！", alertSuccessMsg: "感谢您的参与与反馈", alertFail: "失败", alertFailMsg: "发生错误，请稍后再试", btnOk: "确定",
+                friendTitle: "请添加好友", friendMsg: "请添加我们的 LINE 官方账号为好友以便进行投票。", btnAddFriend: "立即添加"
             },
             ja: {
                 header: "ナンバーワン・マーケット・ベスト店", subtitle: "お気に入りの店に投票して賞品を当てよう！", prize: "金やバイクが当たる！",
@@ -302,47 +317,52 @@
                 submit: "評価を送信する", loading: "保存中...",
                 alertIncomplete: "入力不備", alertIncompleteMsg: "氏名と電話番号を入力してください", alertPhoneError: "番号ที่ถูกต้อง",
                 alertRateError: "1〜5星を選択してください", alertPdpaError: "ポリシーに同意してください",
-                alertSuccess: "完了！", alertSuccessMsg: "ご協力ありがとうございました", alertFail: "エラー", alertFailMsg: "エラーが発生しました", btnOk: "はい"
+                alertSuccess: "完了！", alertSuccessMsg: "ご協力ありがとうございました", alertFail: "エラー", alertFailMsg: "エラーが発生しました", btnOk: "はい",
+                friendTitle: "友だち追加してください", friendMsg: "投票するには、公式LINEアカウントを友だち追加してください。", btnAddFriend: "今すぐ追加"
             },
             my: {
                 header: "NUMBER ONE MARKET အကောင်းဆုံးဆိုင်", subtitle: "ဆုလက်ဆောင်များရယူရန် မဲပေးပါ!!", prize: "ရွှေနှင့် ဆိုင်ကယ်များ ကံစမ်းရန်!",
                 alreadyVoted: "ယနေ့အတွက် မဲပေးပြီးပါပြီ", selectedShop: "သင်ရွေးချယ်သောဆိုင်", lblName: "အမည် (ဆုရယူရန်)",
-                namePlaceholder: "အမည်အပြည့်อစုံရိုက်ပါ", lblPhone: "ဖုန်းနံပါတ်", phonePlaceholder: "ဖုန်းนံพาတ်รိုက်ပါ", rateLabel: "ဆိုင်ကို อဆင့်သတ်မှတ်ရန်",
-                pdpa: "**ဆက်သွယ်ရန်အတွက် อချက်แลงก์များကို စုဆောင်းပါမည်။ အသေးစိတ်ကို <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>ဤနေရာတွင်</a> ဖတ်ရှုပါ", 
-                submit: "အတည်ပြုရန်", loading: "သိမ်းဆည်းเนသည်...",
-                alertIncomplete: "မပြည့်စုံပါ", alertIncompleteMsg: "အမည်และဖုန်းนံพาတ်ထည့်ပါ", alertPhoneError: "ဖုန်းนံพาတ်မှားနေပါသည်",
-                alertRateError: "ကြယ် ၁-๕ လုံးรွေးပါ", alertPdpaError: "စည်းกัมส์ချက်သဘอตูပါ",
-                alertSuccess: "အောင်မြင်သည်!", alertSuccessMsg: "ပါဝင်မှုสำหรับ ကျေးซူးတင်ပါသည်", alertFail: "မှားยွင်းသည်", alertFailMsg: "ထပ်มံကြိုးစားပါ", btnOk: "အိုကေ"
+                namePlaceholder: "အမည်အပြည့်အစုံရိုက်ပါ", lblPhone: "ဖုန်းနံပါတ်", phonePlaceholder: "ဖုန်းနံပါတ်ရိုက်ပါ", rateLabel: "ဆိုင်ကို အဆင့်သတ်မှတ်ရန်",
+                pdpa: "**ဆက်သွယ်ရန်အတွက် အချက်အလက်များကို စုဆောင်းပါမည်။ အသေးစိတ်ကို <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>ဤနေရာတွင်</a> ဖတ်ရှုပါ", 
+                submit: "အတည်ပြုရန်", loading: "သိမ်းဆည်းနေသည်...",
+                alertIncomplete: "မပြည့်စုံပါ", alertIncompleteMsg: "အမည်နှင့် ဖုန်းနံပါတ်ထည့်ပါ", alertPhoneError: "ဖုန်းနံပါတ်မှားနေပါသည်",
+                alertRateError: "ကြယ် ၁-၅ လုံးရွေးပါ", alertPdpaError: "စည်းကမ်းချက်သဘောတူပါ",
+                alertSuccess: "အောင်မြင်သည်!", alertSuccessMsg: "ပါဝင်မှုအတွက် ကျေးဇူးတင်ပါသည်", alertFail: "မှားယွင်းသည်", alertFailMsg: "ထပ်မံကြိုးစားပါ", btnOk: "အိုကေ",
+                friendTitle: "သူငယ်ချင်းအဖြစ်အပ်နှံပါ", friendMsg: "မဲပေးရန်အတွက် ကျွန်ုပ်တို့၏ LINE Official ကို အပ်နှံပေးပါ။", btnAddFriend: "ယခုအပ်နှံမည်"
             },
             lo: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "ໂຫວດຮ້ານຄ້າເພື່ອລຸ້ນຮັບລາງວັນ!!", prize: "ລຸ້ນຮັບຄຳ ແລະ ລົດມໍເຕີໄຊ!",
                 alreadyVoted: "ມື້ນີ້ທ່ານໂຫວດແລ້ວ", selectedShop: "ຮ້ານที่ท่านเลือก", lblName: "ຊື່ ແລະ ນາມສະກຸນ (ເພື່ອຮັບລາງວັນ)",
                 namePlaceholder: "ໃສ່ຊື່-ນາມສະກຸນ", lblPhone: "ເບີໂທລະສັບ", phonePlaceholder: "ໃສ່ເບີໂທ", rateLabel: "ໃຫ້ຄະແນນຮ້ານຄ້າ",
-                pdpa: "**ບໍລິສັດຈະເກັບກຳຂໍ້ມູນຂອງທ່ານເພື່ອການຕິດຕໍ່. ສຶກສາເພີ່ມເຕีม <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>ໄດ້ที่นี่</a>", 
+                pdpa: "**ບໍລິສັດຈະເກັບກຳຂໍ້ມູນຂອງທ່ານເພື່ອການຕິດຕໍ່. ສຶກສາເພີ່ມເຕີມ <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>ໄດ້ທີ່ນີ້</a>", 
                 submit: "ຢືນຢັນການໃຫ້ຄະແນນ", loading: "ກຳລັງບັນທຶກ...",
-                alertIncomplete: "ຂໍ້ມູນບໍ່ຄົບ", alertIncompleteMsg: "ກະລຸນາໃສ່ຊື່ ແລະ ເບີໂທໃຫ້ຄົບ", alertPhoneError: "ເบີໂທບໍ່ຖືກຕ້ອງ",
+                alertIncomplete: "ຂໍ້ມູນບໍ່ຄົບ", alertIncompleteMsg: "ກະລຸນາໃສ່ຊື່ ແລະ ເບີໂທໃຫ້ຄົບ", alertPhoneError: "ເບີໂທບໍ່ຖືກຕ້ອງ",
                 alertRateError: "ກະລຸນາເລືອກ 1-5 ດາວ", alertPdpaError: "ກະລຸນາຍອມຮັບເງື່ອນໄຂ",
-                alertSuccess: "ສຳເລັດ!", alertSuccessMsg: "ຂອບໃຈທີ່ຮ່ວมກິດຈະກຳ", alertFail: "ຂໍອະໄພ", alertFailMsg: "ເກີດຂໍ้ຜິດພາດ", btnOk: "ຕົກລົງ"
+                alertSuccess: "ສຳເລັດ!", alertSuccessMsg: "ຂອບໃຈທີ່ຮ່ວມກິດຈະກຳ", alertFail: "ຂໍອະໄພ", alertFailMsg: "ເກີດຂໍ້ຜິດພາດ", btnOk: "ຕົກລົງ",
+                friendTitle: "ກະລຸນາເພີ່ມເພື່ອນ", friendMsg: "ກະລຸນາເພີ່ມເພື່ອນກັບ LINE Official ຂອງພວກເຮົາເພື່ອໂຫວດ.", btnAddFriend: "ເພີ່ມເພື່ອນດຽວນີ້"
             },
             id: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Vote toko favorit Anda untuk hadiah!!", prize: "Menangkan Emas and Motor!",
-                alreadyVoted: "Sudah memilih hari ini", selectedShop: "Tokoที่ถูกเลือก", lblName: "Nama Lengkap (untuk hadiah)",
+                alreadyVoted: "Sudah memilih hari ini", selectedShop: "Toko yang dipilih", lblName: "Nama Lengkap (untuk hadiah)",
                 namePlaceholder: "Masukkan nama lengkap", lblPhone: "Nomor Telepon", phonePlaceholder: "Masukkan nomor", rateLabel: "Beri nilai toko ini",
                 pdpa: "**Perusahaan akan mengumpulkan data Anda untuk komunikasi. Info lebih lanjut: <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>Kebijakan Privasi</a>", 
-                submit: "Konfirmasi Penilaian", loading: "Menยิปัน...",
-                alertIncomplete: "Tidak Lengkap", alertIncompleteMsg: "Harap isi namaและnomor telepon", alertPhoneError: "Nomor tidak valid",
+                submit: "Konfirmasi Penilaian", loading: "Menyimpan...",
+                alertIncomplete: "Tidak Lengkap", alertIncompleteMsg: "Harap isi nama dan nomor telepon", alertPhoneError: "Nomor tidak valid",
                 alertRateError: "Pilih 1-5 bintang", alertPdpaError: "Harap setujui kebijakan",
-                alertSuccess: "Berhasil!", alertSuccessMsg: "Terima kasih atas partisipasi Anda", alertFail: "Kesalahan", alertFailMsg: "Terjadi kesalahan", btnOk: "OK"
+                alertSuccess: "Berhasil!", alertSuccessMsg: "Terima kasih atas partisipasi Anda", alertFail: "Kesalahan", alertFailMsg: "Terjadi kesalahan", btnOk: "OK",
+                friendTitle: "Tambah Teman", friendMsg: "Silakan tambah akun resmi LINE kami sebagai teman untuk memilih.", btnAddFriend: "Tambah Sekarang"
             },
             vi: {
                 header: "THE BEST OF NUMBER ONE MARKET", subtitle: "Bình chọn cửa hàng เพื่อรับ quà!!", prize: "Trúng Vàng and Xe máy!",
-                alreadyVoted: "Bạn đã bình chọn rồi", selectedShop: "Cửa hàng đã chọn", lblName: "Họและtên (nhận thưởng)",
-                namePlaceholder: "Nhập họและtên", lblPhone: "Số điện thoại", phonePlaceholder: "Nhập số điện thoại", rateLabel: "Đánh giá cửa hàng",
-                pdpa: "**Công ty sẽ thu thập dữ liệuของท่านเพื่อ liên lạc. Chi tiết tại <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>Thông báo bảo mật</a>", 
+                alreadyVoted: "Bạn đã bình chọn rồi", selectedShop: "Cửa hàng đã chọn", lblName: "Họ và tên (nhận thưởng)",
+                namePlaceholder: "Nhập họ và tên", lblPhone: "Số điện thoại", phonePlaceholder: "Nhập số điện thoại", rateLabel: "Đánh giá cửa hàng",
+                pdpa: "**Công ty sẽ thu thập dữ liệu của bạn để liên lạc. Chi tiết tại <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>Thông báo bảo mật</a>", 
                 submit: "Xác nhận đánh giá", loading: "Đang lưu...",
-                alertIncomplete: "Chưa đủ thông tin", alertIncompleteMsg: "Vui lòng nhập tênและsố điện thoại", alertPhoneError: "Số điện thoại sai",
+                alertIncomplete: "Chưa đủ thông tin", alertIncompleteMsg: "Vui lòng nhập tên và số điện thoại", alertPhoneError: "Số điện thoại sai",
                 alertRateError: "Vui lòng chọn 1-5 sao", alertPdpaError: "Vui lòng chấp nhận điều khoản",
-                alertSuccess: "Thành công!", alertSuccessMsg: "Cảm ơn bạn đã tham gia", alertFail: "Lỗi", alertFailMsg: "Đã xảy ra lỗi", btnOk: "OK"
+                alertSuccess: "Thành công!", alertSuccessMsg: "Cảm ơn bạn đã tham gia", alertFail: "Lỗi", alertFailMsg: "Đã xảy ra lỗi", btnOk: "OK",
+                friendTitle: "Thêm bạn bè", friendMsg: "Vui lòng thêm tài khoản LINE chính thức của chúng tôi để bình chọn.", btnAddFriend: "Thêm ngay"
             }
         };
 
@@ -357,11 +377,16 @@
             document.getElementById('phoneInput').placeholder = t.phonePlaceholder;
             document.getElementById('txt-rate-label').innerText = t.rateLabel;
             
-            // [แก้ไขจุดนี้] ใช้ .innerHTML เพื่อให้คลิกลิงก์ได้
+            // ใช้ .innerHTML เพื่อให้คลิกลิงก์ได้
             document.getElementById('txt-pdpa').innerHTML = t.pdpa;
             
             document.getElementById('txt-loading').innerText = t.loading;
             document.getElementById('btn-modal-close').innerText = t.btnOk;
+
+            // อัปเดตส่วนแจ้งเตือนเพิ่มเพื่อนตามภาษา
+            document.getElementById('friendTitle').innerText = t.friendTitle || "กรุณาเพิ่มเพื่อน";
+            document.getElementById('friendMsg').innerText = t.friendMsg || "กรุณาเพิ่มเพื่อนกับ LINE Official ของเราเพื่อทำการโหวต";
+            document.getElementById('btn-add-friend').innerText = t.btnAddFriend || "เพิ่มเพื่อนตอนนี้";
 
             const isAlreadyVoted = currentShopId && checkVoteHistory(currentShopId);
             document.getElementById('btnSubmit').innerText = isAlreadyVoted ? t.alreadyVoted : t.submit;
@@ -370,8 +395,11 @@
         function checkVoteHistory(shopId) {
             const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
             const today = new Date().toLocaleDateString('th-TH');
-            if (history[shopId] === today) return true;
-            return false;
+            return history[shopId] === today;
+        }
+
+        function redirectToOA() {
+            window.location.href = LINE_OA_URL;
         }
 
         async function main() {
@@ -380,6 +408,13 @@
                 await liff.init({ liffId: LIFF_ID });
                 if (!liff.isLoggedIn()) { liff.login(); return; }
                 
+                // ตรวจสอบสถานะการเป็นเพื่อน
+                const friendStatus = await liff.getFriendship();
+                if (!friendStatus.friendFlag) {
+                    document.getElementById('friendAlert').style.display = 'flex';
+                    return;
+                }
+
                 const urlParams = new URLSearchParams(window.location.search);
                 currentShopId = urlParams.get('shop_id') || urlParams.get('shopId');
 
@@ -426,6 +461,13 @@
 
         async function validateAndSubmit() {
             const t = translations[currentLang] || translations.th;
+            
+            const friendStatus = await liff.getFriendship();
+            if (!friendStatus.friendFlag) {
+                document.getElementById('friendAlert').style.display = 'flex';
+                return;
+            }
+
             if (currentShopId && checkVoteHistory(currentShopId)) return showAlert("ผิดพลาด", t.alreadyVoted, 'error');
             
             const name = document.getElementById('nameInput').value.trim();
@@ -433,8 +475,8 @@
             const ratingEl = document.querySelector('input[name="score_quality"]:checked');
             const pdpa = document.getElementById('pdpaConsent').checked;
 
-            if (!name || !phone || !ratingEl || !pdpa) return showAlert("ข้อมูลไม่ครบ", t.alertIncompleteMsg, 'error');
-            if (phone.length < 9) return showAlert("เบอร์โทรศัพท์ผิด", t.alertPhoneError, 'error');
+            if (!name || !phone || !ratingEl || !pdpa) return showAlert(t.alertIncomplete, t.alertIncompleteMsg, 'error');
+            if (phone.length < 9) return showAlert(t.alertPhoneError, t.alertPhoneError, 'error');
 
             submitVote(name, phone, ratingEl.value);
         }
@@ -449,7 +491,7 @@
                     displayName: profile.displayName, fullName: name, phone: phone, quality: rating
                 });
 
-                const resp = await fetch(VOTE_WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: params });
+                await fetch(VOTE_WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: params });
 
                 const history = JSON.parse(localStorage.getItem('vote_history') || '{}');
                 const today = new Date().toLocaleDateString('th-TH');
@@ -468,4 +510,3 @@
     </script>
 </body>
 </html>
-
