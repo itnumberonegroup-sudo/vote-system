@@ -145,8 +145,6 @@
         #customAlert, #friendAlert { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; max-width: 320px; width: 100%; box-sizing: border-box; }
         
-        .qr-image { width: 180px; height: 180px; margin: 15px auto; display: block; border: 1px solid #e2e8f0; border-radius: 10px; }
-
         #loading { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 3000; flex-direction: column; align-items: center; justify-content: center; }
         .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -168,15 +166,13 @@
         </div>
     </div>
 
-    <!-- Alert สำหรับบังคับเพิ่มเพื่อน -->
+    <!-- Alert สำหรับบังคับเพิ่มเพื่อน (ปรับปรุง: นำ QR Code ออก เหลือเพียงปุ่ม) -->
     <div id="friendAlert">
         <div class="modal-content">
             <div style="font-size: 40px; margin-bottom: 10px;"><i class="fas fa-user-plus" style="color: var(--primary-color);"></i></div>
             <h3 id="friendTitle" style="margin: 0;">กรุณาเพิ่มเพื่อน</h3>
-            <p id="friendMsg" style="color: #64748b; margin-top: 10px; font-size: 14px;">กรุณาเพิ่มเพื่อนกับ LINE Official ของเราเพื่อสิทธิ์ในการร่วมสนุกและโหวตร้านค้า</p>
-            <img id="qrDisplay" src="" class="qr-image" alt="QR Code Add Friend">
-            <p style="font-size: 12px; color: #94a3b8; margin-top: 10px;">สแกน QR Code หรือคลิกปุ่มด้านล่างเพื่อเพิ่มเพื่อน</p>
-            <button style="margin-top: 15px; padding: 14px 20px; border-radius: 12px; border: none; background: var(--primary-color); color: white; width: 100%; font-weight: 600; font-size: 16px;" id="btn-add-friend" onclick="redirectToOA()">เพิ่มเพื่อนตอนนี้</button>
+            <p id="friendMsg" style="color: #64748b; margin-top: 15px; font-size: 15px; line-height: 1.5;">กรุณาเพิ่มเพื่อนกับ LINE Official ของเราเพื่อสิทธิ์ในการร่วมสนุกและโหวตร้านค้า</p>
+            <button style="margin-top: 25px; padding: 16px 20px; border-radius: 12px; border: none; background: var(--primary-color); color: white; width: 100%; font-weight: 600; font-size: 17px; cursor: pointer; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);" id="btn-add-friend" onclick="redirectToOA()">เพิ่มเพื่อนตอนนี้</button>
         </div>
     </div>
 
@@ -249,7 +245,6 @@
         const BANNER_VIDEO_URL = ''; 
         const BANNER_IMAGE_URL = 'https://raw.githubusercontent.com/itnumberonegroup-sudo/vote-system/main/Banner.svg'; 
         const LINE_OA_URL = 'https://line.me/R/ti/p/@numberone_market'; 
-        const QR_CODE_ADD_FRIEND = 'https://raw.githubusercontent.com/itnumberonegroup-sudo/vote-system/main/OA_QR.png'; 
 
         const FETCH_SHOP_URL = 'https://script.google.com/macros/s/AKfycbwy6XUJz55kVuxf7zoZH4KLCpfM_ihJCr85BwB17Nh2rzP7X5jxZCAdj5uGx9-6I6Jb/exec'; 
         const VOTE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoXkfpkxhrBxSMooKEKt4lNtx1PPTpaoj4cxBKZPuJoeNy6WUtJjFJSo8mrOjcb1g32A/exec';
@@ -261,7 +256,6 @@
         function initBanner() {
             const v = document.getElementById('bannerVideo');
             const i = document.getElementById('bannerImage');
-            document.getElementById('qrDisplay').src = QR_CODE_ADD_FRIEND;
             
             if(BANNER_VIDEO_URL) {
                 v.querySelector('source').src = BANNER_VIDEO_URL;
@@ -376,14 +370,10 @@
             document.getElementById('lbl-phone').innerHTML = `<i class="fas fa-phone"></i> ${t.lblPhone}`;
             document.getElementById('phoneInput').placeholder = t.phonePlaceholder;
             document.getElementById('txt-rate-label').innerText = t.rateLabel;
-            
-            // ใช้ .innerHTML เพื่อให้คลิกลิงก์ได้
             document.getElementById('txt-pdpa').innerHTML = t.pdpa;
-            
             document.getElementById('txt-loading').innerText = t.loading;
             document.getElementById('btn-modal-close').innerText = t.btnOk;
 
-            // อัปเดตส่วนแจ้งเตือนเพิ่มเพื่อนตามภาษา
             document.getElementById('friendTitle').innerText = t.friendTitle || "กรุณาเพิ่มเพื่อน";
             document.getElementById('friendMsg').innerText = t.friendMsg || "กรุณาเพิ่มเพื่อนกับ LINE Official ของเราเพื่อทำการโหวต";
             document.getElementById('btn-add-friend').innerText = t.btnAddFriend || "เพิ่มเพื่อนตอนนี้";
