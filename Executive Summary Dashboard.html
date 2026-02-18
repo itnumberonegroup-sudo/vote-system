@@ -409,7 +409,7 @@
             `).join('');
         }
 
-        function convertUrl(url) { if (!url) return ""; if (url.includes('github.com') && url.includes('/blob/')) return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/'); if (url.includes('drive.google.com')) { let id = url.includes('/d/') ? url.split('/d/')[1].split('/')[0] : (url.includes('id=') ? url.split('id=')[1].split('&')[0] : ""); return id ? `https://lh3.googleusercontent.com/d/${id}` : url; } return url; }
+     function convertUrl(url) { if (!url) return ""; if (url.includes('github.com') && url.includes('/blob/')) return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/'); if (url.includes('drive.google.com')) { let id = url.includes('/d/') ? url.split('/d/')[1].split('/')[0] : (url.includes('id=') ? url.split('id=')[1].split('&')[0] : ""); return id ? `https://lh3.googleusercontent.com/d/${id}` : url; } return url; }
         window.updateLogo = () => { const container = document.getElementById('logo-container'); if (!container) return; const url = convertUrl(window.appSettings.logoUrl); container.innerHTML = url ? `<img src="${url}" class="h-full w-auto max-w-full object-contain">` : `<span class="text-[10px] font-bold opacity-30">LOGO</span>`; };
         
         window.toggleSettings = (show) => {
@@ -482,8 +482,9 @@
 
         window.onload = initApp;
     </script>
-</body>
+<!--</body>
 </html>
+-->
 
 
 
