@@ -166,7 +166,7 @@
         </div>
     </div>
 
-    <!-- Alert สำหรับบังคับเพิ่มเพื่อน (ปรับปรุง: นำ QR Code ออก เหลือเพียงปุ่ม) -->
+    <!-- Alert สำหรับบังคับเพิ่มเพื่อน -->
     <div id="friendAlert">
         <div class="modal-content">
             <div style="font-size: 40px; margin-bottom: 10px;"><i class="fas fa-user-plus" style="color: var(--primary-color);"></i></div>
@@ -244,7 +244,7 @@
         // --- [การตั้งค่าสื่อแบนเนอร์ & LINE OA] ---
         const BANNER_VIDEO_URL = ''; 
         const BANNER_IMAGE_URL = 'https://raw.githubusercontent.com/itnumberonegroup-sudo/vote-system/main/Banner.svg'; 
-        const LINE_OA_URL = 'https://lin.ee/eYSymp7'; 
+        const LINE_OA_URL = 'https://line.me/R/ti/p/@numberonemarket'; 
 
         const FETCH_SHOP_URL = 'https://script.google.com/macros/s/AKfycbwy6XUJz55kVuxf7zoZH4KLCpfM_ihJCr85BwB17Nh2rzP7X5jxZCAdj5uGx9-6I6Jb/exec'; 
         const VOTE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoXkfpkxhrBxSMooKEKt4lNtx1PPTpaoj4cxBKZPuJoeNy6WUtJjFJSo8mrOjcb1g32A/exec';
@@ -276,8 +276,9 @@
                 namePlaceholder: "ระบุชื่อ-นามสกุล", lblPhone: "เบอร์โทรศัพท์", phonePlaceholder: "0XXXXXXXXX", rateLabel: "ให้คะแนนร้านค้า",
                 pdpa: "** บริการจะจัดเก็บข้อมูลของท่าน เพื่อการติดต่อสื่อสาร หรือแจ้งข้อมูลข่าวสารและสืบประโยชน์เกี่ยวข้องกับผลิตภัณฑ์ บริการ รวมถึงการปฏิบัติตามกฎหมายอื่นที่เกี่ยวข้อง บริษัท นัมเบอร์ วัน จำกัด ท่านสามารถศึกษารายละเอียดเพิ่มเติมเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคลได้จาก <br>ประกาศความเป็นส่วนตัว ฉบับการขอแสดงความคิดเห็น : <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>คลิกที่นี่</a>", 
                 submit: "ยืนยันการให้คะแนน", loading: "กำลังบันทึกคะแนน...",
-                alertIncomplete: "ข้อมูลไม่ครบ", alertIncompleteMsg: "กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วน", alertPhoneError: "เบอร์โทรศัพท์ไม่ถูกต้อง",
-                alertRateError: "กรุณาเลือกดาว 1-5 ดาว", alertPdpaError: "กรุณายอมรับเงื่อนไขความเป็นส่วนตัว",
+                alertIncomplete: "ข้อมูลไม่ครบ", alertNameMsg: "กรุณากรอกชื่อ-นามสกุลให้ครบถ้วน", alertPhoneMsg: "กรุณากรอกเบอร์โทรศัพท์ให้ครบถ้วน",
+                alertPhoneError: "เบอร์โทรศัพท์ไม่ถูกต้อง",
+                alertRateError: "กรุณาให้คะแนนร้านค้า (1-5 ดาว)", alertPdpaError: "กรุณายอมรับเงื่อนไขความเป็นส่วนตัว",
                 alertSuccess: "สำเร็จ!", alertSuccessMsg: "ขอบคุณที่ร่วมสนุกครับ", alertFail: "ขออภัย", alertFailMsg: "เกิดข้อผิดพลาด กรุณาลองใหม่", btnOk: "ตกลง",
                 friendTitle: "กรุณาเพิ่มเพื่อน", friendMsg: "กรุณาเพิ่มเพื่อนกับ LINE Official ของเราเพื่อทำการโหวตและรับสิทธิ์ลุ้นรางวัล", btnAddFriend: "เพิ่มเพื่อนตอนนี้"
             },
@@ -287,8 +288,9 @@
                 namePlaceholder: "Enter your full name", lblPhone: "Phone Number", phonePlaceholder: "0XXXXXXXXX", rateLabel: "Rate this shop",
                 pdpa: "** Your information will be collected for communication. Study more details from our <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>Privacy Notice here</a>", 
                 submit: "Confirm Rating", loading: "Saving your score...",
-                alertIncomplete: "Incomplete", alertIncompleteMsg: "Please fill in name and phone number", alertPhoneError: "Invalid phone number",
-                alertRateError: "Please select 1-5 stars", alertPdpaError: "Please accept privacy notice",
+                alertIncomplete: "Incomplete", alertNameMsg: "Please fill in your full name", alertPhoneMsg: "Please fill in your phone number",
+                alertPhoneError: "Invalid phone number",
+                alertRateError: "Please rate this shop (1-5 stars)", alertPdpaError: "Please accept privacy notice",
                 alertSuccess: "Success!", alertSuccessMsg: "Thank you for your feedback", alertFail: "Error", alertFailMsg: "Something went wrong, please try again", btnOk: "OK",
                 friendTitle: "Please Add Friend", friendMsg: "Please add our LINE Official account as a friend to vote and win prizes.", btnAddFriend: "Add Friend Now"
             },
@@ -298,8 +300,9 @@
                 namePlaceholder: "请输入您的姓名", lblPhone: "电话号码", phonePlaceholder: "请输入号码", rateLabel: "店铺评分",
                 pdpa: "**我们将收集您的数据用于沟通。详情请参阅 <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>隐私声明</a>", 
                 submit: "确认评分", loading: "正在保存...",
-                alertIncomplete: "信息不完整", alertIncompleteMsg: "请输入您的姓名和电话", alertPhoneError: "电话号码错误",
-                alertRateError: "请เลือก1-5星级", alertPdpaError: "请接受隐私条款",
+                alertIncomplete: "信息不完整", alertNameMsg: "请输入您的完整姓名", alertPhoneMsg: "请输入您的电话号码",
+                alertPhoneError: "电话号码错误",
+                alertRateError: "请提供店铺评分 (1-5 星)", alertPdpaError: "请接受隐私条款",
                 alertSuccess: "成功！", alertSuccessMsg: "感谢您的参与与反馈", alertFail: "失败", alertFailMsg: "发生错误，请稍后再试", btnOk: "确定",
                 friendTitle: "请添加好友", friendMsg: "请添加我们的 LINE 官方账号为好友以便进行投票。", btnAddFriend: "立即添加"
             },
@@ -309,8 +312,9 @@
                 namePlaceholder: "氏名を入力してください", lblPhone: "電話番号", phonePlaceholder: "番号を入力", rateLabel: "お店を評価する",
                 pdpa: "**連絡やニュース配信のためにデータを収集します。詳細は <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>こちら</a> をご覧ください", 
                 submit: "評価を送信する", loading: "保存中...",
-                alertIncomplete: "入力不備", alertIncompleteMsg: "氏名と電話番号を入力してください", alertPhoneError: "番号ที่ถูกต้อง",
-                alertRateError: "1〜5星を選択してください", alertPdpaError: "ポリシーに同意してください",
+                alertIncomplete: "入力不備", alertNameMsg: "氏名をフルネームで入力してください", alertPhoneMsg: "電話番号を入力してください",
+                alertPhoneError: "番号が正しくありません",
+                alertRateError: "お店の評価 (1-5 星) を選択してください", alertPdpaError: "ポリシーに同意してください",
                 alertSuccess: "完了！", alertSuccessMsg: "ご協力ありがとうございました", alertFail: "エラー", alertFailMsg: "エラーが発生しました", btnOk: "はい",
                 friendTitle: "友だち追加してください", friendMsg: "投票するには、公式LINEアカウントを友だち追加してください。", btnAddFriend: "今すぐ追加"
             },
@@ -318,21 +322,23 @@
                 header: "NUMBER ONE MARKET အကောင်းဆုံးဆိုင်", subtitle: "ဆုလက်ဆောင်များရယူရန် မဲပေးပါ!!", prize: "ရွှေနှင့် ဆိုင်ကယ်များ ကံစမ်းရန်!",
                 alreadyVoted: "ယနေ့အတွက် မဲပေးပြီးပါပြီ", selectedShop: "သင်ရွေးချယ်သောဆိုင်", lblName: "အမည် (ဆုရယူရန်)",
                 namePlaceholder: "အမည်အပြည့်အစုံရိုက်ပါ", lblPhone: "ဖုန်းနံပါတ်", phonePlaceholder: "ဖုန်းနံပါတ်ရိုက်ပါ", rateLabel: "ဆိုင်ကို အဆင့်သတ်မှတ်ရန်",
-                pdpa: "**ဆက်သွယ်ရန်အတွက် အချက်အလက်များကို စုဆောင်းပါမည်။ အသေးစိတ်ကို <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>ဤနေရာတွင်</a> ဖတ်ရှုပါ", 
+                pdpa: "**ဆက်သွယ်ရန်အတွက် အချက်အလက်များကို စုဆောင်းပါမည်। အသေးစိတ်ကို <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>ဤနေရာတွင်</a> ဖတ်ရှုပါ", 
                 submit: "အတည်ပြုရန်", loading: "သိမ်းဆည်းနေသည်...",
-                alertIncomplete: "မပြည့်စုံပါ", alertIncompleteMsg: "အမည်နှင့် ဖုန်းနံပါတ်ထည့်ပါ", alertPhoneError: "ဖုန်းနံပါတ်မှားနေပါသည်",
-                alertRateError: "ကြယ် ၁-၅ လုံးရွေးပါ", alertPdpaError: "စည်းကမ်းချက်သဘောတူပါ",
+                alertIncomplete: "မပြည့်စုံပါ", alertNameMsg: "အမည်အပြည့်အစုံကို ထည့်သွင်းပါ", alertPhoneMsg: "ဖုန်းနံပါတ်ကို ထည့်သွင်းပါ",
+                alertPhoneError: "ဖုန်းနံပါတ်မှားနေပါသည်",
+                alertRateError: "ကြယ် (၁-၅) ပွင့်ရွေးချယ်ပါ", alertPdpaError: "စည်းကမ်းချက်သဘောတူပါ",
                 alertSuccess: "အောင်မြင်သည်!", alertSuccessMsg: "ပါဝင်မှုအတွက် ကျေးဇူးတင်ပါသည်", alertFail: "မှားယွင်းသည်", alertFailMsg: "ထပ်မံကြိုးစားပါ", btnOk: "အိုကေ",
                 friendTitle: "သူငယ်ချင်းအဖြစ်အပ်နှံပါ", friendMsg: "မဲပေးရန်အတွက် ကျွန်ုပ်တို့၏ LINE Official ကို အပ်နှံပေးပါ။", btnAddFriend: "ယခုအပ်နှံမည်"
             },
             lo: {
-                header: "THE BEST OF NUMBER ONE MARKET", subtitle: "ໂຫວດຮ້ານຄ້າເພື່ອລຸ້ນຮັບລາງວັນ!!", prize: "ລຸ້ນຮັບຄຳ ແລະ ລົດມໍເຕີໄຊ!",
-                alreadyVoted: "ມື້ນີ້ທ່ານໂຫວດແລ້ວ", selectedShop: "ຮ້ານที่ท่านเลือก", lblName: "ຊື່ ແລະ ນາມສະກຸນ (ເພື່ອຮັບລາງວັນ)",
+                header: "THE BEST OF NUMBER ONE MARKET", subtitle: "ໂຫວດຮ້ານຄ້າເພື່ອລຸ້ນຮັບຂອງລາງວັນ!!", prize: "ລຸ້ນຮັບຄຳ ແລະ ລົດມໍເຕີໄຊ!",
+                alreadyVoted: "ມື້ນີ້ທ່ານໂຫວດແລ້ວ", selectedShop: "ຮ້ານທີ່ທ່ານເລືອກ", lblName: "ຊື່ ແລະ ນາມສະກຸນ (ເພື່ອຮັບລາງວັນ)",
                 namePlaceholder: "ໃສ່ຊື່-ນາມສະກຸນ", lblPhone: "ເບີໂທລະສັບ", phonePlaceholder: "ໃສ່ເບີໂທ", rateLabel: "ໃຫ້ຄະແນນຮ້ານຄ້າ",
                 pdpa: "**ບໍລິສັດຈະເກັບກຳຂໍ້ມູນຂອງທ່ານເພື່ອການຕິດຕໍ່. ສຶກສາເພີ່ມເຕີມ <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>ໄດ້ທີ່ນີ້</a>", 
                 submit: "ຢືນຢັນການໃຫ້ຄະແນນ", loading: "ກຳລັງບັນທຶກ...",
-                alertIncomplete: "ຂໍ້ມູນບໍ່ຄົບ", alertIncompleteMsg: "ກະລຸນາໃສ່ຊື່ ແລະ ເບີໂທໃຫ້ຄົບ", alertPhoneError: "ເບີໂທບໍ່ຖືກຕ້ອງ",
-                alertRateError: "ກະລຸນາເລືອກ 1-5 ດາວ", alertPdpaError: "ກະລຸນາຍອມຮັບເງື່ອນໄຂ",
+                alertIncomplete: "ຂໍ້ມູນບໍ່ຄົບ", alertNameMsg: "ກະລຸນາໃສ່ຊື່ ແລະ ນາມສະກຸນໃຫ້ຄົບຖ້ວນ", alertPhoneMsg: "ກະລຸນາໃສ່ເບີໂທລະສັບໃຫ້ຄົບຖ້ວນ",
+                alertPhoneError: "ເບີໂທບໍ່ຖືກຕ້ອງ",
+                alertRateError: "ກະລຸນາໃຫ້ຄະແນນຮ້ານຄ້າ (1-5 ດາວ)", alertPdpaError: "ກະລຸນາຍອມຮັບເງື່ອນໄຂ",
                 alertSuccess: "ສຳເລັດ!", alertSuccessMsg: "ຂອບໃຈທີ່ຮ່ວມກິດຈະກຳ", alertFail: "ຂໍອະໄພ", alertFailMsg: "ເກີດຂໍ້ຜິດພາດ", btnOk: "ຕົກລົງ",
                 friendTitle: "ກະລຸນາເພີ່ມເພື່ອນ", friendMsg: "ກະລຸນາເພີ່ມເພື່ອນກັບ LINE Official ຂອງພວກເຮົາເພື່ອໂຫວດ.", btnAddFriend: "ເພີ່ມເພື່ອນດຽວນີ້"
             },
@@ -342,8 +348,9 @@
                 namePlaceholder: "Masukkan nama lengkap", lblPhone: "Nomor Telepon", phonePlaceholder: "Masukkan nomor", rateLabel: "Beri nilai toko ini",
                 pdpa: "**Perusahaan akan mengumpulkan data Anda untuk komunikasi. Info lebih lanjut: <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>Kebijakan Privasi</a>", 
                 submit: "Konfirmasi Penilaian", loading: "Menyimpan...",
-                alertIncomplete: "Tidak Lengkap", alertIncompleteMsg: "Harap isi nama dan nomor telepon", alertPhoneError: "Nomor tidak valid",
-                alertRateError: "Pilih 1-5 bintang", alertPdpaError: "Harap setujui kebijakan",
+                alertIncomplete: "Tidak Lengkap", alertNameMsg: "Harap isi nama lengkap Anda", alertPhoneMsg: "Harap isi nomor telepon Anda",
+                alertPhoneError: "Nomor tidak valid",
+                alertRateError: "Harap beri rating toko (1-5 bintang)", alertPdpaError: "Harap setujui kebijakan",
                 alertSuccess: "Berhasil!", alertSuccessMsg: "Terima kasih atas partisipasi Anda", alertFail: "Kesalahan", alertFailMsg: "Terjadi kesalahan", btnOk: "OK",
                 friendTitle: "Tambah Teman", friendMsg: "Silakan tambah akun resmi LINE kami sebagai teman untuk memilih.", btnAddFriend: "Tambah Sekarang"
             },
@@ -353,8 +360,9 @@
                 namePlaceholder: "Nhập họ và tên", lblPhone: "Số điện thoại", phonePlaceholder: "Nhập số điện thoại", rateLabel: "Đánh giá cửa hàng",
                 pdpa: "**Công ty sẽ thu thập dữ liệu của bạn để liên lạc. Chi tiết tại <a href='https://www.numberonemarket.com/privacy.php' target='_blank'>Thông báo bảo mật</a>", 
                 submit: "Xác nhận đánh giá", loading: "Đang lưu...",
-                alertIncomplete: "Chưa đủ thông tin", alertIncompleteMsg: "Vui lòng nhập tên và số điện thoại", alertPhoneError: "Số điện thoại sai",
-                alertRateError: "Vui lòng chọn 1-5 sao", alertPdpaError: "Vui lòng chấp nhận điều khoản",
+                alertIncomplete: "Chưa đủ thông tin", alertNameMsg: "Vui lòng nhập họ và tên đầy đủ", alertPhoneMsg: "Vui lòng nhập số điện thoại",
+                alertPhoneError: "Số điện thoại sai",
+                alertRateError: "Vui lòng đánh giá cửa hàng (1-5 sao)", alertPdpaError: "Vui lòng chấp nhận điều khoản",
                 alertSuccess: "Thành công!", alertSuccessMsg: "Cảm ơn bạn đã tham gia", alertFail: "Lỗi", alertFailMsg: "Đã xảy ra lỗi", btnOk: "OK",
                 friendTitle: "Thêm bạn bè", friendMsg: "Vui lòng thêm tài khoản LINE chính thức của chúng tôi để bình chọn.", btnAddFriend: "Thêm ngay"
             }
@@ -398,11 +406,18 @@
                 await liff.init({ liffId: LIFF_ID });
                 if (!liff.isLoggedIn()) { liff.login(); return; }
                 
-                // ตรวจสอบสถานะการเป็นเพื่อน
-                const friendStatus = await liff.getFriendship();
-                if (!friendStatus.friendFlag) {
+                // ตรวจสอบสถานะการเป็นเพื่อน ด้วยการครอบ try...catch ป้องกัน Error จากระบบ LINE
+                let isFriend = false;
+                try {
+                    const friendStatus = await liff.getFriendship();
+                    isFriend = friendStatus.friendFlag;
+                } catch (e) {
+                    console.warn("Friendship check failed, likely Linked OA configuration issue:", e);
+                    isFriend = false; 
+                }
+
+                if (!isFriend) {
                     document.getElementById('friendAlert').style.display = 'flex';
-                    return;
                 }
 
                 const urlParams = new URLSearchParams(window.location.search);
@@ -452,8 +467,14 @@
         async function validateAndSubmit() {
             const t = translations[currentLang] || translations.th;
             
-            const friendStatus = await liff.getFriendship();
-            if (!friendStatus.friendFlag) {
+            // เช็คสถานะเพื่อนก่อน
+            try {
+                const friendStatus = await liff.getFriendship();
+                if (!friendStatus.friendFlag) {
+                    document.getElementById('friendAlert').style.display = 'flex';
+                    return;
+                }
+            } catch (e) {
                 document.getElementById('friendAlert').style.display = 'flex';
                 return;
             }
@@ -465,8 +486,30 @@
             const ratingEl = document.querySelector('input[name="score_quality"]:checked');
             const pdpa = document.getElementById('pdpaConsent').checked;
 
-            if (!name || !phone || !ratingEl || !pdpa) return showAlert(t.alertIncomplete, t.alertIncompleteMsg, 'error');
-            if (phone.length < 9) return showAlert(t.alertPhoneError, t.alertPhoneError, 'error');
+            // --- เริ่มการตรวจสอบแยกส่วน (Separate Validation) ---
+            
+            // 1. ตรวจสอบชื่อ
+            if (!name) {
+                return showAlert(t.alertIncomplete, t.alertNameMsg, 'error');
+            }
+            
+            // 2. ตรวจสอบเบอร์โทรศัพท์
+            if (!phone) {
+                return showAlert(t.alertIncomplete, t.alertPhoneMsg, 'error');
+            }
+            if (phone.length < 9) {
+                return showAlert(t.alertPhoneError, t.alertPhoneError, 'error');
+            }
+            
+            // 3. ตรวจสอบคะแนนร้านค้า
+            if (!ratingEl) {
+                return showAlert("ยังไม่ให้คะแนน", t.alertRateError, 'error');
+            }
+            
+            // 4. ตรวจสอบการยินยอม PDPA
+            if (!pdpa) {
+                return showAlert("ยังไม่ยินยอม", t.alertPdpaError, 'error');
+            }
 
             submitVote(name, phone, ratingEl.value);
         }
@@ -500,4 +543,3 @@
     </script>
 </body>
 </html>
-
